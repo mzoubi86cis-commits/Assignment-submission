@@ -1,0 +1,1922 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مدرسة الطرة الثانوية للبنين - نظام رفع الواجبات</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        /* ============================================================
+           جميع التنسيقات (CSS) - تم اختصارها لتوفير المساحة
+           ============================================================ */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f0f4f8;
+            color: #2d3748;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* ----- الرأس ----- */
+        header {
+            background: linear-gradient(135deg, #0d3b66, #1a5276, #2e86c1);
+            color: white;
+            padding: 15px 0;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 4px solid #f1c40f;
+        }
+
+        header .container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logo-img {
+            width: 75px;
+            height: 75px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 3px solid #f1c40f;
+            box-shadow: 0 0 25px rgba(241, 196, 15, 0.4);
+            flex-shrink: 0;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 0 25px rgba(241, 196, 15, 0.4); }
+            50% { box-shadow: 0 0 40px rgba(241, 196, 15, 0.7); }
+            100% { box-shadow: 0 0 25px rgba(241, 196, 15, 0.4); }
+        }
+
+        .logo-img svg {
+            width: 50px;
+            height: 50px;
+        }
+
+        .logo-text h1 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            line-height: 1.2;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .logo-text .school-sub {
+            font-size: 0.85rem;
+            opacity: 0.95;
+            font-weight: 300;
+            display: block;
+            margin-top: 2px;
+            background: rgba(255,255,255,0.15);
+            padding: 3px 18px;
+            border-radius: 20px;
+            display: inline-block;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .logo-text .school-sub i {
+            margin-left: 5px;
+        }
+
+        .header-left .subtitle {
+            font-size: 0.95rem;
+            opacity: 0.95;
+            background: rgba(255,255,255,0.12);
+            padding: 8px 20px;
+            border-radius: 30px;
+            white-space: nowrap;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        /* ----- البطاقات ----- */
+        .card {
+            background: white;
+            border-radius: 16px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.08);
+            transition: transform 0.2s;
+            border-top: 4px solid #2e86c1;
+        }
+
+        .card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 40px rgba(0,0,0,0.12);
+        }
+
+        .card h2 {
+            color: #1a5276;
+            margin-bottom: 20px;
+            font-size: 1.5rem;
+            border-right: 5px solid #2e86c1;
+            padding-right: 15px;
+        }
+
+        .card h2 i {
+            margin-left: 10px;
+            color: #2e86c1;
+        }
+
+        /* ----- نموذج الاختيار ----- */
+        .selection-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 20px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group label {
+            font-weight: 600;
+            margin-bottom: 6px;
+            color: #2d3748;
+            font-size: 0.95rem;
+        }
+
+        .form-group label i {
+            margin-left: 6px;
+            color: #2e86c1;
+        }
+
+        .form-group label .required {
+            color: #e74c3c;
+            margin-right: 3px;
+        }
+
+        .form-group select,
+        .form-group input {
+            padding: 12px 15px;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            font-size: 1rem;
+            background: #f7fafc;
+            transition: border 0.3s;
+            font-family: inherit;
+        }
+
+        .form-group select:focus,
+        .form-group input:focus {
+            outline: none;
+            border-color: #2e86c1;
+            box-shadow: 0 0 0 3px rgba(46, 134, 193, 0.2);
+        }
+
+        .form-group select:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            background: #edf2f7;
+        }
+
+        .form-group .hint {
+            font-size: 0.8rem;
+            color: #a0aec0;
+            margin-top: 4px;
+        }
+
+        .form-group .hint.success {
+            color: #27ae60;
+        }
+
+        .form-group .hint.error {
+            color: #e74c3c;
+        }
+
+        /* ----- رفع الملف ----- */
+        .upload-area {
+            border: 3px dashed #cbd5e1;
+            border-radius: 16px;
+            padding: 40px 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            background: #fafbfc;
+            position: relative;
+        }
+
+        .upload-area:hover {
+            border-color: #2e86c1;
+            background: #f0f7ff;
+        }
+
+        .upload-area.dragover {
+            border-color: #27ae60;
+            background: #eafaf1;
+        }
+
+        .upload-area i {
+            color: #2e86c1;
+            margin-bottom: 10px;
+        }
+
+        .upload-area p {
+            color: #718096;
+            margin-bottom: 8px;
+        }
+
+        .upload-area input[type="file"] {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            cursor: pointer;
+        }
+
+        .file-name {
+            display: block;
+            margin-top: 10px;
+            font-weight: 600;
+            color: #2d3748;
+            background: #edf2f7;
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-size: 0.9rem;
+        }
+
+        /* ----- أزرار ----- */
+        .btn-primary {
+            background: linear-gradient(135deg, #2e86c1, #0d3b66);
+            color: white;
+            border: none;
+            padding: 14px 35px;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 20px;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .btn-primary:hover {
+            transform: scale(1.02);
+            box-shadow: 0 8px 25px rgba(46, 134, 193, 0.4);
+        }
+
+        .btn-primary:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn-secondary {
+            background: #edf2f7;
+            color: #2d3748;
+            border: 2px solid #e2e8f0;
+            padding: 10px 20px;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-secondary:hover {
+            background: #e2e8f0;
+        }
+
+        .btn-danger {
+            background: #e74c3c;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 15px;
+        }
+
+        .btn-danger:hover {
+            background: #c0392b;
+            transform: scale(1.02);
+        }
+
+        .btn-gold {
+            background: linear-gradient(135deg, #f1c40f, #f39c12);
+            color: #1a202c;
+            border: none;
+            padding: 10px 25px;
+            border-radius: 10px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-gold:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 15px rgba(241, 196, 15, 0.4);
+        }
+
+        /* ----- الرسائل ----- */
+        .message {
+            margin-top: 15px;
+            padding: 12px 18px;
+            border-radius: 10px;
+            font-weight: 600;
+            display: none;
+        }
+
+        .message.success {
+            display: block;
+            background: #d4edda;
+            color: #155724;
+            border: 2px solid #c3e6cb;
+        }
+
+        .message.error {
+            display: block;
+            background: #f8d7da;
+            color: #721c24;
+            border: 2px solid #f5c6cb;
+        }
+
+        .message.info {
+            display: block;
+            background: #d1ecf1;
+            color: #0c5460;
+            border: 2px solid #bee5eb;
+        }
+
+        /* ====== نافذة منبثقة للتأكيد ====== */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.6);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(5px);
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal-box {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 550px;
+            width: 90%;
+            text-align: center;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            animation: modalIn 0.5s ease;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        @keyframes modalIn {
+            from {
+                transform: scale(0.8) translateY(-50px);
+                opacity: 0;
+            }
+            to {
+                transform: scale(1) translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .modal-box .icon-success {
+            font-size: 4rem;
+            color: #27ae60;
+            margin-bottom: 15px;
+        }
+
+        .modal-box h2 {
+            color: #1a5276;
+            margin-bottom: 10px;
+        }
+
+        .modal-box p {
+            color: #4a5568;
+            margin-bottom: 8px;
+            line-height: 1.8;
+        }
+
+        .modal-box .details {
+            background: #f7fafc;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 15px 0;
+            text-align: right;
+            border: 2px solid #e2e8f0;
+        }
+
+        .modal-box .details .row {
+            display: flex;
+            justify-content: space-between;
+            padding: 5px 0;
+            border-bottom: 1px solid #edf2f7;
+        }
+
+        .modal-box .details .row:last-child {
+            border-bottom: none;
+        }
+
+        .modal-box .details .label {
+            font-weight: 600;
+            color: #2d3748;
+        }
+
+        .modal-box .details .value {
+            color: #2e86c1;
+            font-weight: 600;
+        }
+
+        .modal-box .btn-close-modal {
+            background: linear-gradient(135deg, #2e86c1, #0d3b66);
+            color: white;
+            border: none;
+            padding: 12px 40px;
+            border-radius: 50px;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 10px;
+        }
+
+        .modal-box .btn-close-modal:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 15px rgba(46, 134, 193, 0.4);
+        }
+
+        /* ----- الفلاتر ----- */
+        .filter-bar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 20px;
+            align-items: center;
+        }
+
+        .filter-bar select {
+            padding: 10px 15px;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            background: #f7fafc;
+            font-size: 0.95rem;
+            font-family: inherit;
+            flex: 1;
+            min-width: 150px;
+        }
+
+        .filter-bar select:focus {
+            outline: none;
+            border-color: #2e86c1;
+        }
+
+        /* ====== قسم تسجيل الدخول للمقيّم ====== */
+        .evaluator-login {
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            border: 2px solid #f1c40f;
+            border-radius: 16px;
+            padding: 25px;
+            margin-bottom: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .evaluator-login .login-title {
+            font-weight: 700;
+            color: #1a5276;
+            font-size: 1.1rem;
+        }
+
+        .evaluator-login .login-title i {
+            color: #f1c40f;
+            margin-left: 8px;
+        }
+
+        .evaluator-login .login-inputs {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .evaluator-login .login-inputs input {
+            padding: 10px 15px;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            font-size: 0.95rem;
+            background: white;
+            min-width: 200px;
+        }
+
+        .evaluator-login .login-inputs input:focus {
+            outline: none;
+            border-color: #f1c40f;
+        }
+
+        .evaluator-login .login-status {
+            font-size: 0.9rem;
+            padding: 5px 15px;
+            border-radius: 20px;
+        }
+
+        .evaluator-login .login-status.logged-in {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .evaluator-login .login-status.logged-out {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        /* ----- الجدول ----- */
+        .table-responsive {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9rem;
+        }
+
+        table th {
+            background: #0d3b66;
+            color: white;
+            padding: 12px 10px;
+            text-align: center;
+            white-space: nowrap;
+        }
+
+        table th i {
+            margin-left: 5px;
+        }
+
+        table td {
+            padding: 10px;
+            text-align: center;
+            border-bottom: 1px solid #edf2f7;
+        }
+
+        table tr:hover td {
+            background: #f0f7ff;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 4px 14px;
+            border-radius: 30px;
+            font-size: 0.8rem;
+            font-weight: 700;
+        }
+
+        .status-pending {
+            background: #fefcbf;
+            color: #975a16;
+        }
+
+        .status-approved {
+            background: #c6f6d5;
+            color: #22543d;
+        }
+
+        .action-btn {
+            background: none;
+            border: none;
+            font-size: 1.3rem;
+            cursor: pointer;
+            transition: transform 0.2s;
+            padding: 0 4px;
+        }
+
+        .action-btn:hover {
+            transform: scale(1.3);
+        }
+
+        .action-btn.approve {
+            color: #27ae60;
+        }
+
+        .action-btn.download {
+            color: #2e86c1;
+        }
+
+        .action-btn.delete {
+            color: #e74c3c;
+        }
+
+        .empty-message {
+            text-align: center;
+            padding: 30px;
+            color: #a0aec0;
+            font-size: 1.1rem;
+        }
+
+        /* ====== حماية القسم ====== */
+        .protected-section {
+            display: none;
+        }
+
+        .protected-section.visible {
+            display: block;
+        }
+
+        /* ----- قسم المعلم ----- */
+        .admin-section {
+            background: #f8f9fa;
+            border: 2px solid #e2e8f0;
+            border-top: 4px solid #f39c12;
+        }
+
+        .admin-hint {
+            color: #4a5568;
+            margin-bottom: 15px;
+        }
+
+        .admin-actions {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        /* ----- التذييل ----- */
+        footer {
+            background: linear-gradient(135deg, #0d3b66, #1a202c);
+            color: #e2e8f0;
+            padding: 30px 0 20px;
+            margin-top: 40px;
+            border-top: 4px solid #f1c40f;
+        }
+
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .footer-left {
+            text-align: right;
+        }
+
+        .footer-left .designer {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #f1c40f;
+        }
+
+        .footer-left .designer i {
+            margin-left: 8px;
+        }
+
+        .footer-left .designer span {
+            color: #2e86c1;
+        }
+
+        .footer-center {
+            text-align: center;
+            font-size: 0.85rem;
+            opacity: 0.8;
+        }
+
+        .footer-center i {
+            color: #f1c40f;
+        }
+
+        .footer-right {
+            text-align: left;
+            font-size: 0.9rem;
+        }
+
+        .footer-right .official {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .footer-right .official .position {
+            font-weight: 600;
+            color: #f1c40f;
+        }
+
+        .footer-right .official .name {
+            color: #e2e8f0;
+        }
+
+        .footer-bottom {
+            text-align: center;
+            margin-top: 20px;
+            padding-top: 15px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            font-size: 0.85rem;
+            opacity: 0.7;
+        }
+
+        /* ----- إحصائيات ----- */
+        .stats {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+
+        .stat-item {
+            background: #f7fafc;
+            padding: 10px 20px;
+            border-radius: 10px;
+            border: 2px solid #e2e8f0;
+            flex: 1;
+            min-width: 120px;
+            text-align: center;
+        }
+
+        .stat-item i {
+            margin-left: 8px;
+        }
+
+        .stat-item span {
+            font-weight: 700;
+            color: #1a5276;
+            font-size: 1.2rem;
+        }
+
+        .stat-item.total { border-color: #2e86c1; }
+        .stat-item.approved { border-color: #27ae60; }
+        .stat-item.pending { border-color: #f39c12; }
+
+        /* ====== رسالة نجاح للطالب ====== */
+        .success-toast {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #27ae60;
+            color: white;
+            padding: 18px 35px;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            box-shadow: 0 10px 40px rgba(39, 174, 96, 0.4);
+            z-index: 2000;
+            display: none;
+            align-items: center;
+            gap: 12px;
+            animation: slideUp 0.5s ease;
+        }
+
+        .success-toast.show {
+            display: flex;
+        }
+
+        @keyframes slideUp {
+            from {
+                transform: translateX(-50%) translateY(100px);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(-50%) translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .success-toast i {
+            font-size: 1.8rem;
+        }
+
+        /* ----- استجابة للشاشات الصغيرة ----- */
+        @media (max-width: 992px) {
+            .footer-content {
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+            }
+            .footer-left, .footer-right {
+                text-align: center;
+            }
+            .footer-right .official {
+                align-items: center;
+            }
+            .evaluator-login {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .evaluator-login .login-inputs {
+                flex-direction: column;
+            }
+            .evaluator-login .login-inputs input {
+                min-width: unset;
+                width: 100%;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .logo-img {
+                width: 55px;
+                height: 55px;
+            }
+            .logo-img svg {
+                width: 35px;
+                height: 35px;
+            }
+            .logo-text h1 {
+                font-size: 1.2rem;
+            }
+            .logo-text .school-sub {
+                font-size: 0.7rem;
+                padding: 2px 12px;
+            }
+            .header-left .subtitle {
+                font-size: 0.75rem;
+                padding: 5px 12px;
+                white-space: normal;
+            }
+            .card {
+                padding: 20px;
+            }
+            .selection-grid {
+                grid-template-columns: 1fr;
+            }
+            table th, table td {
+                padding: 6px 4px;
+                font-size: 0.7rem;
+            }
+            .filter-bar {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .stats {
+                flex-direction: column;
+            }
+            header .container {
+                flex-direction: column;
+                text-align: center;
+                gap: 10px;
+            }
+            .header-right {
+                flex-direction: column;
+                width: 100%;
+            }
+            .logo-container {
+                justify-content: center;
+            }
+            .footer-content {
+                gap: 15px;
+            }
+            .modal-box {
+                padding: 20px;
+            }
+            .modal-box .details .row {
+                flex-direction: column;
+                align-items: center;
+                gap: 3px;
+            }
+            .success-toast {
+                padding: 15px 20px;
+                font-size: 0.95rem;
+                width: 90%;
+                text-align: center;
+            }
+        }
+
+        @media (max-width: 480px) {
+            table {
+                font-size: 0.6rem;
+            }
+            table th, table td {
+                padding: 4px 2px;
+            }
+            .card h2 {
+                font-size: 1rem;
+            }
+            .btn-primary {
+                font-size: 0.9rem;
+                padding: 12px 15px;
+            }
+            .stat-item {
+                padding: 8px 12px;
+                font-size: 0.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ============================================================
+    هيكل HTML
+    ============================================================ -->
+
+    <!-- رأس الصفحة -->
+    <header>
+        <div class="container">
+            <div class="header-right">
+                <div class="logo-container">
+                    <div class="logo-img">
+                        <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                            <circle cx="50" cy="50" r="45" fill="#0d3b66" stroke="#f1c40f" stroke-width="3"/>
+                            <circle cx="50" cy="50" r="35" fill="#1a5276" stroke="#f1c40f" stroke-width="2"/>
+                            <text x="50" y="65" font-family="Arial, sans-serif" font-size="45" font-weight="bold" fill="#f1c40f" text-anchor="middle">ط</text>
+                            <text x="50" y="88" font-family="Arial, sans-serif" font-size="10" font-weight="bold" fill="white" text-anchor="middle">الثانوية</text>
+                        </svg>
+                    </div>
+                    <div class="logo-text">
+                        <h1>مدرسة الطرة الثانوية للبنين</h1>
+                        <span class="school-sub">
+                            <i class="fas fa-university"></i> 
+                            مديرية التربية والتعليم لواء الرمثا
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class="header-left">
+                <span class="subtitle">
+                    <i class="fas fa-cloud-upload-alt"></i> نظام رفع وتسليم الواجبات الإلكتروني
+                </span>
+            </div>
+        </div>
+    </header>
+
+    <!-- ============================================================
+    نافذة منبثقة للتأكيد (تظهر للطالب بعد التسليم)
+    ============================================================ -->
+    <div class="modal-overlay" id="successModal">
+        <div class="modal-box">
+            <div class="icon-success">
+                <i class="fas fa-check-circle"></i>
+            </div>
+            <h2>✅ تم تسليم الواجب بنجاح!</h2>
+            <p>شكراً لك على التزامك، تم استلام واجبك وسيتم مراجعته من قبل المقيّم.</p>
+            <div class="details" id="submissionDetails">
+                <!-- سيتم ملؤها بواسطة JavaScript -->
+            </div>
+            <button class="btn-close-modal" onclick="closeModal()">
+                <i class="fas fa-check"></i> حسناً
+            </button>
+        </div>
+    </div>
+
+    <!-- ============================================================
+    رسالة نجاح منبثقة (toast)
+    ============================================================ -->
+    <div class="success-toast" id="successToast">
+        <i class="fas fa-check-circle"></i>
+        <span id="toastMessage">تم تسليم الواجب بنجاح!</span>
+    </div>
+
+    <!-- المحتوى الرئيسي -->
+    <main class="container">
+        
+        <!-- قسم الإحصائيات -->
+        <section class="stats" id="statsSection">
+            <div class="stat-item total">
+                <i class="fas fa-users"></i> إجمالي المسلّمين: <span id="totalCount">0</span>
+            </div>
+            <div class="stat-item approved">
+                <i class="fas fa-check-circle"></i> تم التأكيد: <span id="approvedCount">0</span>
+            </div>
+            <div class="stat-item pending">
+                <i class="fas fa-clock"></i> قيد المراجعة: <span id="pendingCount">0</span>
+            </div>
+        </section>
+
+        <!-- ============================================================
+        قسم تسجيل الدخول للمقيّم
+        ============================================================ -->
+        <div class="evaluator-login">
+            <div class="login-title">
+                <i class="fas fa-user-shield"></i>
+                منطقة المقيّمين
+            </div>
+            <div class="login-inputs">
+                <input type="password" id="evaluatorPassword" placeholder="أدخل كلمة سر المقيّم" onkeypress="if(event.key==='Enter') loginEvaluator()">
+                <button class="btn-gold" onclick="loginEvaluator()">
+                    <i class="fas fa-sign-in-alt"></i> دخول
+                </button>
+                <button class="btn-secondary" onclick="logoutEvaluator()" id="logoutBtn" style="display:none;">
+                    <i class="fas fa-sign-out-alt"></i> خروج
+                </button>
+                <span class="login-status logged-out" id="loginStatus">
+                    <i class="fas fa-lock"></i> غير متصل
+                </span>
+            </div>
+        </div>
+
+        <!-- قسم اختيار التخصص والصف -->
+        <section class="selection-section card">
+            <h2><i class="fas fa-user-graduate"></i> بيانات الطالب والواجب</h2>
+            <div class="selection-grid">
+                <div class="form-group">
+                    <label for="studentId"><i class="fas fa-id-card"></i> رقم الطالب <span class="required">*</span></label>
+                    <input type="text" id="studentId" placeholder="مثال: 20241001" maxlength="20">
+                    <span class="hint">رقم فريد لكل طالب</span>
+                </div>
+                <div class="form-group">
+                    <label for="studentName"><i class="fas fa-user"></i> اسم الطالب <span class="required">*</span></label>
+                    <input type="text" id="studentName" placeholder="أدخل اسمك الثلاثي">
+                </div>
+                <div class="form-group">
+                    <label for="specialization"><i class="fas fa-code"></i> التخصص <span class="required">*</span></label>
+                    <select id="specialization">
+                        <option value="">-- اختر التخصص --</option>
+                        <option value="تكنولوجيا المعلومات">💻 تكنولوجيا المعلومات</option>
+                        <option value="إدارة الأعمال">📊 إدارة الأعمال</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="grade"><i class="fas fa-graduation-cap"></i> الصف <span class="required">*</span></label>
+                    <select id="grade">
+                        <option value="">-- اختر الصف --</option>
+                        <option value="العاشر">العاشر</option>
+                        <option value="الحادي عشر">الحادي عشر</option>
+                        <option value="الثاني عشر">الثاني عشر</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="evaluatorName"><i class="fas fa-user-tie"></i> اسم المقيّم <span class="required">*</span></label>
+                    <select id="evaluatorName">
+                        <option value="">-- اختر التخصص أولاً --</option>
+                    </select>
+                    <span class="hint" id="evaluatorHint">⚠️ يرجى اختيار التخصص أولاً</span>
+                </div>
+                <div class="form-group">
+                    <label for="unitInfo"><i class="fas fa-book"></i> اسم الوحدة ورقمها <span class="required">*</span></label>
+                    <input type="text" id="unitInfo" placeholder="مثال: الوحدة الثالثة - البرمجة">
+                    <span class="hint">أدخل اسم الوحدة ورقمها</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- قسم رفع الملف -->
+        <section class="upload-section card">
+            <h2><i class="fas fa-cloud-upload-alt"></i> رفع الواجب</h2>
+            <div class="upload-area" id="uploadArea">
+                <i class="fas fa-file-pdf fa-3x"></i>
+                <p>اسحب ملف الواجب هنا أو اضغط للاختيار</p>
+                <p style="font-size:0.8rem;color:#a0aec0;">الملفات المدعومة: PDF, DOC, DOCX, JPG, PNG</p>
+                <input type="file" id="fileInput" accept=".pdf,.doc,.docx,.jpg,.png">
+                <span class="file-name" id="fileName">لم يتم اختيار ملف</span>
+            </div>
+            <button id="submitBtn" class="btn-primary"><i class="fas fa-paper-plane"></i> تسليم الواجب للمقيّم</button>
+            <div id="uploadMessage" class="message"></div>
+        </section>
+
+        <!-- ============================================================
+        قسم عرض الطلاب المسلّمين (محمي بكلمة سر)
+        ============================================================ -->
+        <section class="submissions-section card protected-section" id="submissionsSection">
+            <h2><i class="fas fa-list"></i> قائمة الطلاب الذين سلموا الواجب</h2>
+            
+            <!-- فلاتر العرض -->
+            <div class="filter-bar">
+                <select id="filterSpecialization">
+                    <option value="all">📚 كل التخصصات</option>
+                    <option value="تكنولوجيا المعلومات">💻 تكنولوجيا المعلومات</option>
+                    <option value="إدارة الأعمال">📊 إدارة الأعمال</option>
+                </select>
+                <select id="filterGrade">
+                    <option value="all">📖 كل الصفوف</option>
+                    <option value="العاشر">العاشر</option>
+                    <option value="الحادي عشر">الحادي عشر</option>
+                    <option value="الثاني عشر">الثاني عشر</option>
+                </select>
+                <select id="filterEvaluator">
+                    <option value="all">👨‍🏫 كل المقيّمين</option>
+                </select>
+                <button id="refreshBtn" class="btn-secondary"><i class="fas fa-sync"></i> تحديث</button>
+            </div>
+
+            <!-- الجدول -->
+            <div class="table-responsive">
+                <table id="submissionsTable">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>رقم الطالب</th>
+                            <th>اسم الطالب</th>
+                            <th>المقيّم</th>
+                            <th>التخصص</th>
+                            <th>الصف</th>
+                            <th>الوحدة</th>
+                            <th>اسم الملف</th>
+                            <th>تاريخ التسليم</th>
+                            <th>الحالة</th>
+                            <th>إجراءات</th>
+                        </tr>
+                    </thead>
+                    <tbody id="submissionsBody">
+                        <!-- سيتم إدراج البيانات هنا بواسطة JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+            <p id="emptyMessage" class="empty-message">📭 لا يوجد طلاب سلموا واجبات حتى الآن</p>
+        </section>
+
+        <!-- قسم إدارة المعلم (محمي بكلمة سر) -->
+        <section class="admin-section card protected-section" id="adminSection">
+            <h2><i class="fas fa-chalkboard-teacher"></i> لوحة تحكم المعلم</h2>
+            <p class="admin-hint">
+                <i class="fas fa-info-circle"></i> 
+                اضغط على أيقونة <i class="fas fa-check-circle" style="color:#27ae60;"></i> لتأكيد الاستلام الصحيح
+                | <i class="fas fa-trash" style="color:#e74c3c;"></i> لحذف التسليم
+            </p>
+            <div class="admin-actions">
+                <button id="resetDemoBtn" class="btn-danger"><i class="fas fa-trash-alt"></i> إعادة تعيين البيانات</button>
+                <button id="exportBtn" class="btn-secondary"><i class="fas fa-file-export"></i> تصدير التقرير (JSON)</button>
+            </div>
+        </section>
+    </main>
+
+    <!-- تذييل الصفحة -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-left">
+                    <div class="designer">
+                        <i class="fas fa-pen-fancy"></i> 
+                        المقيّم: <span> منذر عبدالوهاب الزعبي</span>
+                    </div>
+                </div>
+                <div class="footer-center">
+                    <i class="fas fa-school"></i>
+                    <p style="margin-top:5px;">نظام إدارة الواجبات الإلكتروني</p>
+                    <p style="font-size:0.75rem;opacity:0.6;">© 2026 جميع الحقوق محفوظة</p>
+                </div>
+                <div class="footer-right">
+                    <div class="official">
+                        <div>
+                            <span class="position"><i class="fas fa-user-tie"></i> مدير المدرسة:</span>
+                            <span class="name">د. طارق جيت</span>
+                        </div>
+                        <div>
+                            <span class="position"><i class="fas fa-clipboard-check"></i> ضابط الجودة:</span>
+                            <span class="name">أ. يزن الخطيب</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <i class="fas fa-code"></i> تم التطوير بواسطة أ.منذر الزعبي - مدرسة الطرة الثانوية للبنين
+            </div>
+        </div>
+    </footer>
+
+    <!-- ============================================================
+    جافا سكريبت (JavaScript)
+    ============================================================ -->
+    <script>
+        // ============================================================
+        // نظام إدارة الواجبات - مدرسة الطرة الثانوية للبنين
+        // ============================================================
+
+        // -------- كلمة سر المقيّم --------
+        const EVALUATOR_PASSWORD = 'teacher123';
+
+        // -------- قوائم المقيّمين حسب التخصص --------
+        const EVALUATORS = {
+            'تكنولوجيا المعلومات': [
+                'منذر الزعبي',
+                'فادي الحناوي',
+                'سالم السميرات',
+                'ثائر أبو زريق'
+            ],
+            'إدارة الأعمال': [
+                'معاوية الجهماني',
+                'محمد طويط',
+                'غيث عليان',
+                'محمد غرايبة'
+            ]
+        };
+
+        // -------- البيانات (مخزنة في LocalStorage) --------
+        const STORAGE_KEY = 'altorra_submissions';
+
+        // بيانات افتراضية عند التشغيل الأول
+        const defaultSubmissions = [
+            {
+                id: 1,
+                studentId: '20241001',
+                studentName: 'أحمد محمد علي',
+                evaluatorName: 'منذر الزعبي',
+                specialization: 'تكنولوجيا المعلومات',
+                grade: 'العاشر',
+                unitInfo: 'الوحدة الأولى - أساسيات البرمجة',
+                fileName: 'واجب_البرمجة_1.pdf',
+                fileSize: '2.4 MB',
+                uploadDate: '2026-09-02 10:30',
+                status: 'approved',
+                teacherNote: ''
+            },
+            {
+                id: 2,
+                studentId: '20241002',
+                studentName: 'خالد يوسف حسن',
+                evaluatorName: 'معاوية الجهماني',
+                specialization: 'إدارة الأعمال',
+                grade: 'الحادي عشر',
+                unitInfo: 'الوحدة الثالثة - التسويق',
+                fileName: 'تقرير_التسويق.docx',
+                fileSize: '1.8 MB',
+                uploadDate: '2026-09-02 11:15',
+                status: 'pending',
+                teacherNote: ''
+            },
+            {
+                id: 3,
+                studentId: '20241003',
+                studentName: 'سعيد عبدالله عمر',
+                evaluatorName: 'فادي الحناوي',
+                specialization: 'تكنولوجيا المعلومات',
+                grade: 'الثاني عشر',
+                unitInfo: 'الوحدة الخامسة - قواعد البيانات',
+                fileName: 'مشروع_قواعد_بيانات.sql',
+                fileSize: '3.1 MB',
+                uploadDate: '2026-09-01 14:45',
+                status: 'pending',
+                teacherNote: ''
+            },
+            {
+                id: 4,
+                studentId: '20241004',
+                studentName: 'منصور إبراهيم خالد',
+                evaluatorName: 'محمد طويط',
+                specialization: 'إدارة الأعمال',
+                grade: 'العاشر',
+                unitInfo: 'الوحدة الثانية - مبادئ الإدارة',
+                fileName: 'بحث_مبادئ_الإدارة.pdf',
+                fileSize: '1.2 MB',
+                uploadDate: '2026-09-03 09:20',
+                status: 'pending',
+                teacherNote: ''
+            }
+        ];
+
+        // -------- تهيئة البيانات --------
+        function initData() {
+            let data = localStorage.getItem(STORAGE_KEY);
+            if (!data) {
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(defaultSubmissions));
+            }
+        }
+
+        function getSubmissions() {
+            return JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+        }
+
+        function saveSubmissions(submissions) {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(submissions));
+        }
+
+        // -------- تحديث قائمة المقيّمين حسب التخصص --------
+        function updateEvaluators() {
+            const specialization = document.getElementById('specialization').value;
+            const evaluatorSelect = document.getElementById('evaluatorName');
+            const hint = document.getElementById('evaluatorHint');
+
+            // تفعيل القائمة
+            evaluatorSelect.disabled = false;
+
+            // مسح القائمة الحالية
+            evaluatorSelect.innerHTML = '';
+
+            if (specialization && EVALUATORS[specialization]) {
+                // إضافة خيار فارغ
+                const emptyOption = document.createElement('option');
+                emptyOption.value = '';
+                emptyOption.textContent = '-- اختر المقيّم --';
+                evaluatorSelect.appendChild(emptyOption);
+
+                // إضافة أسماء المقيّمين
+                EVALUATORS[specialization].forEach(name => {
+                    const option = document.createElement('option');
+                    option.value = name;
+                    option.textContent = name;
+                    evaluatorSelect.appendChild(option);
+                });
+
+                // تحديث النص الإرشادي
+                hint.textContent = `✅ ${EVALUATORS[specialization].length} مقيّم متاح`;
+                hint.className = 'hint success';
+                evaluatorSelect.style.color = '#2d3748';
+            } else {
+                // لا يوجد تخصص محدد
+                const emptyOption = document.createElement('option');
+                emptyOption.value = '';
+                emptyOption.textContent = '-- اختر التخصص أولاً --';
+                evaluatorSelect.appendChild(emptyOption);
+                evaluatorSelect.disabled = true;
+                hint.textContent = '⚠️ يرجى اختيار التخصص أولاً';
+                hint.className = 'hint error';
+                evaluatorSelect.style.color = '#a0aec0';
+            }
+        }
+
+        // -------- تحديث فلتر المقيّمين --------
+        function updateEvaluatorFilter() {
+            const submissions = getSubmissions();
+            const evaluators = [...new Set(submissions.map(s => s.evaluatorName).filter(Boolean))];
+            const currentValue = filterEvaluator.value;
+            
+            filterEvaluator.innerHTML = '<option value="all">👨‍🏫 كل المقيّمين</option>';
+            evaluators.forEach(e => {
+                const option = document.createElement('option');
+                option.value = e;
+                option.textContent = e;
+                filterEvaluator.appendChild(option);
+            });
+            
+            if ([...filterEvaluator.options].some(opt => opt.value === currentValue)) {
+                filterEvaluator.value = currentValue;
+            }
+        }
+
+        // -------- تحديث الإحصائيات --------
+        function updateStats() {
+            const submissions = getSubmissions();
+            const total = submissions.length;
+            const approved = submissions.filter(s => s.status === 'approved').length;
+            const pending = submissions.filter(s => s.status === 'pending').length;
+            
+            totalCount.textContent = total;
+            approvedCount.textContent = approved;
+            pendingCount.textContent = pending;
+        }
+
+        // -------- المتغيرات العامة --------
+        let currentFile = null;
+        let currentFileName = '';
+        let isEvaluatorLoggedIn = false;
+
+        // -------- عناصر DOM --------
+        const studentIdInput = document.getElementById('studentId');
+        const studentNameInput = document.getElementById('studentName');
+        const specializationSelect = document.getElementById('specialization');
+        const gradeSelect = document.getElementById('grade');
+        const evaluatorNameSelect = document.getElementById('evaluatorName');
+        const unitInfoInput = document.getElementById('unitInfo');
+        const fileInput = document.getElementById('fileInput');
+        const uploadArea = document.getElementById('uploadArea');
+        const fileNameDisplay = document.getElementById('fileName');
+        const submitBtn = document.getElementById('submitBtn');
+        const uploadMessage = document.getElementById('uploadMessage');
+        const submissionsBody = document.getElementById('submissionsBody');
+        const emptyMessage = document.getElementById('emptyMessage');
+        const filterSpecialization = document.getElementById('filterSpecialization');
+        const filterGrade = document.getElementById('filterGrade');
+        const filterEvaluator = document.getElementById('filterEvaluator');
+        const refreshBtn = document.getElementById('refreshBtn');
+        const resetDemoBtn = document.getElementById('resetDemoBtn');
+        const exportBtn = document.getElementById('exportBtn');
+        const totalCount = document.getElementById('totalCount');
+        const approvedCount = document.getElementById('approvedCount');
+        const pendingCount = document.getElementById('pendingCount');
+        const successModal = document.getElementById('successModal');
+        const submissionDetails = document.getElementById('submissionDetails');
+        const successToast = document.getElementById('successToast');
+        const toastMessage = document.getElementById('toastMessage');
+        const evaluatorPassword = document.getElementById('evaluatorPassword');
+        const loginStatus = document.getElementById('loginStatus');
+        const logoutBtn = document.getElementById('logoutBtn');
+
+        // -------- ربط حدث تغيير التخصص --------
+        specializationSelect.addEventListener('change', function() {
+            updateEvaluators();
+            // إذا كان المقيّم مسجلاً دخول، نحدث الجدول
+            if (isEvaluatorLoggedIn) {
+                renderTable();
+            }
+        });
+
+        // -------- عرض الجدول (للمقيّم فقط) --------
+        function renderTable() {
+            if (!isEvaluatorLoggedIn) {
+                document.querySelectorAll('.protected-section').forEach(el => el.classList.remove('visible'));
+                return;
+            }
+
+            document.querySelectorAll('.protected-section').forEach(el => el.classList.add('visible'));
+
+            const allSubmissions = getSubmissions();
+            const specFilter = filterSpecialization.value;
+            const gradeFilter = filterGrade.value;
+            const evaluatorFilter = filterEvaluator.value;
+
+            let filtered = allSubmissions;
+            if (specFilter !== 'all') {
+                filtered = filtered.filter(s => s.specialization === specFilter);
+            }
+            if (gradeFilter !== 'all') {
+                filtered = filtered.filter(s => s.grade === gradeFilter);
+            }
+            if (evaluatorFilter !== 'all') {
+                filtered = filtered.filter(s => s.evaluatorName === evaluatorFilter);
+            }
+
+            filtered.sort((a, b) => new Date(b.uploadDate) - new Date(a.uploadDate));
+
+            if (filtered.length === 0) {
+                submissionsBody.innerHTML = '';
+                emptyMessage.style.display = 'block';
+                updateStats();
+                updateEvaluatorFilter();
+                return;
+            }
+            emptyMessage.style.display = 'none';
+
+            let html = '';
+            filtered.forEach((sub, index) => {
+                const statusClass = sub.status === 'approved' ? 'status-approved' : 'status-pending';
+                const statusText = sub.status === 'approved' ? '✓ تم الاستلام' : '⏳ قيد المراجعة';
+                
+                let fileIcon = 'fa-file';
+                if (sub.fileName) {
+                    const ext = sub.fileName.split('.').pop().toLowerCase();
+                    if (['pdf'].includes(ext)) fileIcon = 'fa-file-pdf';
+                    else if (['doc', 'docx'].includes(ext)) fileIcon = 'fa-file-word';
+                    else if (['jpg', 'jpeg', 'png', 'gif'].includes(ext)) fileIcon = 'fa-file-image';
+                    else if (['sql', 'txt'].includes(ext)) fileIcon = 'fa-file-code';
+                }
+
+                html += `
+                    <tr>
+                        <td>${index + 1}</td>
+                        <td><strong>${sub.studentId || 'غير محدد'}</strong></td>
+                        <td><strong>${sub.studentName}</strong></td>
+                        <td><span style="color:#2e86c1;font-weight:600;">${sub.evaluatorName || 'غير محدد'}</span></td>
+                        <td>${sub.specialization}</td>
+                        <td>${sub.grade}</td>
+                        <td style="font-size:0.85rem;">${sub.unitInfo || 'غير محدد'}</td>
+                        <td>
+                            <i class="fas ${fileIcon}" style="color:#e74c3c;"></i>
+                            ${sub.fileName}
+                            <span style="font-size:0.65rem;color:#a0aec0;display:block;">(${sub.fileSize || 'غير معروف'})</span>
+                        </td>
+                        <td style="font-size:0.8rem;">${sub.uploadDate}</td>
+                        <td><span class="status-badge ${statusClass}">${statusText}</span></td>
+                        <td>
+                            <button class="action-btn approve" data-id="${sub.id}" title="تأكيد الاستلام">
+                                <i class="fas fa-check-circle" style="color:${sub.status === 'approved' ? '#27ae60' : '#bdc3c7'};"></i>
+                            </button>
+                            <button class="action-btn download" data-file="${sub.fileName}" title="تحميل الملف">
+                                <i class="fas fa-download" style="color:#2e86c1;"></i>
+                            </button>
+                            <button class="action-btn delete" data-id="${sub.id}" title="حذف التسليم">
+                                <i class="fas fa-trash" style="color:#e74c3c;"></i>
+                            </button>
+                        </td>
+                    </tr>
+                `;
+            });
+
+            submissionsBody.innerHTML = html;
+
+            document.querySelectorAll('.action-btn.approve').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const id = parseInt(this.dataset.id);
+                    toggleApproval(id);
+                });
+            });
+
+            document.querySelectorAll('.action-btn.download').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const fileName = this.dataset.file;
+                    alert(`📥 جاري تحميل الملف: "${fileName}"\n(هذه محاكاة - في التطبيق الفعلي سيتم تحميل الملف الحقيقي)`);
+                });
+            });
+
+            document.querySelectorAll('.action-btn.delete').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const id = parseInt(this.dataset.id);
+                    if (confirm('⚠️ هل أنت متأكد من حذف هذا التسليم؟')) {
+                        deleteSubmission(id);
+                    }
+                });
+            });
+
+            updateStats();
+            updateEvaluatorFilter();
+        }
+
+        // -------- تبديل حالة الموافقة --------
+        function toggleApproval(id) {
+            if (!isEvaluatorLoggedIn) {
+                showMessage('⚠️ يجب تسجيل الدخول كمدقق أولاً', 'error');
+                return;
+            }
+            let submissions = getSubmissions();
+            const sub = submissions.find(s => s.id === id);
+            if (sub) {
+                sub.status = sub.status === 'approved' ? 'pending' : 'approved';
+                saveSubmissions(submissions);
+                renderTable();
+                showMessage(`✅ تم تحديث حالة الطالب "${sub.studentName}"`, 'success');
+            }
+        }
+
+        // -------- حذف تسليم --------
+        function deleteSubmission(id) {
+            if (!isEvaluatorLoggedIn) {
+                showMessage('⚠️ يجب تسجيل الدخول كمدقق أولاً', 'error');
+                return;
+            }
+            let submissions = getSubmissions();
+            const sub = submissions.find(s => s.id === id);
+            submissions = submissions.filter(s => s.id !== id);
+            saveSubmissions(submissions);
+            renderTable();
+            if (sub) {
+                showMessage(`🗑️ تم حذف تسليم الطالب "${sub.studentName}"`, 'success');
+            }
+        }
+
+        // -------- عرض رسالة --------
+        function showMessage(text, type = 'success') {
+            uploadMessage.textContent = text;
+            uploadMessage.className = 'message ' + type;
+            uploadMessage.style.display = 'block';
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            setTimeout(() => {
+                uploadMessage.style.display = 'none';
+            }, 4000);
+        }
+
+        // -------- عرض نافذة التأكيد --------
+        function showSuccessModal(data) {
+            submissionDetails.innerHTML = `
+                <div class="row">
+                    <span class="label"><i class="fas fa-id-card"></i> رقم الطالب:</span>
+                    <span class="value">${data.studentId}</span>
+                </div>
+                <div class="row">
+                    <span class="label"><i class="fas fa-user"></i> اسم الطالب:</span>
+                    <span class="value">${data.studentName}</span>
+                </div>
+                <div class="row">
+                    <span class="label"><i class="fas fa-user-tie"></i> المقيّم:</span>
+                    <span class="value">${data.evaluatorName}</span>
+                </div>
+                <div class="row">
+                    <span class="label"><i class="fas fa-code"></i> التخصص:</span>
+                    <span class="value">${data.specialization}</span>
+                </div>
+                <div class="row">
+                    <span class="label"><i class="fas fa-graduation-cap"></i> الصف:</span>
+                    <span class="value">${data.grade}</span>
+                </div>
+                <div class="row">
+                    <span class="label"><i class="fas fa-book"></i> الوحدة:</span>
+                    <span class="value">${data.unitInfo}</span>
+                </div>
+                <div class="row">
+                    <span class="label"><i class="fas fa-file"></i> الملف:</span>
+                    <span class="value">${data.fileName}</span>
+                </div>
+                <div class="row">
+                    <span class="label"><i class="fas fa-clock"></i> تاريخ التسليم:</span>
+                    <span class="value">${data.uploadDate}</span>
+                </div>
+            `;
+            successModal.classList.add('active');
+        }
+
+        function closeModal() {
+            successModal.classList.remove('active');
+        }
+
+        successModal.addEventListener('click', function(e) {
+            if (e.target === this) closeModal();
+        });
+
+        // -------- عرض رسالة Toast --------
+        function showToast(message) {
+            toastMessage.textContent = message;
+            successToast.classList.add('show');
+            setTimeout(() => {
+                successToast.classList.remove('show');
+            }, 5000);
+        }
+
+        // -------- معالجة رفع الملف --------
+        uploadArea.addEventListener('click', function(e) {
+            if (e.target.tagName !== 'INPUT') {
+                fileInput.click();
+            }
+        });
+
+        uploadArea.addEventListener('dragover', function(e) {
+            e.preventDefault();
+            this.classList.add('dragover');
+        });
+
+        uploadArea.addEventListener('dragleave', function(e) {
+            e.preventDefault();
+            this.classList.remove('dragover');
+        });
+
+        uploadArea.addEventListener('drop', function(e) {
+            e.preventDefault();
+            this.classList.remove('dragover');
+            if (e.dataTransfer.files.length > 0) {
+                fileInput.files = e.dataTransfer.files;
+                handleFileSelect(e.dataTransfer.files[0]);
+            }
+        });
+
+        fileInput.addEventListener('change', function() {
+            if (this.files.length > 0) {
+                handleFileSelect(this.files[0]);
+            }
+        });
+
+        function handleFileSelect(file) {
+            if (file.size > 10 * 1024 * 1024) {
+                showMessage('⚠️ حجم الملف كبير جداً (الحد الأقصى 10 ميجابايت)', 'error');
+                fileInput.value = '';
+                return;
+            }
+            
+            currentFile = file;
+            currentFileName = file.name;
+            fileNameDisplay.textContent = `📎 ${file.name} (${(file.size / 1024 / 1024).toFixed(2)} MB)`;
+            fileNameDisplay.style.color = '#2e86c1';
+            fileNameDisplay.style.background = '#dbeafe';
+        }
+
+        // -------- تسجيل دخول المقيّم --------
+        function loginEvaluator() {
+            const password = evaluatorPassword.value.trim();
+            if (password === EVALUATOR_PASSWORD) {
+                isEvaluatorLoggedIn = true;
+                loginStatus.className = 'login-status logged-in';
+                loginStatus.innerHTML = '<i class="fas fa-unlock"></i> متصل';
+                evaluatorPassword.value = '';
+                evaluatorPassword.style.display = 'none';
+                logoutBtn.style.display = 'inline-block';
+                document.querySelector('.evaluator-login .btn-gold').style.display = 'none';
+                showMessage('🔓 تم تسجيل الدخول بنجاح!', 'success');
+                renderTable();
+            } else {
+                showMessage('❌ كلمة سر غير صحيحة!', 'error');
+                evaluatorPassword.value = '';
+                evaluatorPassword.focus();
+            }
+        }
+
+        // -------- تسجيل خروج المقيّم --------
+        function logoutEvaluator() {
+            isEvaluatorLoggedIn = false;
+            loginStatus.className = 'login-status logged-out';
+            loginStatus.innerHTML = '<i class="fas fa-lock"></i> غير متصل';
+            evaluatorPassword.style.display = 'block';
+            logoutBtn.style.display = 'none';
+            document.querySelector('.evaluator-login .btn-gold').style.display = 'inline-block';
+            document.querySelectorAll('.protected-section').forEach(el => el.classList.remove('visible'));
+            showMessage('🔒 تم تسجيل الخروج', 'info');
+        }
+
+        // -------- تسليم الواجب --------
+        submitBtn.addEventListener('click', function() {
+            const studentId = studentIdInput.value.trim();
+            const studentName = studentNameInput.value.trim();
+            const specialization = specializationSelect.value;
+            const grade = gradeSelect.value;
+            const evaluatorName = evaluatorNameSelect.value;
+            const unitInfo = unitInfoInput.value.trim();
+
+            // التحقق من الحقول
+            if (!studentId) {
+                showMessage('⚠️ الرجاء إدخال رقم الطالب', 'error');
+                studentIdInput.focus();
+                return;
+            }
+            if (!studentName) {
+                showMessage('⚠️ الرجاء إدخال اسم الطالب', 'error');
+                studentNameInput.focus();
+                return;
+            }
+            if (studentName.length < 3) {
+                showMessage('⚠️ الاسم يجب أن يكون مكوناً من 3 أحرف على الأقل', 'error');
+                studentNameInput.focus();
+                return;
+            }
+            if (!specialization) {
+                showMessage('⚠️ الرجاء اختيار التخصص', 'error');
+                specializationSelect.focus();
+                return;
+            }
+            if (!grade) {
+                showMessage('⚠️ الرجاء اختيار الصف', 'error');
+                gradeSelect.focus();
+                return;
+            }
+            if (!evaluatorName) {
+                showMessage('⚠️ الرجاء اختيار المقيّم', 'error');
+                evaluatorNameSelect.focus();
+                return;
+            }
+            if (!unitInfo) {
+                showMessage('⚠️ الرجاء إدخال اسم الوحدة ورقمها', 'error');
+                unitInfoInput.focus();
+                return;
+            }
+            if (!currentFile) {
+                showMessage('⚠️ الرجاء اختيار ملف الواجب', 'error');
+                return;
+            }
+
+            // التحقق من عدم وجود رقم طالب مكرر
+            const submissions = getSubmissions();
+            const duplicate = submissions.some(s => s.studentId === studentId);
+
+            if (duplicate) {
+                showMessage(`⚠️ رقم الطالب "${studentId}" مسجل بالفعل`, 'error');
+                studentIdInput.focus();
+                studentIdInput.select();
+                return;
+            }
+
+            // إنشاء سجل جديد
+            const now = new Date();
+            const newSubmission = {
+                id: Date.now(),
+                studentId: studentId,
+                studentName: studentName,
+                evaluatorName: evaluatorName,
+                specialization: specialization,
+                grade: grade,
+                unitInfo: unitInfo,
+                fileName: currentFile.name,
+                fileSize: (currentFile.size / 1024 / 1024).toFixed(2) + ' MB',
+                uploadDate: now.toLocaleString('ar-EG', { 
+                    hour12: false,
+                    year: 'numeric',
+                    month: '2-digit',
+                    day: '2-digit',
+                    hour: '2-digit',
+                    minute: '2-digit'
+                }),
+                status: 'pending',
+                teacherNote: ''
+            };
+
+            // إضافة إلى المصفوفة
+            submissions.push(newSubmission);
+            saveSubmissions(submissions);
+
+            // عرض النافذة المنبثقة للتأكيد
+            showSuccessModal(newSubmission);
+
+            // عرض رسالة Toast
+            showToast(`✅ تم تسليم واجب "${studentName}" بنجاح!`);
+
+            // إعادة تعيين النموذج
+            currentFile = null;
+            currentFileName = '';
+            fileInput.value = '';
+            fileNameDisplay.textContent = 'لم يتم اختيار ملف';
+            fileNameDisplay.style.color = '#2d3748';
+            fileNameDisplay.style.background = '#edf2f7';
+            
+            // مسح الحقول بعد التسليم
+            studentIdInput.value = '';
+            studentNameInput.value = '';
+            unitInfoInput.value = '';
+            // لا نمسح التخصص والصف والمقيّم لتسهيل الإضافة المتكررة
+
+            // تحديث الجدول (إذا كان المقيّم مسجلاً دخول)
+            if (isEvaluatorLoggedIn) {
+                renderTable();
+            }
+        });
+
+        // -------- إعادة تعيين البيانات --------
+        resetDemoBtn.addEventListener('click', function() {
+            if (!isEvaluatorLoggedIn) {
+                showMessage('⚠️ يجب تسجيل الدخول كمدقق أولاً', 'error');
+                return;
+            }
+            if (confirm('⚠️ هل أنت متأكد؟ سيتم حذف جميع البيانات وإعادة البيانات الافتراضية.')) {
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(defaultSubmissions));
+                renderTable();
+                showMessage('🔄 تم إعادة تعيين البيانات إلى الوضع الافتراضي', 'success');
+            }
+        });
+
+        // -------- تصدير التقرير --------
+        exportBtn.addEventListener('click', function() {
+            if (!isEvaluatorLoggedIn) {
+                showMessage('⚠️ يجب تسجيل الدخول كمدقق أولاً', 'error');
+                return;
+            }
+            const submissions = getSubmissions();
+            const dataStr = JSON.stringify(submissions, null, 2);
+            const blob = new Blob([dataStr], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `تقرير_الواجبات_${new Date().toLocaleDateString('ar-EG')}.json`;
+            a.click();
+            URL.revokeObjectURL(url);
+            showMessage('📊 تم تصدير التقرير بنجاح!', 'success');
+        });
+
+        // -------- تحديث الجدول --------
+        refreshBtn.addEventListener('click', function() {
+            if (!isEvaluatorLoggedIn) {
+                showMessage('⚠️ يجب تسجيل الدخول كمدقق أولاً', 'error');
+                return;
+            }
+            renderTable();
+            showMessage('🔄 تم تحديث القائمة', 'success');
+        });
+
+        // -------- تطبيق الفلاتر عند التغيير --------
+        filterSpecialization.addEventListener('change', renderTable);
+        filterGrade.addEventListener('change', renderTable);
+        filterEvaluator.addEventListener('change', renderTable);
+
+        // -------- التنقل بين الحقول بالضغط على Enter --------
+        studentIdInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') studentNameInput.focus();
+        });
+
+        studentNameInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') specializationSelect.focus();
+        });
+
+        specializationSelect.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') gradeSelect.focus();
+        });
+
+        gradeSelect.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') evaluatorNameSelect.focus();
+        });
+
+        evaluatorNameSelect.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') unitInfoInput.focus();
+        });
+
+        unitInfoInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') fileInput.click();
+        });
+
+        // -------- تهيئة الصفحة --------
+        initData();
+        updateEvaluators(); // تحديث قائمة المقيّمين عند تحميل الصفحة
+        renderTable();
+
+        // عرض رسالة ترحيب
+        setTimeout(() => {
+            const count = getSubmissions().length;
+            showMessage(`👋 مرحباً! عدد الطلاب المسجلين: ${count} طالب`, 'success');
+        }, 500);
+
+        console.log('✅ نظام مدرسة الطرة الثانوية للبنين جاهز!');
+        console.log('📌 عدد الطلاب المسجلين:', getSubmissions().length);
+        console.log('🔑 كلمة سر المقيّم:', EVALUATOR_PASSWORD);
+        console.log('👨‍🏫 قوائم المقيّمين:', EVALUATORS);
+    </script>
+
+</body>
+</html>
