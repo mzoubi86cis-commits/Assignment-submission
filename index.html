@@ -4,12 +4,25 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>مدرسة الطرة الثانوية للبنين - نظام رفع الواجبات</title>
+    
+    <!-- ============================================================
+    FAVICON - أيقونة الموقع (تظهر في تبويب المتصفح)
+    ============================================================ -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%230d3b66'/><circle cx='50' cy='40' r='20' fill='%23f1c40f'/><rect x='30' y='55' width='40' height='25' rx='5' fill='%23f1c40f'/><rect x='35' y='60' width='30' height='5' rx='2' fill='%230d3b66'/><rect x='35' y='68' width='30' height='5' rx='2' fill='%230d3b66'/></svg>">
+    
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- ============================================================
+    مكتبة QR Code
+    ============================================================ -->
+    <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
     
     <style>
         /* ============================================================
-           جميع التنسيقات (CSS) - تم اختصارها لتوفير المساحة
+           جميع التنسيقات (CSS)
            ============================================================ */
+        
+        /* ----- الإعدادات العامة ----- */
         * {
             margin: 0;
             padding: 0;
@@ -72,6 +85,7 @@
             box-shadow: 0 0 25px rgba(241, 196, 15, 0.4);
             flex-shrink: 0;
             animation: pulse 2s infinite;
+            overflow: hidden;
         }
 
         @keyframes pulse {
@@ -146,6 +160,118 @@
         .card h2 i {
             margin-left: 10px;
             color: #2e86c1;
+        }
+
+        /* ============================================================
+           قسم QR Code
+           ============================================================ */
+        .qr-section {
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            border: 2px solid #2e86c1;
+            border-radius: 16px;
+            padding: 25px 30px;
+            margin-bottom: 30px;
+            margin-top: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .qr-section .qr-info {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .qr-section .qr-info h3 {
+            color: #1a5276;
+            font-size: 1.2rem;
+            margin-bottom: 8px;
+        }
+
+        .qr-section .qr-info h3 i {
+            color: #f1c40f;
+            margin-left: 8px;
+        }
+
+        .qr-section .qr-info p {
+            color: #4a5568;
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        .qr-section .qr-info .url-display {
+            background: white;
+            padding: 8px 15px;
+            border-radius: 8px;
+            border: 2px solid #e2e8f0;
+            font-size: 0.85rem;
+            color: #2e86c1;
+            direction: ltr;
+            text-align: left;
+            margin-top: 8px;
+            word-break: break-all;
+            font-family: monospace;
+        }
+
+        .qr-section .qr-code-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .qr-section .qr-code-container #qrcode {
+            background: white;
+            padding: 12px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            border: 3px solid #f1c40f;
+        }
+
+        .qr-section .qr-code-container #qrcode img {
+            display: block;
+        }
+
+        .qr-section .qr-actions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 10px;
+        }
+
+        .btn-qr-download {
+            background: linear-gradient(135deg, #2e86c1, #0d3b66);
+            color: white;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 0.9rem;
+        }
+
+        .btn-qr-download:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 15px rgba(46, 134, 193, 0.4);
+        }
+
+        .btn-qr-copy {
+            background: #edf2f7;
+            color: #2d3748;
+            border: 2px solid #e2e8f0;
+            padding: 8px 20px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 0.9rem;
+        }
+
+        .btn-qr-copy:hover {
+            background: #e2e8f0;
         }
 
         /* ----- نموذج الاختيار ----- */
@@ -686,7 +812,7 @@
             background: linear-gradient(135deg, #0d3b66, #1a202c);
             color: #e2e8f0;
             padding: 30px 0 20px;
-            margin-top: 40px;
+            margin-top: 0;
             border-top: 4px solid #f1c40f;
         }
 
@@ -704,7 +830,7 @@
 
         .footer-left .designer {
             font-size: 1.1rem;
-            font-weight: 650;
+            font-weight: 600;
             color: #f1c40f;
         }
 
@@ -850,6 +976,13 @@
                 min-width: unset;
                 width: 100%;
             }
+            .qr-section {
+                flex-direction: column;
+                text-align: center;
+            }
+            .qr-section .qr-code-container {
+                order: -1;
+            }
         }
 
         @media (max-width: 768px) {
@@ -919,6 +1052,9 @@
                 width: 90%;
                 text-align: center;
             }
+            .qr-section .qr-info .url-display {
+                font-size: 0.75rem;
+            }
         }
 
         @media (max-width: 480px) {
@@ -939,6 +1075,9 @@
                 padding: 8px 12px;
                 font-size: 0.8rem;
             }
+            .qr-section {
+                padding: 15px;
+            }
         }
     </style>
 </head>
@@ -954,11 +1093,24 @@
             <div class="header-right">
                 <div class="logo-container">
                     <div class="logo-img">
+                        <!-- ============================================================
+                        اختر أحد خيارات الشعار من الأسفل (قم بإلغاء تعليق الخيار المطلوب)
+                        ============================================================ -->
+                        
+                        <!-- الخيار 1: شعار كتاب وتخرج (أنيق واحترافي) -->
                         <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
                             <circle cx="50" cy="50" r="45" fill="#0d3b66" stroke="#f1c40f" stroke-width="3"/>
                             <circle cx="50" cy="50" r="35" fill="#1a5276" stroke="#f1c40f" stroke-width="2"/>
-                            <text x="50" y="65" font-family="Arial, sans-serif" font-size="45" font-weight="bold" fill="#f1c40f" text-anchor="middle">ط</text>
-                            <text x="50" y="88" font-family="Arial, sans-serif" font-size="10" font-weight="bold" fill="white" text-anchor="middle">الثانوية</text>
+                            <!-- كتاب مفتوح -->
+                            <path d="M25 35 L50 28 L75 35 L75 65 L50 72 L25 65 Z" fill="#f1c40f" opacity="0.9"/>
+                            <path d="M50 28 L50 72" stroke="#0d3b66" stroke-width="2"/>
+                            <!-- قبعة تخرج -->
+                            <polygon points="35,30 50,18 65,30 50,42" fill="#f1c40f" stroke="white" stroke-width="1"/>
+                            <rect x="47" y="40" width="6" height="5" fill="#f1c40f" rx="1"/>
+                            <circle cx="50" cy="43" r="2" fill="#0d3b66"/>
+                            <!-- نجوم -->
+                            <circle cx="30" cy="55" r="2" fill="white" opacity="0.6"/>
+                            <circle cx="70" cy="55" r="2" fill="white" opacity="0.6"/>
                         </svg>
                     </div>
                     <div class="logo-text">
@@ -1166,6 +1318,31 @@
                 <button id="exportBtn" class="btn-secondary"><i class="fas fa-file-export"></i> تصدير التقرير (JSON)</button>
             </div>
         </section>
+
+        <!-- ============================================================
+        قسم QR Code - في أسفل الصفحة قبل التذييل
+        ============================================================ -->
+        <section class="qr-section" id="qrSection">
+            <div class="qr-info">
+                <h3><i class="fas fa-qrcode"></i> رابط الموقع - QR Code</h3>
+                <p>
+                    <i class="fas fa-mobile-alt" style="color:#2e86c1;"></i> 
+                    استخدم كود QR لزيارة الموقع بسرعة من هاتفك أو مشاركته مع الآخرين
+                </p>
+                <div class="url-display" id="siteUrl">جاري تحميل الرابط...</div>
+                <div class="qr-actions">
+                    <button class="btn-qr-download" onclick="downloadQR()">
+                        <i class="fas fa-download"></i> تحميل QR Code
+                    </button>
+                    <button class="btn-qr-copy" onclick="copyUrl()">
+                        <i class="fas fa-copy"></i> نسخ الرابط
+                    </button>
+                </div>
+            </div>
+            <div class="qr-code-container">
+                <div id="qrcode"></div>
+            </div>
+        </section>
     </main>
 
     <!-- تذييل الصفحة -->
@@ -1175,7 +1352,7 @@
                 <div class="footer-left">
                     <div class="designer">
                         <i class="fas fa-pen-fancy"></i> 
-                        تصميم المقيّم: <span> منذر عبدالوهاب الزعبي</span>
+                        المصمم: <span>المقيّم: منذر عبدالوهاب الزعبي</span>
                     </div>
                 </div>
                 <div class="footer-center">
@@ -1197,7 +1374,7 @@
                 </div>
             </div>
             <div class="footer-bottom">
-                <i class="fas fa-code"></i> تم التطوير بواسطة أ.منذر الزعبي - مدرسة الطرة الثانوية للبنين
+                <i class="fas fa-code"></i> تم التطوير بواسطة فريق التقنية - مدرسة الطرة الثانوية للبنين
             </div>
         </div>
     </footer>
@@ -1314,20 +1491,15 @@
             const evaluatorSelect = document.getElementById('evaluatorName');
             const hint = document.getElementById('evaluatorHint');
 
-            // تفعيل القائمة
             evaluatorSelect.disabled = false;
-
-            // مسح القائمة الحالية
             evaluatorSelect.innerHTML = '';
 
             if (specialization && EVALUATORS[specialization]) {
-                // إضافة خيار فارغ
                 const emptyOption = document.createElement('option');
                 emptyOption.value = '';
                 emptyOption.textContent = '-- اختر المقيّم --';
                 evaluatorSelect.appendChild(emptyOption);
 
-                // إضافة أسماء المقيّمين
                 EVALUATORS[specialization].forEach(name => {
                     const option = document.createElement('option');
                     option.value = name;
@@ -1335,12 +1507,10 @@
                     evaluatorSelect.appendChild(option);
                 });
 
-                // تحديث النص الإرشادي
                 hint.textContent = `✅ ${EVALUATORS[specialization].length} مقيّم متاح`;
                 hint.className = 'hint success';
                 evaluatorSelect.style.color = '#2d3748';
             } else {
-                // لا يوجد تخصص محدد
                 const emptyOption = document.createElement('option');
                 emptyOption.value = '';
                 emptyOption.textContent = '-- اختر التخصص أولاً --';
@@ -1387,6 +1557,7 @@
         let currentFile = null;
         let currentFileName = '';
         let isEvaluatorLoggedIn = false;
+        let qrCodeInstance = null;
 
         // -------- عناصر DOM --------
         const studentIdInput = document.getElementById('studentId');
@@ -1419,10 +1590,56 @@
         const loginStatus = document.getElementById('loginStatus');
         const logoutBtn = document.getElementById('logoutBtn');
 
+        // ============================================================
+        // QR Code Functions
+        // ============================================================
+        function generateQR() {
+            const url = window.location.href;
+            document.getElementById('siteUrl').textContent = url;
+            
+            const qrContainer = document.getElementById('qrcode');
+            qrContainer.innerHTML = '';
+            
+            qrCodeInstance = new QRCode(qrContainer, {
+                text: url,
+                width: 150,
+                height: 150,
+                colorDark: '#0d3b66',
+                colorLight: '#ffffff',
+                correctLevel: QRCode.CorrectLevel.H
+            });
+        }
+
+        function downloadQR() {
+            const canvas = document.querySelector('#qrcode canvas');
+            if (canvas) {
+                const link = document.createElement('a');
+                link.download = 'QR_Code_مدرسة_الطرة.png';
+                link.href = canvas.toDataURL('image/png');
+                link.click();
+            } else {
+                alert('⚠️ يرجى الانتظار حتى يتم تحميل QR Code');
+            }
+        }
+
+        function copyUrl() {
+            const url = window.location.href;
+            navigator.clipboard.writeText(url).then(() => {
+                showToast('📋 تم نسخ الرابط بنجاح!');
+            }).catch(() => {
+                const input = document.createElement('input');
+                input.value = url;
+                document.body.appendChild(input);
+                input.select();
+                document.execCommand('copy');
+                document.body.removeChild(input);
+                showToast('📋 تم نسخ الرابط بنجاح!');
+            });
+        }
+
         // -------- ربط حدث تغيير التخصص --------
         specializationSelect.addEventListener('change', function() {
             updateEvaluators();
-            // إذا كان المقيّم مسجلاً دخول، نحدث الجدول
             if (isEvaluatorLoggedIn) {
                 renderTable();
             }
@@ -1724,7 +1941,6 @@
             const evaluatorName = evaluatorNameSelect.value;
             const unitInfo = unitInfoInput.value.trim();
 
-            // التحقق من الحقول
             if (!studentId) {
                 showMessage('⚠️ الرجاء إدخال رقم الطالب', 'error');
                 studentIdInput.focus();
@@ -1765,7 +1981,6 @@
                 return;
             }
 
-            // التحقق من عدم وجود رقم طالب مكرر
             const submissions = getSubmissions();
             const duplicate = submissions.some(s => s.studentId === studentId);
 
@@ -1776,7 +1991,6 @@
                 return;
             }
 
-            // إنشاء سجل جديد
             const now = new Date();
             const newSubmission = {
                 id: Date.now(),
@@ -1800,17 +2014,12 @@
                 teacherNote: ''
             };
 
-            // إضافة إلى المصفوفة
             submissions.push(newSubmission);
             saveSubmissions(submissions);
 
-            // عرض النافذة المنبثقة للتأكيد
             showSuccessModal(newSubmission);
-
-            // عرض رسالة Toast
             showToast(`✅ تم تسليم واجب "${studentName}" بنجاح!`);
 
-            // إعادة تعيين النموذج
             currentFile = null;
             currentFileName = '';
             fileInput.value = '';
@@ -1818,13 +2027,10 @@
             fileNameDisplay.style.color = '#2d3748';
             fileNameDisplay.style.background = '#edf2f7';
             
-            // مسح الحقول بعد التسليم
             studentIdInput.value = '';
             studentNameInput.value = '';
             unitInfoInput.value = '';
-            // لا نمسح التخصص والصف والمقيّم لتسهيل الإضافة المتكررة
 
-            // تحديث الجدول (إذا كان المقيّم مسجلاً دخول)
             if (isEvaluatorLoggedIn) {
                 renderTable();
             }
@@ -1903,19 +2109,23 @@
 
         // -------- تهيئة الصفحة --------
         initData();
-        updateEvaluators(); // تحديث قائمة المقيّمين عند تحميل الصفحة
+        updateEvaluators();
         renderTable();
 
-        // عرض رسالة ترحيب
+        setTimeout(() => {
+            generateQR();
+        }, 500);
+
         setTimeout(() => {
             const count = getSubmissions().length;
             showMessage(`👋 مرحباً! عدد الطلاب المسجلين: ${count} طالب`, 'success');
-        }, 500);
+        }, 800);
 
         console.log('✅ نظام مدرسة الطرة الثانوية للبنين جاهز!');
         console.log('📌 عدد الطلاب المسجلين:', getSubmissions().length);
         console.log('🔑 كلمة سر المقيّم:', EVALUATOR_PASSWORD);
         console.log('👨‍🏫 قوائم المقيّمين:', EVALUATORS);
+        console.log('📱 QR Code تم إنشاؤه للرابط:', window.location.href);
     </script>
 
 </body>
