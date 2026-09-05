@@ -11,7 +11,7 @@
     <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
     
     <style>
-        /* ====== جميع التنسيقات (نفس الكود الأصلي) ====== */
+        /* ====== جميع التنسيقات ====== */
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f0f4f8; color: #2d3748; line-height: 1.6; }
         .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
@@ -98,6 +98,8 @@
         .btn-danger:hover { background: #c0392b; transform: scale(1.02); }
         .btn-gold { background: linear-gradient(135deg, #f1c40f, #f39c12); color: #1a202c; border: none; padding: 10px 25px; border-radius: 10px; font-weight: 700; cursor: pointer; transition: all 0.3s; }
         .btn-gold:hover { transform: scale(1.05); box-shadow: 0 4px 15px rgba(241, 196, 15, 0.4); }
+        .btn-success { background: #27ae60; color: white; border: none; padding: 8px 18px; border-radius: 10px; font-weight: 600; cursor: pointer; transition: all 0.3s; }
+        .btn-success:hover { background: #1e8449; transform: scale(1.02); }
         
         .message { margin-top: 15px; padding: 12px 18px; border-radius: 10px; font-weight: 600; display: none; }
         .message.success { display: block; background: #d4edda; color: #155724; border: 2px solid #c3e6cb; }
@@ -110,7 +112,7 @@
         @keyframes modalIn { from { transform: scale(0.8) translateY(-50px); opacity: 0; } to { transform: scale(1) translateY(0); opacity: 1; } }
         .modal-box .icon-success { font-size: 4rem; color: #27ae60; margin-bottom: 15px; }
         .modal-box h2 { color: #1a5276; margin-bottom: 10px; }
-        .modal-box .details { background: #f7fafc; padding: 15px; border-radius: 10px; margin: 15px 0; text-align: right; border: 2px solid #e2e8f0; }
+        .modal-box .details { background: #f7fafc; padding: 15px; border-radius: 10px; margin: 15px 0; text-align: right; border: 2px solid #e2e8f0; max-height: 400px; overflow-y: auto; }
         .modal-box .details .row { display: flex; justify-content: space-between; padding: 5px 0; border-bottom: 1px solid #edf2f7; }
         .modal-box .details .row:last-child { border-bottom: none; }
         .modal-box .details .label { font-weight: 600; color: #2d3748; }
@@ -121,6 +123,25 @@
         .filter-bar { display: flex; flex-wrap: wrap; gap: 15px; margin-bottom: 20px; align-items: center; }
         .filter-bar select { padding: 10px 15px; border: 2px solid #e2e8f0; border-radius: 10px; background: #f7fafc; font-size: 0.95rem; font-family: inherit; flex: 1; min-width: 150px; }
         .filter-bar select:focus { outline: none; border-color: #2e86c1; }
+        
+        .student-search {
+            background: linear-gradient(135deg, #e8f4fd, #dbeafe);
+            border: 2px solid #2e86c1;
+            border-radius: 16px;
+            padding: 20px 25px;
+            margin-bottom: 25px;
+            display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 15px;
+        }
+        .student-search .search-title { font-weight: 700; color: #1a5276; font-size: 1rem; }
+        .student-search .search-title i { color: #f1c40f; margin-left: 8px; }
+        .student-search .search-inputs { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; flex: 1; }
+        .student-search .search-inputs input { padding: 10px 15px; border: 2px solid #e2e8f0; border-radius: 10px; font-size: 0.95rem; background: white; flex: 1; min-width: 150px; }
+        .student-search .search-inputs input:focus { outline: none; border-color: #2e86c1; }
+        .student-search .search-result { padding: 10px 20px; border-radius: 10px; font-weight: 600; font-size: 0.95rem; min-width: 200px; text-align: center; max-height: 200px; overflow-y: auto; }
+        .student-search .search-result.found { background: #d4edda; color: #155724; border: 2px solid #c3e6cb; }
+        .student-search .search-result.not-found { background: #f8d7da; color: #721c24; border: 2px solid #f5c6cb; }
+        .student-search .search-result.waiting { background: #fefcbf; color: #975a16; border: 2px solid #fce8b2; }
+        .student-search .search-result .status-icon { font-size: 1.5rem; margin-left: 8px; }
         
         .evaluator-login {
             background: linear-gradient(135deg, #f8f9fa, #e9ecef);
@@ -141,6 +162,7 @@
         table th i { margin-left: 5px; }
         table td { padding: 10px; text-align: center; border-bottom: 1px solid #edf2f7; }
         table tr:hover td { background: #f0f7ff; }
+        
         .status-badge { display: inline-block; padding: 4px 14px; border-radius: 30px; font-size: 0.8rem; font-weight: 700; }
         .status-pending { background: #fefcbf; color: #975a16; }
         .status-approved { background: #c6f6d5; color: #22543d; }
@@ -149,6 +171,7 @@
         .action-btn.approve { color: #27ae60; }
         .action-btn.download { color: #2e86c1; }
         .action-btn.delete { color: #e74c3c; }
+        .action-btn.grade { color: #f39c12; }
         .empty-message { text-align: center; padding: 30px; color: #a0aec0; font-size: 1.1rem; }
         
         .protected-section { display: none; }
@@ -164,12 +187,12 @@
         }
         .footer-content { display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 20px; }
         .footer-left { text-align: right; }
-        .footer-left .designer { font-size: 1.1rem; font-weight: 600; color: #f1c40f; }
+        .footer-left .designer { font-size: 1.2rem; font-weight: 700; color: #f1c40f; }
         .footer-left .designer i { margin-left: 8px; }
         .footer-left .designer span { color: #2e86c1; }
         .footer-center { text-align: center; font-size: 0.85rem; opacity: 0.8; }
         .footer-center i { color: #f1c40f; }
-        .footer-right { text-align: left; font-size: 0.9rem; }
+        .footer-right { text-align: left; font-size: 0.8rem; }
         .footer-right .official { display: flex; flex-direction: column; gap: 5px; }
         .footer-right .official .position { font-weight: 600; color: #f1c40f; }
         .footer-right .official .name { color: #e2e8f0; }
@@ -193,6 +216,19 @@
         @keyframes slideUp { from { transform: translateX(-50%) translateY(100px); opacity: 0; } to { transform: translateX(-50%) translateY(0); opacity: 1; } }
         .success-toast i { font-size: 1.8rem; }
         
+        /* ====== علامات التقييم بألوان مميزة ====== */
+        .grade-badge {
+            display: inline-block;
+            padding: 4px 14px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 700;
+        }
+        .grade-D { background: #d4edda; color: #155724; border: 2px solid #27ae60; }
+        .grade-M { background: #cce5ff; color: #004085; border: 2px solid #3498db; }
+        .grade-P { background: #fff3cd; color: #856404; border: 2px solid #f39c12; }
+        .grade-U { background: #f8d7da; color: #721c24; border: 2px solid #e74c3c; }
+        
         @media (max-width: 992px) {
             .footer-content { flex-direction: column; align-items: center; text-align: center; }
             .footer-left, .footer-right { text-align: center; }
@@ -202,6 +238,9 @@
             .evaluator-login .login-inputs input { min-width: unset; width: 100%; }
             .qr-section { flex-direction: column; text-align: center; }
             .qr-section .qr-code-container { order: -1; }
+            .student-search { flex-direction: column; align-items: stretch; }
+            .student-search .search-inputs { flex-direction: column; }
+            .student-search .search-inputs input { min-width: unset; width: 100%; }
         }
         @media (max-width: 768px) {
             .logo-img { width: 55px; height: 55px; }
@@ -234,39 +273,7 @@
 <body>
 
     <!-- ============================================================
-    الرأس
-    ============================================================ -->
-    <header>
-        <div class="container">
-            <div class="header-right">
-                <div class="logo-container">
-                    <div class="logo-img">
-                        <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-                            <circle cx="50" cy="50" r="45" fill="#0d3b66" stroke="#f1c40f" stroke-width="3"/>
-                            <circle cx="50" cy="50" r="35" fill="#1a5276" stroke="#f1c40f" stroke-width="2"/>
-                            <path d="M25 35 L50 28 L75 35 L75 65 L50 72 L25 65 Z" fill="#f1c40f" opacity="0.9"/>
-                            <path d="M50 28 L50 72" stroke="#0d3b66" stroke-width="2"/>
-                            <polygon points="35,30 50,18 65,30 50,42" fill="#f1c40f" stroke="white" stroke-width="1"/>
-                            <rect x="47" y="40" width="6" height="5" fill="#f1c40f" rx="1"/>
-                            <circle cx="50" cy="43" r="2" fill="#0d3b66"/>
-                            <circle cx="30" cy="55" r="2" fill="white" opacity="0.6"/>
-                            <circle cx="70" cy="55" r="2" fill="white" opacity="0.6"/>
-                        </svg>
-                    </div>
-                    <div class="logo-text">
-                        <h1>مدرسة الطرة الثانوية للبنين</h1>
-                        <span class="school-sub"><i class="fas fa-university"></i> مديرية التربية والتعليم لواء الرمثا</span>
-                    </div>
-                </div>
-            </div>
-            <div class="header-left">
-                <span class="subtitle"><i class="fas fa-cloud-upload-alt"></i> نظام رفع وتسليم الواجبات الإلكتروني</span>
-            </div>
-        </div>
-    </header>
-
-    <!-- ============================================================
-    نافذة التأكيد
+    نافذة التأكيد (تسليم الواجب)
     ============================================================ -->
     <div class="modal-overlay" id="successModal">
         <div class="modal-box">
@@ -275,6 +282,20 @@
             <p>شكراً لك، تم استلام واجبك وسيتم مراجعته من قبل المقيّم.</p>
             <div class="details" id="submissionDetails"></div>
             <button class="btn-close-modal" onclick="closeModal()"><i class="fas fa-check"></i> حسناً</button>
+        </div>
+    </div>
+
+    <!-- ============================================================
+    نافذة نتائج البحث
+    ============================================================ -->
+    <div class="modal-overlay" id="searchResultModal">
+        <div class="modal-box">
+            <div class="icon-success" id="searchResultIcon" style="color:#2e86c1;">
+                <i class="fas fa-search"></i>
+            </div>
+            <h2 id="searchResultTitle">📋 نتائج البحث</h2>
+            <div class="details" id="searchResultDetails"></div>
+            <button class="btn-close-modal" onclick="closeSearchModal()"><i class="fas fa-check"></i> حسناً</button>
         </div>
     </div>
 
@@ -296,6 +317,19 @@
             <div class="stat-item total"><i class="fas fa-users"></i> إجمالي المسلّمين: <span id="totalCount">0</span></div>
             <div class="stat-item approved"><i class="fas fa-check-circle"></i> تم التأكيد: <span id="approvedCount">0</span></div>
             <div class="stat-item pending"><i class="fas fa-clock"></i> قيد المراجعة: <span id="pendingCount">0</span></div>
+        </section>
+
+        <!-- قسم بحث الطالب -->
+        <section class="student-search">
+            <div class="search-title"><i class="fas fa-search"></i> بحث عن واجبي</div>
+            <div class="search-inputs">
+                <input type="text" id="studentSearchInput" placeholder="🔍 أدخل رقم الطالب أو اسمه..." onkeypress="if(event.key==='Enter') searchStudent()">
+                <button class="btn-secondary" onclick="searchStudent()"><i class="fas fa-search"></i> بحث</button>
+                <div class="search-result waiting" id="searchResult">
+                    <span class="status-icon"><i class="fas fa-info-circle"></i></span>
+                    أدخل رقمك أو اسمك للبحث
+                </div>
+            </div>
         </section>
 
         <!-- تسجيل الدخول -->
@@ -402,6 +436,7 @@
                             <th>اسم الملف</th>
                             <th>تاريخ التسليم</th>
                             <th>الحالة</th>
+                            <th>العلامة</th>
                             <th>إجراءات</th>
                         </tr>
                     </thead>
@@ -416,9 +451,10 @@
             <h2><i class="fas fa-chalkboard-teacher"></i> لوحة تحكم المعلم</h2>
             <p class="admin-hint">
                 <i class="fas fa-info-circle"></i> 
-                اضغط على أيقونة <i class="fas fa-check-circle" style="color:#27ae60;"></i> لتأكيد الاستلام الصحيح
-                | <i class="fas fa-trash" style="color:#e74c3c;"></i> لحذف التسليم
-                | <i class="fas fa-download" style="color:#2e86c1;"></i> لتحميل الملف الفعلي
+                <i class="fas fa-check-circle" style="color:#27ae60;"></i> تأكيد الاستلام |
+                <i class="fas fa-star" style="color:#f39c12;"></i> إضافة علامة (D, M, P, U) |
+                <i class="fas fa-download" style="color:#2e86c1;"></i> تحميل الملف |
+                <i class="fas fa-trash" style="color:#e74c3c;"></i> حذف التسليم
             </p>
             <div class="admin-actions">
                 <button id="resetDemoBtn" class="btn-danger"><i class="fas fa-trash-alt"></i> إعادة تعيين البيانات</button>
@@ -450,21 +486,29 @@
         <div class="container">
             <div class="footer-content">
                 <div class="footer-left">
-                    <div class="designer"><i class="fas fa-pen-fancy"></i> المصمم: <span>المقيّم: منذر عبدالوهاب الزعبي</span></div>
+                    <div class="designer"><i class="fas fa-pen-fancy"></i> إعداد وتصميم: <span> منذر عبدالوهاب الزعبي</span></div>
                 </div>
                 <div class="footer-center">
                     <i class="fas fa-school"></i>
-                    <p>نظام إدارة الواجبات الإلكتروني</p>
-                    <p style="font-size:0.75rem;opacity:0.6;">© 2026 جميع الحقوق محفوظة</p>
+                    <p>BTEC - نظام إدارة الواجبات الإلكتروني</p>
+                    <p style="font-size:0.75rem;opacity:0.6;">© 2026- جميع الحقوق محفوظة</p>
+                    
+                    <br>
+                    <div><span class="position"><i class="fas fa-clipboard-check"></i> مقيمي تكنولوجيا المعلومات</span> <span class="name">منذر الزعبي، فادي الحناوي، سالم السميرات، ثائر أبو زريق</span></div>
+                    <div><span class="position"><i class="fas fa-clipboard-check"></i> مقيمي إدارة الاعمال</span> <span class="name">معاوية الجهماني، محمد طويط، غيث عليان، محمد غرايب</span></div>
+
+
                 </div>
                 <div class="footer-right">
                     <div class="official">
                         <div><span class="position"><i class="fas fa-user-tie"></i> مدير المدرسة:</span> <span class="name">د. طارق جيت</span></div>
                         <div><span class="position"><i class="fas fa-clipboard-check"></i> ضابط الجودة:</span> <span class="name">أ. يزن الخطيب</span></div>
+                        <div><span class="position"><i class="fas fa-clipboard-check"></i>  مساعد المدير:</span> <span class="name"> أ. محمد الشبول  </span></div>
+
                     </div>
                 </div>
             </div>
-            <div class="footer-bottom"><i class="fas fa-code"></i> تم التطوير بواسطة فريق التقنية - مدرسة الطرة الثانوية للبنين</div>
+            <div class="footer-bottom"><i class="fas fa-code"></i> تم التطوير بواسطة المقيّم: منذر الزعبي - مدرسة الطرة الثانوية للبنين</div>
         </div>
     </footer>
 
@@ -473,12 +517,11 @@
     ============================================================ -->
     <script>
         // ============================================================
-        // نظام إدارة الواجبات - مع تخزين الملفات محلياً
+        // نظام إدارة الواجبات - مع علامات D, M, P, U
         // ============================================================
 
         const EVALUATOR_PASSWORD = 'teacher123';
 
-        // قوائم المقيّمين
         const EVALUATORS = {
             'تكنولوجيا المعلومات': ['منذر الزعبي', 'فادي الحناوي', 'سالم السميرات', 'ثائر أبو زريق'],
             'إدارة الأعمال': ['معاوية الجهماني', 'محمد طويط', 'غيث عليان', 'محمد غرايبة']
@@ -486,24 +529,39 @@
 
         const STORAGE_KEY = 'altorra_submissions';
 
-        // ============================================================
-        // تخزين الملفات محلياً (على الجهاز)
-        // ============================================================
-        // الملفات تُحفظ في مجلد "uploads" داخل نفس مجلد الموقع
-        // يجب إنشاء هذا المجلد يدوياً
+        const defaultSubmissions = [
+            { id: 1, studentId: '20241001', studentName: 'أحمد محمد علي', evaluatorName: 'منذر الزعبي', specialization: 'تكنولوجيا المعلومات', grade: 'العاشر', unitInfo: 'الوحدة الأولى - أساسيات البرمجة', fileName: 'واجب_البرمجة_1.pdf', fileSize: '2.4 MB', uploadDate: '2026-09-02 10:30', status: 'approved', gradeValue: 'D' },
+            { id: 2, studentId: '20241002', studentName: 'خالد يوسف حسن', evaluatorName: 'معاوية الجهماني', specialization: 'إدارة الأعمال', grade: 'الحادي عشر', unitInfo: 'الوحدة الثالثة - التسويق', fileName: 'تقرير_التسويق.docx', fileSize: '1.8 MB', uploadDate: '2026-09-02 11:15', status: 'pending', gradeValue: '' },
+            { id: 3, studentId: '20241003', studentName: 'سعيد عبدالله عمر', evaluatorName: 'فادي الحناوي', specialization: 'تكنولوجيا المعلومات', grade: 'الثاني عشر', unitInfo: 'الوحدة الخامسة - قواعد البيانات', fileName: 'مشروع_قواعد_بيانات.sql', fileSize: '3.1 MB', uploadDate: '2026-09-01 14:45', status: 'pending', gradeValue: '' },
+            { id: 4, studentId: '20241004', studentName: 'منصور إبراهيم خالد', evaluatorName: 'محمد طويط', specialization: 'إدارة الأعمال', grade: 'العاشر', unitInfo: 'الوحدة الثانية - مبادئ الإدارة', fileName: 'بحث_مبادئ_الإدارة.pdf', fileSize: '1.2 MB', uploadDate: '2026-09-03 09:20', status: 'pending', gradeValue: '' }
+        ];
 
+        function initData() {
+            let data = localStorage.getItem(STORAGE_KEY);
+            if (!data) {
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(defaultSubmissions));
+            }
+        }
+
+        function getSubmissions() {
+            return JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+        }
+
+        function saveSubmissions(submissions) {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(submissions));
+        }
+
+        // ============================================================
+        // تخزين الملفات
+        // ============================================================
         function saveFileLocally(file, callback) {
-            // استخدام FileReader لقراءة الملف وتحويله إلى Base64
             const reader = new FileReader();
             reader.onload = function(e) {
                 const fileData = e.target.result;
-                // تخزين الملف في LocalStorage (مؤقتاً - للحصول على رابط)
-                // في التطبيق الفعلي، يتم حفظ الملف على السيرفر
                 try {
                     localStorage.setItem('file_' + file.name, fileData);
                     callback(fileData);
                 } catch (err) {
-                    // إذا كان الملف كبيراً، نستخدم IndexedDB
                     saveToIndexedDB(file, callback);
                 }
             };
@@ -553,18 +611,13 @@
             if (data) {
                 callback(data);
             } else {
-                // محاولة من IndexedDB
                 getFileFromIndexedDB(fileName, callback);
             }
         }
 
-        // ============================================================
-        // تحميل الملف الفعلي
-        // ============================================================
         function downloadActualFile(fileName) {
             getFileFromLocalStorage(fileName, function(fileData) {
                 if (fileData) {
-                    // إنشاء رابط تحميل
                     const link = document.createElement('a');
                     link.href = fileData;
                     link.download = fileName;
@@ -573,36 +626,9 @@
                     document.body.removeChild(link);
                     showToast('📥 جاري تحميل الملف: ' + fileName);
                 } else {
-                    // إذا لم يوجد الملف، نعرض رسالة
-                    alert('⚠️ الملف غير موجود في التخزين المحلي.\n' +
-                          'ملاحظة: الملفات تُحفظ محلياً فقط. تأكد من وجود الملف في مجلد uploads/');
+                    alert('⚠️ الملف غير موجود في التخزين المحلي.');
                 }
             });
-        }
-
-        // ============================================================
-        // البيانات الافتراضية
-        // ============================================================
-        const defaultSubmissions = [
-            { id: 1, studentId: '20241001', studentName: 'أحمد محمد علي', evaluatorName: 'منذر الزعبي', specialization: 'تكنولوجيا المعلومات', grade: 'العاشر', unitInfo: 'الوحدة الأولى - أساسيات البرمجة', fileName: 'واجب_البرمجة_1.pdf', fileSize: '2.4 MB', uploadDate: '2026-09-02 10:30', status: 'approved', teacherNote: '' },
-            { id: 2, studentId: '20241002', studentName: 'خالد يوسف حسن', evaluatorName: 'معاوية الجهماني', specialization: 'إدارة الأعمال', grade: 'الحادي عشر', unitInfo: 'الوحدة الثالثة - التسويق', fileName: 'تقرير_التسويق.docx', fileSize: '1.8 MB', uploadDate: '2026-09-02 11:15', status: 'pending', teacherNote: '' },
-            { id: 3, studentId: '20241003', studentName: 'سعيد عبدالله عمر', evaluatorName: 'فادي الحناوي', specialization: 'تكنولوجيا المعلومات', grade: 'الثاني عشر', unitInfo: 'الوحدة الخامسة - قواعد البيانات', fileName: 'مشروع_قواعد_بيانات.sql', fileSize: '3.1 MB', uploadDate: '2026-09-01 14:45', status: 'pending', teacherNote: '' },
-            { id: 4, studentId: '20241004', studentName: 'منصور إبراهيم خالد', evaluatorName: 'محمد طويط', specialization: 'إدارة الأعمال', grade: 'العاشر', unitInfo: 'الوحدة الثانية - مبادئ الإدارة', fileName: 'بحث_مبادئ_الإدارة.pdf', fileSize: '1.2 MB', uploadDate: '2026-09-03 09:20', status: 'pending', teacherNote: '' }
-        ];
-
-        function initData() {
-            let data = localStorage.getItem(STORAGE_KEY);
-            if (!data) {
-                localStorage.setItem(STORAGE_KEY, JSON.stringify(defaultSubmissions));
-            }
-        }
-
-        function getSubmissions() {
-            return JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
-        }
-
-        function saveSubmissions(submissions) {
-            localStorage.setItem(STORAGE_KEY, JSON.stringify(submissions));
         }
 
         // ============================================================
@@ -642,9 +668,143 @@
         const evaluatorPassword = document.getElementById('evaluatorPassword');
         const loginStatus = document.getElementById('loginStatus');
         const logoutBtn = document.getElementById('logoutBtn');
+        const studentSearchInput = document.getElementById('studentSearchInput');
+        const searchResult = document.getElementById('searchResult');
 
         // ============================================================
-        // الوظائف
+        // وظيفة بحث الطالب
+        // ============================================================
+        function searchStudent() {
+            const query = studentSearchInput.value.trim();
+            
+            if (!query) {
+                showToast('📝 الرجاء إدخال رقم الطالب أو اسمه');
+                return;
+            }
+
+            const submissions = getSubmissions();
+            
+            let found = submissions.filter(s => 
+                s.studentId === query || 
+                s.studentName.toLowerCase().includes(query.toLowerCase())
+            );
+
+            if (found.length === 0) {
+                document.getElementById('searchResultIcon').innerHTML = '<i class="fas fa-times-circle" style="color:#e74c3c;"></i>';
+                document.getElementById('searchResultIcon').style.color = '#e74c3c';
+                document.getElementById('searchResultTitle').textContent = '❌ لا توجد نتائج';
+                document.getElementById('searchResultDetails').innerHTML = `
+                    <div style="text-align:center;padding:20px;">
+                        <p style="font-size:1.1rem;color:#4a5568;">
+                            <i class="fas fa-user-slash" style="font-size:2rem;color:#e74c3c;display:block;margin-bottom:10px;"></i>
+                            لم يتم العثور على واجب مسجل بهذا الاسم أو الرقم
+                        </p>
+                        <p style="font-size:0.9rem;color:#a0aec0;margin-top:10px;">
+                            تأكد من صحة البيانات وحاول مرة أخرى
+                        </p>
+                    </div>
+                `;
+                document.getElementById('searchResultModal').classList.add('active');
+                
+                searchResult.className = 'search-result not-found';
+                searchResult.innerHTML = `
+                    <span class="status-icon"><i class="fas fa-times-circle"></i></span>
+                    ❌ لا توجد نتائج مطابقة
+                `;
+                return;
+            }
+
+            let detailsHTML = '';
+            found.forEach((s, index) => {
+                const isApproved = s.status === 'approved';
+                const statusIcon = isApproved ? '✅' : '⏳';
+                const statusText = isApproved ? 'تم تأكيد الواجب' : 'لم يتم تأكيد الواجب بعد';
+                const statusColor = isApproved ? '#27ae60' : '#f39c12';
+                
+                // عرض العلامة مع الترجمة
+                let gradeDisplay = '📝 <span style="color:#a0aec0;">لم يتم إضافة علامة بعد</span>';
+                if (s.gradeValue) {
+                    const gradeLabels = {
+                        'D': 'ممتاز 🏆',
+                        'M': 'جيد جداً 👍',
+                        'P': 'مقبول ✅',
+                        'U': 'غير مقبول ❌'
+                    };
+                    const label = gradeLabels[s.gradeValue] || s.gradeValue;
+                    gradeDisplay = `⭐ <span style="font-weight:700;color:#f39c12;">${s.gradeValue} - ${label}</span>`;
+                }
+                
+                detailsHTML += `
+                    <div style="border-bottom:1px solid #edf2f7;padding:10px 0;${index === found.length - 1 ? 'border-bottom:none;' : ''}">
+                        <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:5px;">
+                            <span style="font-weight:700;color:#1a5276;">📌 الواجب رقم ${index + 1}</span>
+                            <span style="font-size:0.8rem;color:#a0aec0;">${s.uploadDate}</span>
+                        </div>
+                        <div class="row">
+                            <span class="label"><i class="fas fa-user"></i> اسم الطالب:</span>
+                            <span class="value" style="font-weight:700;">${s.studentName}</span>
+                        </div>
+                        <div class="row">
+                            <span class="label"><i class="fas fa-id-card"></i> رقم الطالب:</span>
+                            <span class="value">${s.studentId}</span>
+                        </div>
+                        <div class="row">
+                            <span class="label"><i class="fas fa-book"></i> الواجب:</span>
+                            <span class="value">${s.unitInfo}</span>
+                        </div>
+                        <div class="row">
+                            <span class="label"><i class="fas fa-user-tie"></i> المقيّم:</span>
+                            <span class="value">${s.evaluatorName}</span>
+                        </div>
+                        <div class="row">
+                            <span class="label"><i class="fas fa-file"></i> الملف:</span>
+                            <span class="value" style="font-size:0.85rem;">${s.fileName}</span>
+                        </div>
+                        <div class="row" style="border-bottom:none;padding-bottom:0;">
+                            <span class="label"><i class="fas fa-check-circle"></i> الحالة:</span>
+                            <span class="value" style="color:${statusColor};font-weight:700;">${statusIcon} ${statusText}</span>
+                        </div>
+                        <div class="row" style="border-bottom:none;padding-top:5px;">
+                            <span class="label"><i class="fas fa-star"></i> العلامة:</span>
+                            <span class="value" style="font-size:1rem;">${gradeDisplay}</span>
+                        </div>
+                    </div>
+                `;
+            });
+
+            const allApproved = found.every(s => s.status === 'approved');
+            document.getElementById('searchResultIcon').innerHTML = `<i class="fas fa-${allApproved ? 'check-circle' : 'search'}" style="color:${allApproved ? '#27ae60' : '#2e86c1'};"></i>`;
+            document.getElementById('searchResultIcon').style.color = allApproved ? '#27ae60' : '#2e86c1';
+            document.getElementById('searchResultTitle').textContent = allApproved ? '✅ جميع واجباتك مؤكدة! 🎉' : `📋 تم العثور على ${found.length} واجب${found.length > 1 ? 'ات' : ''}`;
+            document.getElementById('searchResultDetails').innerHTML = detailsHTML;
+            document.getElementById('searchResultModal').classList.add('active');
+            
+            searchResult.className = 'search-result found';
+            searchResult.innerHTML = `
+                <div style="text-align:right;width:100%;">
+                    <div style="font-weight:700;margin-bottom:5px;color:#1a5276;">
+                        ${allApproved ? '✅ جميع واجباتك مؤكدة! 🎉' : '📋 تم العثور على ' + found.length + ' واجب' + (found.length > 1 ? 'ات' : '')}
+                    </div>
+                    ${found.map(s => `
+                        <div style="border-bottom:1px solid #e2e8f0;padding:6px 0;text-align:right;font-size:0.9rem;">
+                            <strong>${s.studentName}</strong> (${s.studentId}) - ${s.unitInfo}
+                            <br>
+                            <span style="color:${s.status === 'approved' ? '#27ae60' : '#f39c12'};">
+                                ${s.status === 'approved' ? '✅ مؤكد' : '⏳ قيد المراجعة'}
+                            </span>
+                            ${s.gradeValue ? ' | ⭐ ' + s.gradeValue : ''}
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+        }
+
+        function closeSearchModal() {
+            document.getElementById('searchResultModal').classList.remove('active');
+        }
+
+        // ============================================================
+        // الوظائف الأساسية
         // ============================================================
 
         function updateEvaluators() {
@@ -742,6 +902,20 @@
                     else if (['sql', 'txt'].includes(ext)) fileIcon = 'fa-file-code';
                 }
 
+                // عرض العلامة مع لون مناسب
+                let gradeDisplay = '<span class="grade-badge" style="background:#e2e8f0;color:#a0aec0;">—</span>';
+                if (sub.gradeValue) {
+                    const gradeClass = 'grade-' + sub.gradeValue;
+                    const gradeLabels = {
+                        'D': 'ممتاز 🏆',
+                        'M': 'جيد جداً 👍',
+                        'P': 'مقبول ✅',
+                        'U': 'غير مقبول ❌'
+                    };
+                    const label = gradeLabels[sub.gradeValue] || sub.gradeValue;
+                    gradeDisplay = `<span class="grade-badge ${gradeClass}">⭐ ${sub.gradeValue} - ${label}</span>`;
+                }
+
                 html += `
                     <tr>
                         <td>${index + 1}</td>
@@ -758,11 +932,15 @@
                         </td>
                         <td style="font-size:0.8rem;">${sub.uploadDate}</td>
                         <td><span class="status-badge ${statusClass}">${statusText}</span></td>
+                        <td>${gradeDisplay}</td>
                         <td>
                             <button class="action-btn approve" data-id="${sub.id}" title="تأكيد الاستلام">
                                 <i class="fas fa-check-circle" style="color:${sub.status === 'approved' ? '#27ae60' : '#bdc3c7'};"></i>
                             </button>
-                            <button class="action-btn download" data-file="${sub.fileName}" title="تحميل الملف الفعلي" onclick="downloadActualFile('${sub.fileName}')">
+                            <button class="action-btn grade" data-id="${sub.id}" title="إضافة علامة (D, M, P, U)">
+                                <i class="fas fa-star" style="color:#f39c12;"></i>
+                            </button>
+                            <button class="action-btn download" data-file="${sub.fileName}" title="تحميل الملف" onclick="downloadActualFile('${sub.fileName}')">
                                 <i class="fas fa-download" style="color:#2e86c1;"></i>
                             </button>
                             <button class="action-btn delete" data-id="${sub.id}" title="حذف التسليم">
@@ -782,6 +960,13 @@
                 });
             });
 
+            document.querySelectorAll('.action-btn.grade').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const id = parseInt(this.dataset.id);
+                    addGrade(id);
+                });
+            });
+
             document.querySelectorAll('.action-btn.delete').forEach(btn => {
                 btn.addEventListener('click', function() {
                     const id = parseInt(this.dataset.id);
@@ -795,6 +980,75 @@
             updateEvaluatorFilter();
         }
 
+        // ============================================================
+        // إضافة علامة للواجب (مع قائمة منسدلة D, M, P, U)
+        // ============================================================
+        function addGrade(id) {
+            if (!isEvaluatorLoggedIn) {
+                showMessage('⚠️ يجب تسجيل الدخول كمدقق أولاً', 'error');
+                return;
+            }
+            let submissions = getSubmissions();
+            const sub = submissions.find(s => s.id === id);
+            if (sub) {
+                const currentGrade = sub.gradeValue || 'لا توجد علامة';
+                
+                // عرض القائمة في نافذة منبثقة
+                let message = '⭐ اختر علامة الطالب:\n\n';
+                message += ' ────────────────────────────\n';
+                message += ' │ 1. D  │ ممتاز 🏆           │\n';
+                message += ' ├───────┼────────────────────┤\n';
+                message += ' │ 2. M  │ جيد جداً 👍         │\n';
+                message += ' ├───────┼────────────────────┤\n';
+                message += ' │ 3. P  │ مقبول ✅            │\n';
+                message += ' ├───────┼────────────────────┤\n';
+                message += ' │ 4. U  │ غير مقبول ❌        │\n';
+                message += ' └───────┴────────────────────┘\n\n';
+                message += ' ────────────────────────────\n';
+                message += ` العلامة الحالية: ${currentGrade}\n`;
+                message += ' ────────────────────────────\n\n';
+                message += ' أدخل الرقم (1-4) أو الحرف (D, M, P, U):';
+                
+                const choice = prompt(message, '');
+                
+                if (choice === null) {
+                    return; // إلغاء
+                }
+                
+                let gradeValue = '';
+                let gradeLabel = '';
+                const upperChoice = choice.trim().toUpperCase();
+                
+                // التحقق من الإدخال
+                if (upperChoice === '1' || upperChoice === 'D') {
+                    gradeValue = 'D';
+                    gradeLabel = 'ممتاز 🏆';
+                } else if (upperChoice === '2' || upperChoice === 'M') {
+                    gradeValue = 'M';
+                    gradeLabel = 'جيد جداً 👍';
+                } else if (upperChoice === '3' || upperChoice === 'P') {
+                    gradeValue = 'P';
+                    gradeLabel = 'مقبول ✅';
+                } else if (upperChoice === '4' || upperChoice === 'U') {
+                    gradeValue = 'U';
+                    gradeLabel = 'غير مقبول ❌';
+                } else if (upperChoice === '' || upperChoice === 'إلغاء') {
+                    return;
+                } else {
+                    showMessage('❌ اختيار غير صحيح! استخدم الأرقام (1-4) أو الحروف (D, M, P, U)', 'error');
+                    return;
+                }
+                
+                if (gradeValue) {
+                    sub.gradeValue = gradeValue;
+                    saveSubmissions(submissions);
+                    renderTable();
+                    showMessage(`✅ تم إضافة العلامة "${gradeValue} (${gradeLabel})" للطالب "${sub.studentName}"`, 'success');
+                    showToast(`🏷️ تمت إضافة العلامة ${gradeValue} لـ ${sub.studentName}`);
+                }
+            }
+        }
+
         function toggleApproval(id) {
             if (!isEvaluatorLoggedIn) {
                 showMessage('⚠️ يجب تسجيل الدخول كمدقق أولاً', 'error');
@@ -806,6 +1060,8 @@
                 sub.status = sub.status === 'approved' ? 'pending' : 'approved';
                 saveSubmissions(submissions);
                 renderTable();
+                const statusText = sub.status === 'approved' ? 'تم تأكيد واجبك ✅' : 'تم إعادة واجبك للمراجعة ⏳';
+                showToast(`📢 ${sub.studentName}: ${statusText}`);
                 showMessage(`✅ تم تحديث حالة الطالب "${sub.studentName}"`, 'success');
             }
         }
@@ -942,7 +1198,7 @@
         }
 
         // ============================================================
-        // تسليم الواجب مع حفظ الملف
+        // تسليم الواجب
         // ============================================================
         submitBtn.addEventListener('click', function() {
             const studentId = studentIdInput.value.trim();
@@ -967,9 +1223,7 @@
                 return;
             }
 
-            // حفظ الملف في التخزين المحلي
             saveFileLocally(currentFile, function(fileData) {
-                // إنشاء سجل جديد
                 const now = new Date();
                 const newSubmission = {
                     id: Date.now(),
@@ -990,7 +1244,7 @@
                         minute: '2-digit'
                     }),
                     status: 'pending',
-                    teacherNote: ''
+                    gradeValue: ''
                 };
 
                 submissions.push(newSubmission);
@@ -999,7 +1253,6 @@
                 showSuccessModal(newSubmission);
                 showToast(`✅ تم تسليم واجب "${studentName}" بنجاح!`);
 
-                // إعادة تعيين النموذج
                 currentFile = null;
                 currentFileName = '';
                 fileInput.value = '';
@@ -1145,8 +1398,7 @@
         console.log('✅ نظام مدرسة الطرة الثانوية للبنين جاهز!');
         console.log('📌 عدد الطلاب المسجلين:', getSubmissions().length);
         console.log('🔑 كلمة سر المقيّم:', EVALUATOR_PASSWORD);
-        console.log('📁 الملفات تُحفظ محلياً في LocalStorage و IndexedDB');
-        console.log('💡 لعرض الملفات فعلياً، استخدم زر التحميل (⬇️) في الجدول');
+        console.log('⭐ نظام العلامات: D (ممتاز), M (جيد جداً), P (مقبول), U (غير مقبول)');
     </script>
 
 </body>
