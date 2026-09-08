@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>مدرسة الطرة الثانوية للبنين - نظام رفع الواجبات</title>
+    <title>مدرسة الطرة الثانوية للبنين - نظام إدارة الواجبات</title>
     
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%230d3b66'/><circle cx='50' cy='40' r='20' fill='%23f1c40f'/><rect x='30' y='55' width='40' height='25' rx='5' fill='%23f1c40f'/></svg>">
     
@@ -11,465 +11,628 @@
     <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
     
     <style>
-        /* ====== جميع التنسيقات ====== */
+        /* ============================================================
+           جميع التنسيقات
+           ============================================================ */
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f0f4f8; color: #2d3748; line-height: 1.6; }
-        .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+        .container { max-width: 1300px; margin: 0 auto; padding: 0 20px; }
         
+        /* ----- الرأس ----- */
         header {
             background: linear-gradient(135deg, #0d3b66, #1a5276, #2e86c1);
-            color: white; padding: 15px 0; box-shadow: 0 4px 20px rgba(0,0,0,0.3);
-            position: sticky; top: 0; z-index: 100; border-bottom: 4px solid #f1c40f;
+            color: white; padding: 12px 0; box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+            position: sticky; top: 0; z-index: 1000; border-bottom: 4px solid #f1c40f;
         }
         header .container { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; }
-        .header-right { display: flex; align-items: center; gap: 15px; }
-        .logo-container { display: flex; align-items: center; gap: 15px; }
+        .header-right { display: flex; align-items: center; gap: 12px; }
+        .logo-container { display: flex; align-items: center; gap: 12px; }
         .logo-img {
-            width: 75px; height: 75px; background: white; border-radius: 50%;
+            width: 60px; height: 60px; background: white; border-radius: 50%;
             display: flex; align-items: center; justify-content: center;
             border: 3px solid #f1c40f; box-shadow: 0 0 25px rgba(241, 196, 15, 0.4);
-            flex-shrink: 0; animation: pulse 2s infinite; overflow: hidden;
+            flex-shrink: 0; overflow: hidden;
         }
-        @keyframes pulse {
-            0% { box-shadow: 0 0 25px rgba(241, 196, 15, 0.4); }
-            50% { box-shadow: 0 0 40px rgba(241, 196, 15, 0.7); }
-            100% { box-shadow: 0 0 25px rgba(241, 196, 15, 0.4); }
+        .logo-img svg { width: 40px; height: 40px; }
+        .logo-text h1 { font-size: 1.4rem; font-weight: 700; line-height: 1.2; }
+        .logo-text .school-sub { font-size: 0.7rem; opacity: 0.9; display: block; background: rgba(255,255,255,0.15); padding: 2px 14px; border-radius: 20px; display: inline-block; }
+        .header-left .subtitle { font-size: 0.8rem; opacity: 0.95; background: rgba(255,255,255,0.12); padding: 5px 16px; border-radius: 30px; }
+        
+        /* ----- البطاقات ----- */
+        .card {
+            background: white; border-radius: 14px; padding: 25px; margin-bottom: 25px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.06); transition: transform 0.2s, box-shadow 0.2s;
+            border-top: 4px solid #2e86c1;
         }
-        .logo-img svg { width: 50px; height: 50px; }
-        .logo-text h1 { font-size: 1.8rem; font-weight: 700; line-height: 1.2; }
-        .logo-text .school-sub { font-size: 0.85rem; opacity: 0.95; display: block; margin-top: 2px; background: rgba(255,255,255,0.15); padding: 3px 18px; border-radius: 20px; display: inline-block; border: 1px solid rgba(255,255,255,0.1); }
-        .header-left .subtitle { font-size: 0.95rem; opacity: 0.95; background: rgba(255,255,255,0.12); padding: 8px 20px; border-radius: 30px; white-space: nowrap; border: 1px solid rgba(255,255,255,0.1); }
+        .card:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(0,0,0,0.1); }
+        .card.gold-border { border-top-color: #f1c40f; }
+        .card.green-border { border-top-color: #27ae60; }
+        .card.red-border { border-top-color: #e74c3c; }
+        .card h2 { color: #0d3b66; margin-bottom: 18px; font-size: 1.3rem; border-right: 4px solid #2e86c1; padding-right: 14px; }
+        .card h2 i { margin-left: 8px; color: #2e86c1; }
         
-        .card { background: white; border-radius: 16px; padding: 30px; margin-bottom: 30px; box-shadow: 0 8px 30px rgba(0,0,0,0.08); transition: transform 0.2s; border-top: 4px solid #2e86c1; }
-        .card:hover { transform: translateY(-2px); box-shadow: 0 12px 40px rgba(0,0,0,0.12); }
-        .card h2 { color: #1a5276; margin-bottom: 20px; font-size: 1.5rem; border-right: 5px solid #2e86c1; padding-right: 15px; }
-        .card h2 i { margin-left: 10px; color: #2e86c1; }
+        /* ----- شريط التنقل ----- */
+        .nav-tabs {
+            display: flex; gap: 4px; flex-wrap: wrap; background: white; padding: 8px 14px;
+            border-radius: 14px; margin-bottom: 20px; box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+            border: 1px solid #e2e8f0;
+        }
+        .nav-tabs .tab-btn {
+            padding: 8px 16px; border: none; background: transparent; border-radius: 8px;
+            font-size: 0.85rem; font-weight: 600; color: #4a5568; cursor: pointer;
+            transition: all 0.3s; display: flex; align-items: center; gap: 6px;
+        }
+        .nav-tabs .tab-btn:hover { background: #f0f4f8; }
+        .nav-tabs .tab-btn.active { background: #0d3b66; color: white; }
+        .nav-tabs .tab-btn .badge {
+            background: #e74c3c; color: white; border-radius: 50%; padding: 0 7px;
+            font-size: 0.6rem; font-weight: 700;
+        }
+        .nav-tabs .tab-btn.hidden { display: none; }
         
-        .qr-section {
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+        
+        /* ----- تسجيل الدخول ----- */
+        .login-section {
             background: linear-gradient(135deg, #f8f9fa, #e9ecef);
-            border: 2px solid #2e86c1; border-radius: 16px; padding: 25px 30px;
-            margin-bottom: 30px; margin-top: 30px;
-            display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 20px;
+            border: 2px solid #f1c40f; border-radius: 14px; padding: 18px 22px;
+            margin-bottom: 20px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px;
         }
-        .qr-section .qr-info { flex: 1; min-width: 200px; }
-        .qr-section .qr-info h3 { color: #1a5276; font-size: 1.2rem; margin-bottom: 8px; }
-        .qr-section .qr-info h3 i { color: #f1c40f; margin-left: 8px; }
-        .qr-section .qr-info .url-display { background: white; padding: 8px 15px; border-radius: 8px; border: 2px solid #e2e8f0; font-size: 0.85rem; color: #2e86c1; direction: ltr; text-align: left; margin-top: 8px; word-break: break-all; font-family: monospace; }
-        .qr-section .qr-code-container #qrcode { background: white; padding: 12px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); border: 3px solid #f1c40f; }
-        .qr-section .qr-actions { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 10px; }
-        .btn-qr-download { background: linear-gradient(135deg, #2e86c1, #0d3b66); color: white; border: none; padding: 8px 20px; border-radius: 8px; font-weight: 600; cursor: pointer; transition: all 0.3s; font-size: 0.9rem; }
-        .btn-qr-download:hover { transform: scale(1.05); box-shadow: 0 4px 15px rgba(46, 134, 193, 0.4); }
-        .btn-qr-copy { background: #edf2f7; color: #2d3748; border: 2px solid #e2e8f0; padding: 8px 20px; border-radius: 8px; font-weight: 600; cursor: pointer; transition: all 0.3s; font-size: 0.9rem; }
-        .btn-qr-copy:hover { background: #e2e8f0; }
+        .login-section .login-title { font-weight: 700; color: #0d3b66; font-size: 0.95rem; }
+        .login-section .login-title i { color: #f1c40f; margin-left: 6px; }
+        .login-section .login-inputs { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+        .login-section .login-inputs select { padding: 8px 14px; border: 2px solid #e2e8f0; border-radius: 8px; font-size: 0.9rem; background: white; }
+        .login-section .login-inputs input { padding: 8px 14px; border: 2px solid #e2e8f0; border-radius: 8px; font-size: 0.9rem; background: white; min-width: 140px; }
+        .login-section .login-inputs select:focus, .login-section .login-inputs input:focus { outline: none; border-color: #f1c40f; }
+        .login-status { font-size: 0.85rem; padding: 4px 14px; border-radius: 20px; }
+        .login-status.logged-in { background: #d4edda; color: #155724; }
+        .login-status.logged-out { background: #f8d7da; color: #721c24; }
         
-        .selection-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; }
+        /* ----- نماذج ----- */
+        .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; }
         .form-group { display: flex; flex-direction: column; }
-        .form-group label { font-weight: 600; margin-bottom: 6px; color: #2d3748; font-size: 0.95rem; }
-        .form-group label i { margin-left: 6px; color: #2e86c1; }
-        .form-group label .required { color: #e74c3c; margin-right: 3px; }
-        .form-group select, .form-group input { padding: 12px 15px; border: 2px solid #e2e8f0; border-radius: 10px; font-size: 1rem; background: #f7fafc; transition: border 0.3s; font-family: inherit; }
-        .form-group select:focus, .form-group input:focus { outline: none; border-color: #2e86c1; box-shadow: 0 0 0 3px rgba(46, 134, 193, 0.2); }
+        .form-group label { font-weight: 600; margin-bottom: 4px; font-size: 0.85rem; color: #2d3748; }
+        .form-group label i { margin-left: 5px; color: #2e86c1; }
+        .form-group label .required { color: #e74c3c; margin-right: 2px; }
+        .form-group select, .form-group input, .form-group textarea {
+            padding: 10px 14px; border: 2px solid #e2e8f0; border-radius: 8px;
+            font-size: 0.9rem; background: #f7fafc; transition: all 0.3s; font-family: inherit;
+        }
+        .form-group select:focus, .form-group input:focus, .form-group textarea:focus {
+            outline: none; border-color: #2e86c1; box-shadow: 0 0 0 3px rgba(46, 134, 193, 0.2);
+        }
         .form-group select:disabled { opacity: 0.6; cursor: not-allowed; background: #edf2f7; }
-        .form-group .hint { font-size: 0.8rem; color: #a0aec0; margin-top: 4px; }
-        .form-group .hint.success { color: #27ae60; }
-        .form-group .hint.error { color: #e74c3c; }
+        .form-group textarea { min-height: 50px; resize: vertical; }
+        .form-group .hint { font-size: 0.75rem; color: #a0aec0; margin-top: 3px; }
         
+        /* ----- رفع الملف ----- */
         .upload-area {
-            border: 3px dashed #cbd5e1; border-radius: 16px; padding: 40px 20px;
+            border: 3px dashed #cbd5e1; border-radius: 14px; padding: 30px 20px;
             text-align: center; cursor: pointer; transition: all 0.3s;
-            background: #fafbfc; position: relative;
+            background: #fafbfc; position: relative; margin-top: 10px;
         }
         .upload-area:hover { border-color: #2e86c1; background: #f0f7ff; }
         .upload-area.dragover { border-color: #27ae60; background: #eafaf1; }
-        .upload-area i { color: #2e86c1; margin-bottom: 10px; }
         .upload-area input[type="file"] { position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0; cursor: pointer; }
-        .file-name { display: block; margin-top: 10px; font-weight: 600; color: #2d3748; background: #edf2f7; padding: 6px 12px; border-radius: 8px; font-size: 0.9rem; }
+        .file-list { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+        .file-item { background: #edf2f7; padding: 4px 10px; border-radius: 20px; font-size: 0.8rem; display: flex; align-items: center; gap: 5px; }
+        .file-item .remove { cursor: pointer; color: #e74c3c; font-weight: 700; }
+        .file-name { display: block; margin-top: 8px; font-weight: 600; background: #edf2f7; padding: 5px 12px; border-radius: 8px; font-size: 0.85rem; }
         
+        /* ----- أزرار ----- */
         .btn-primary {
             background: linear-gradient(135deg, #2e86c1, #0d3b66); color: white;
-            border: none; padding: 14px 35px; border-radius: 50px;
-            font-size: 1.1rem; font-weight: 700; cursor: pointer; transition: all 0.3s;
-            margin-top: 20px; width: 100%; display: flex; align-items: center; justify-content: center; gap: 10px;
+            border: none; padding: 12px 28px; border-radius: 50px;
+            font-size: 0.95rem; font-weight: 700; cursor: pointer; transition: all 0.3s;
+            margin-top: 12px; width: 100%; display: flex; align-items: center; justify-content: center; gap: 8px;
         }
-        .btn-primary:hover { transform: scale(1.02); box-shadow: 0 8px 25px rgba(46, 134, 193, 0.4); }
-        .btn-secondary { background: #edf2f7; color: #2d3748; border: 2px solid #e2e8f0; padding: 10px 20px; border-radius: 10px; font-weight: 600; cursor: pointer; transition: all 0.3s; }
+        .btn-primary:hover { transform: scale(1.02); box-shadow: 0 6px 20px rgba(46, 134, 193, 0.4); }
+        .btn-primary:disabled { opacity: 0.6; cursor: not-allowed; }
+        .btn-secondary { background: #edf2f7; color: #2d3748; border: 2px solid #e2e8f0; padding: 8px 18px; border-radius: 8px; font-weight: 600; cursor: pointer; transition: all 0.3s; }
         .btn-secondary:hover { background: #e2e8f0; }
-        .btn-danger { background: #e74c3c; color: white; border: none; padding: 10px 20px; border-radius: 10px; font-weight: 600; cursor: pointer; transition: all 0.3s; margin-top: 15px; }
+        .btn-danger { background: #e74c3c; color: white; border: none; padding: 8px 18px; border-radius: 8px; font-weight: 600; cursor: pointer; transition: all 0.3s; }
         .btn-danger:hover { background: #c0392b; transform: scale(1.02); }
-        .btn-gold { background: linear-gradient(135deg, #f1c40f, #f39c12); color: #1a202c; border: none; padding: 10px 25px; border-radius: 10px; font-weight: 700; cursor: pointer; transition: all 0.3s; }
-        .btn-gold:hover { transform: scale(1.05); box-shadow: 0 4px 15px rgba(241, 196, 15, 0.4); }
-        .btn-success { background: #27ae60; color: white; border: none; padding: 8px 18px; border-radius: 10px; font-weight: 600; cursor: pointer; transition: all 0.3s; }
+        .btn-success { background: #27ae60; color: white; border: none; padding: 8px 18px; border-radius: 8px; font-weight: 600; cursor: pointer; transition: all 0.3s; }
         .btn-success:hover { background: #1e8449; transform: scale(1.02); }
+        .btn-gold { background: linear-gradient(135deg, #f1c40f, #f39c12); color: #1a202c; border: none; padding: 8px 20px; border-radius: 8px; font-weight: 700; cursor: pointer; transition: all 0.3s; }
+        .btn-gold:hover { transform: scale(1.05); box-shadow: 0 4px 15px rgba(241, 196, 15, 0.4); }
+        .btn-sm { padding: 4px 12px; font-size: 0.8rem; width: auto; display: inline-flex; }
         
-        .message { margin-top: 15px; padding: 12px 18px; border-radius: 10px; font-weight: 600; display: none; }
-        .message.success { display: block; background: #d4edda; color: #155724; border: 2px solid #c3e6cb; }
-        .message.error { display: block; background: #f8d7da; color: #721c24; border: 2px solid #f5c6cb; }
-        .message.info { display: block; background: #d1ecf1; color: #0c5460; border: 2px solid #bee5eb; }
-        
-        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 1000; align-items: center; justify-content: center; backdrop-filter: blur(5px); }
-        .modal-overlay.active { display: flex; }
-        .modal-box { background: white; border-radius: 20px; padding: 40px; max-width: 550px; width: 90%; text-align: center; box-shadow: 0 20px 60px rgba(0,0,0,0.3); animation: modalIn 0.5s ease; max-height: 90vh; overflow-y: auto; }
-        @keyframes modalIn { from { transform: scale(0.8) translateY(-50px); opacity: 0; } to { transform: scale(1) translateY(0); opacity: 1; } }
-        .modal-box .icon-success { font-size: 4rem; color: #27ae60; margin-bottom: 15px; }
-        .modal-box h2 { color: #1a5276; margin-bottom: 10px; }
-        .modal-box .details { background: #f7fafc; padding: 15px; border-radius: 10px; margin: 15px 0; text-align: right; border: 2px solid #e2e8f0; max-height: 400px; overflow-y: auto; }
-        .modal-box .details .row { display: flex; justify-content: space-between; padding: 5px 0; border-bottom: 1px solid #edf2f7; }
-        .modal-box .details .row:last-child { border-bottom: none; }
-        .modal-box .details .label { font-weight: 600; color: #2d3748; }
-        .modal-box .details .value { color: #2e86c1; font-weight: 600; }
-        .modal-box .btn-close-modal { background: linear-gradient(135deg, #2e86c1, #0d3b66); color: white; border: none; padding: 12px 40px; border-radius: 50px; font-size: 1rem; font-weight: 700; cursor: pointer; transition: all 0.3s; margin-top: 10px; }
-        .modal-box .btn-close-modal:hover { transform: scale(1.05); box-shadow: 0 4px 15px rgba(46, 134, 193, 0.4); }
-        
-        .filter-bar { display: flex; flex-wrap: wrap; gap: 15px; margin-bottom: 20px; align-items: center; }
-        .filter-bar select { padding: 10px 15px; border: 2px solid #e2e8f0; border-radius: 10px; background: #f7fafc; font-size: 0.95rem; font-family: inherit; flex: 1; min-width: 150px; }
-        .filter-bar select:focus { outline: none; border-color: #2e86c1; }
-        
-        .student-search {
-            background: linear-gradient(135deg, #e8f4fd, #dbeafe);
-            border: 2px solid #2e86c1;
-            border-radius: 16px;
-            padding: 20px 25px;
-            margin-bottom: 25px;
-            display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 15px;
-        }
-        .student-search .search-title { font-weight: 700; color: #1a5276; font-size: 1rem; }
-        .student-search .search-title i { color: #f1c40f; margin-left: 8px; }
-        .student-search .search-inputs { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; flex: 1; }
-        .student-search .search-inputs input { padding: 10px 15px; border: 2px solid #e2e8f0; border-radius: 10px; font-size: 0.95rem; background: white; flex: 1; min-width: 150px; }
-        .student-search .search-inputs input:focus { outline: none; border-color: #2e86c1; }
-        .student-search .search-result { padding: 10px 20px; border-radius: 10px; font-weight: 600; font-size: 0.95rem; min-width: 200px; text-align: center; max-height: 200px; overflow-y: auto; }
-        .student-search .search-result.found { background: #d4edda; color: #155724; border: 2px solid #c3e6cb; }
-        .student-search .search-result.not-found { background: #f8d7da; color: #721c24; border: 2px solid #f5c6cb; }
-        .student-search .search-result.waiting { background: #fefcbf; color: #975a16; border: 2px solid #fce8b2; }
-        .student-search .search-result .status-icon { font-size: 1.5rem; margin-left: 8px; }
-        
-        .evaluator-login {
-            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
-            border: 2px solid #f1c40f; border-radius: 16px; padding: 25px;
-            margin-bottom: 30px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 15px;
-        }
-        .evaluator-login .login-title { font-weight: 700; color: #1a5276; font-size: 1.1rem; }
-        .evaluator-login .login-title i { color: #f1c40f; margin-left: 8px; }
-        .evaluator-login .login-inputs { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
-        .evaluator-login .login-inputs input { padding: 10px 15px; border: 2px solid #e2e8f0; border-radius: 10px; font-size: 0.95rem; background: white; min-width: 200px; }
-        .evaluator-login .login-status { font-size: 0.9rem; padding: 5px 15px; border-radius: 20px; }
-        .evaluator-login .login-status.logged-in { background: #d4edda; color: #155724; }
-        .evaluator-login .login-status.logged-out { background: #f8d7da; color: #721c24; }
-        
+        /* ----- الجدول ----- */
         .table-responsive { overflow-x: auto; }
-        table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
-        table th { background: #0d3b66; color: white; padding: 12px 10px; text-align: center; white-space: nowrap; }
-        table th i { margin-left: 5px; }
-        table td { padding: 10px; text-align: center; border-bottom: 1px solid #edf2f7; }
+        table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+        table th { background: #0d3b66; color: white; padding: 10px 8px; text-align: center; white-space: nowrap; }
+        table td { padding: 8px; text-align: center; border-bottom: 1px solid #edf2f7; vertical-align: middle; }
         table tr:hover td { background: #f0f7ff; }
         
-        .status-badge { display: inline-block; padding: 4px 14px; border-radius: 30px; font-size: 0.8rem; font-weight: 700; }
+        .status-badge { display: inline-block; padding: 3px 12px; border-radius: 30px; font-size: 0.7rem; font-weight: 700; }
         .status-pending { background: #fefcbf; color: #975a16; }
         .status-approved { background: #c6f6d5; color: #22543d; }
-        .action-btn { background: none; border: none; font-size: 1.3rem; cursor: pointer; transition: transform 0.2s; padding: 0 4px; }
+        .status-overdue { background: #f8d7da; color: #721c24; }
+        
+        .action-btn { background: none; border: none; font-size: 1.1rem; cursor: pointer; transition: transform 0.2s; padding: 0 3px; }
         .action-btn:hover { transform: scale(1.3); }
         .action-btn.approve { color: #27ae60; }
         .action-btn.download { color: #2e86c1; }
         .action-btn.delete { color: #e74c3c; }
         .action-btn.grade { color: #f39c12; }
-        .empty-message { text-align: center; padding: 30px; color: #a0aec0; font-size: 1.1rem; }
+        .action-btn.edit { color: #3498db; }
         
-        .protected-section { display: none; }
-        .protected-section.visible { display: block; }
+        .empty-message { text-align: center; padding: 25px; color: #a0aec0; font-size: 1rem; }
         
-        .admin-section { background: #f8f9fa; border: 2px solid #e2e8f0; border-top: 4px solid #f39c12; }
-        .admin-hint { color: #4a5568; margin-bottom: 15px; }
-        .admin-actions { display: flex; gap: 15px; flex-wrap: wrap; }
-        
-        footer {
-            background: linear-gradient(135deg, #0d3b66, #1a202c);
-            color: #e2e8f0; padding: 30px 0 20px; margin-top: 0; border-top: 4px solid #f1c40f;
+        /* ----- بحث الطالب ----- */
+        .student-search {
+            background: linear-gradient(135deg, #e8f4fd, #dbeafe);
+            border: 2px solid #2e86c1; border-radius: 14px; padding: 18px 22px;
+            margin-bottom: 20px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px;
         }
-        .footer-content { display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 20px; }
-        .footer-left { text-align: right; }
-        .footer-left .designer { font-size: 1.2rem; font-weight: 700; color: #f1c40f; }
-        .footer-left .designer i { margin-left: 8px; }
-        .footer-left .designer span { color: #2e86c1; }
-        .footer-center { text-align: center; font-size: 0.85rem; opacity: 0.8; }
-        .footer-center i { color: #f1c40f; }
-        .footer-right { text-align: left; font-size: 0.8rem; }
-        .footer-right .official { display: flex; flex-direction: column; gap: 5px; }
-        .footer-right .official .position { font-weight: 600; color: #f1c40f; }
-        .footer-right .official .name { color: #e2e8f0; }
-        .footer-bottom { text-align: center; margin-top: 20px; padding-top: 15px; border-top: 1px solid rgba(255,255,255,0.1); font-size: 0.85rem; opacity: 0.7; }
+        .student-search .search-title { font-weight: 700; color: #0d3b66; font-size: 0.95rem; }
+        .student-search .search-title i { color: #f1c40f; margin-left: 6px; }
+        .student-search .search-inputs { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; flex: 1; }
+        .student-search .search-inputs input { padding: 8px 14px; border: 2px solid #e2e8f0; border-radius: 8px; font-size: 0.9rem; background: white; flex: 1; min-width: 140px; }
+        .student-search .search-result { padding: 8px 16px; border-radius: 8px; font-weight: 600; font-size: 0.9rem; min-width: 180px; text-align: center; max-height: 180px; overflow-y: auto; }
+        .student-search .search-result.found { background: #d4edda; color: #155724; border: 2px solid #c3e6cb; }
+        .student-search .search-result.not-found { background: #f8d7da; color: #721c24; border: 2px solid #f5c6cb; }
+        .student-search .search-result.waiting { background: #fefcbf; color: #975a16; border: 2px solid #fce8b2; }
         
-        .stats { display: flex; gap: 20px; flex-wrap: wrap; margin-bottom: 20px; }
-        .stat-item { background: #f7fafc; padding: 10px 20px; border-radius: 10px; border: 2px solid #e2e8f0; flex: 1; min-width: 120px; text-align: center; }
-        .stat-item i { margin-left: 8px; }
-        .stat-item span { font-weight: 700; color: #1a5276; font-size: 1.2rem; }
-        .stat-item.total { border-color: #2e86c1; }
-        .stat-item.approved { border-color: #27ae60; }
-        .stat-item.pending { border-color: #f39c12; }
+        /* ----- نافذة منبثقة ----- */
+        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 9999; align-items: center; justify-content: center; backdrop-filter: blur(4px); }
+        .modal-overlay.active { display: flex; }
+        .modal-box { background: white; border-radius: 18px; padding: 30px; max-width: 520px; width: 92%; text-align: center; box-shadow: 0 20px 60px rgba(0,0,0,0.3); animation: modalIn 0.4s ease; max-height: 90vh; overflow-y: auto; }
+        @keyframes modalIn { from { transform: scale(0.9) translateY(-30px); opacity: 0; } to { transform: scale(1) translateY(0); opacity: 1; } }
+        .modal-box .icon { font-size: 3.5rem; margin-bottom: 10px; }
+        .modal-box h2 { color: #0d3b66; margin-bottom: 8px; font-size: 1.3rem; }
+        .modal-box .details { background: #f7fafc; padding: 12px; border-radius: 10px; margin: 12px 0; text-align: right; border: 2px solid #e2e8f0; max-height: 300px; overflow-y: auto; }
+        .modal-box .details .row { display: flex; justify-content: space-between; padding: 4px 0; border-bottom: 1px solid #edf2f7; font-size: 0.9rem; }
+        .modal-box .details .row:last-child { border-bottom: none; }
+        .modal-box .details .label { font-weight: 600; color: #2d3748; }
+        .modal-box .details .value { color: #2e86c1; font-weight: 600; }
+        .modal-box .btn-close { background: linear-gradient(135deg, #2e86c1, #0d3b66); color: white; border: none; padding: 10px 35px; border-radius: 50px; font-size: 0.95rem; font-weight: 700; cursor: pointer; transition: all 0.3s; margin-top: 8px; }
+        .modal-box .btn-close:hover { transform: scale(1.05); box-shadow: 0 4px 15px rgba(46, 134, 193, 0.4); }
         
-        .success-toast {
-            position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
-            background: #27ae60; color: white; padding: 18px 35px; border-radius: 50px;
-            font-size: 1.1rem; font-weight: 700; box-shadow: 0 10px 40px rgba(39, 174, 96, 0.4);
-            z-index: 2000; display: none; align-items: center; gap: 12px; animation: slideUp 0.5s ease;
-        }
-        .success-toast.show { display: flex; }
-        @keyframes slideUp { from { transform: translateX(-50%) translateY(100px); opacity: 0; } to { transform: translateX(-50%) translateY(0); opacity: 1; } }
-        .success-toast i { font-size: 1.8rem; }
-        
-        /* ====== علامات التقييم بألوان مميزة ====== */
-        .grade-badge {
-            display: inline-block;
-            padding: 4px 14px;
-            border-radius: 20px;
-            font-size: 0.85rem;
-            font-weight: 700;
-        }
+        /* ----- العلامات ----- */
+        .grade-badge { display: inline-block; padding: 3px 12px; border-radius: 20px; font-size: 0.8rem; font-weight: 700; }
         .grade-D { background: #d4edda; color: #155724; border: 2px solid #27ae60; }
         .grade-M { background: #cce5ff; color: #004085; border: 2px solid #3498db; }
         .grade-P { background: #fff3cd; color: #856404; border: 2px solid #f39c12; }
         .grade-U { background: #f8d7da; color: #721c24; border: 2px solid #e74c3c; }
         
-        @media (max-width: 992px) {
-            .footer-content { flex-direction: column; align-items: center; text-align: center; }
-            .footer-left, .footer-right { text-align: center; }
-            .footer-right .official { align-items: center; }
-            .evaluator-login { flex-direction: column; align-items: stretch; }
-            .evaluator-login .login-inputs { flex-direction: column; }
-            .evaluator-login .login-inputs input { min-width: unset; width: 100%; }
-            .qr-section { flex-direction: column; text-align: center; }
-            .qr-section .qr-code-container { order: -1; }
+        /* ----- Toast ----- */
+        .toast {
+            position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
+            background: #27ae60; color: white; padding: 12px 28px; border-radius: 50px;
+            font-size: 0.95rem; font-weight: 700; box-shadow: 0 10px 40px rgba(39, 174, 96, 0.4);
+            z-index: 9999; display: none; align-items: center; gap: 10px; animation: slideUp 0.4s ease;
+        }
+        .toast.show { display: flex; }
+        @keyframes slideUp { from { transform: translateX(-50%) translateY(80px); opacity: 0; } to { transform: translateX(-50%) translateY(0); opacity: 1; } }
+        .toast i { font-size: 1.4rem; }
+        .toast.error { background: #e74c3c; box-shadow: 0 10px 40px rgba(231, 76, 60, 0.4); }
+        .toast.warning { background: #f39c12; box-shadow: 0 10px 40px rgba(243, 156, 18, 0.4); }
+        
+        /* ----- QR Code ----- */
+        .qr-section {
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            border: 2px solid #2e86c1; border-radius: 14px; padding: 18px 22px;
+            margin-top: 20px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 15px;
+        }
+        .qr-section .qr-info { flex: 1; min-width: 180px; }
+        .qr-section .qr-info h3 { color: #0d3b66; font-size: 1rem; margin-bottom: 4px; }
+        .qr-section .qr-info h3 i { color: #f1c40f; margin-left: 6px; }
+        .qr-section .qr-info .url-display { background: white; padding: 5px 12px; border-radius: 6px; border: 2px solid #e2e8f0; font-size: 0.75rem; color: #2e86c1; direction: ltr; text-align: left; margin-top: 4px; word-break: break-all; font-family: monospace; }
+        .qr-section .qr-code-container #qrcode { background: white; padding: 8px; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); border: 3px solid #f1c40f; }
+        .qr-section .qr-code-container #qrcode img { display: block; width: 120px; height: 120px; }
+        .qr-section .qr-actions { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 4px; }
+        .btn-qr { background: linear-gradient(135deg, #2e86c1, #0d3b66); color: white; border: none; padding: 5px 16px; border-radius: 6px; font-weight: 600; cursor: pointer; transition: all 0.3s; font-size: 0.8rem; }
+        .btn-qr:hover { transform: scale(1.05); }
+        .btn-qr-copy { background: #edf2f7; color: #2d3748; border: 2px solid #e2e8f0; padding: 5px 16px; border-radius: 6px; font-weight: 600; cursor: pointer; transition: all 0.3s; font-size: 0.8rem; }
+        .btn-qr-copy:hover { background: #e2e8f0; }
+        
+        /* ----- التذييل ----- */
+        footer {
+            background: linear-gradient(135deg, #0d3b66, #1a202c);
+            color: #e2e8f0; padding: 20px 0 12px; border-top: 4px solid #f1c40f;
+            margin-top: 20px;
+        }
+        .footer-content { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; }
+        .footer-content .designer { font-size: 0.9rem; font-weight: 600; color: #f1c40f; }
+        .footer-content .designer span { color: #2e86c1; }
+        .footer-content .center { text-align: center; font-size: 0.8rem; opacity: 0.8; }
+        .footer-content .official { font-size: 0.85rem; }
+        .footer-content .official .pos { font-weight: 600; color: #f1c40f; }
+        .footer-bottom { text-align: center; margin-top: 10px; padding-top: 10px; border-top: 1px solid rgba(255,255,255,0.1); font-size: 0.75rem; opacity: 0.6; }
+        
+        /* ----- استجابة ----- */
+        @media (max-width: 768px) {
+            .logo-img { width: 45px; height: 45px; }
+            .logo-img svg { width: 30px; height: 30px; }
+            .logo-text h1 { font-size: 1rem; }
+            .logo-text .school-sub { font-size: 0.6rem; padding: 1px 10px; }
+            .header-left .subtitle { font-size: 0.65rem; padding: 3px 10px; }
+            .card { padding: 15px; }
+            .form-grid { grid-template-columns: 1fr; }
+            .nav-tabs { justify-content: center; }
+            .nav-tabs .tab-btn { font-size: 0.7rem; padding: 5px 10px; }
+            .nav-tabs .tab-btn span { display: none; }
+            .login-section { flex-direction: column; align-items: stretch; }
+            .login-section .login-inputs { flex-direction: column; }
+            .login-section .login-inputs select, .login-section .login-inputs input { min-width: unset; width: 100%; }
             .student-search { flex-direction: column; align-items: stretch; }
             .student-search .search-inputs { flex-direction: column; }
             .student-search .search-inputs input { min-width: unset; width: 100%; }
-        }
-        @media (max-width: 768px) {
-            .logo-img { width: 55px; height: 55px; }
-            .logo-img svg { width: 35px; height: 35px; }
-            .logo-text h1 { font-size: 1.2rem; }
-            .logo-text .school-sub { font-size: 0.7rem; padding: 2px 12px; }
-            .header-left .subtitle { font-size: 0.75rem; padding: 5px 12px; white-space: normal; }
-            .card { padding: 20px; }
-            .selection-grid { grid-template-columns: 1fr; }
-            table th, table td { padding: 6px 4px; font-size: 0.7rem; }
-            .filter-bar { flex-direction: column; align-items: stretch; }
-            .stats { flex-direction: column; }
-            header .container { flex-direction: column; text-align: center; gap: 10px; }
+            table th, table td { padding: 4px 3px; font-size: 0.65rem; }
+            .qr-section { flex-direction: column; text-align: center; }
+            .qr-section .qr-code-container { order: -1; }
+            .modal-box { padding: 18px; }
+            .modal-box .details .row { flex-direction: column; align-items: center; gap: 2px; }
+            .toast { padding: 10px 18px; font-size: 0.85rem; width: 90%; text-align: center; }
+            .footer-content { flex-direction: column; align-items: center; text-align: center; }
+            header .container { flex-direction: column; text-align: center; gap: 6px; }
             .header-right { flex-direction: column; width: 100%; }
             .logo-container { justify-content: center; }
-            .footer-content { gap: 15px; }
-            .modal-box { padding: 20px; }
-            .modal-box .details .row { flex-direction: column; align-items: center; gap: 3px; }
-            .success-toast { padding: 15px 20px; font-size: 0.95rem; width: 90%; text-align: center; }
+            .header-left { justify-content: center; }
         }
         @media (max-width: 480px) {
-            table { font-size: 0.6rem; }
-            table th, table td { padding: 4px 2px; }
+            table { font-size: 0.55rem; }
+            table th, table td { padding: 3px 2px; }
             .card h2 { font-size: 1rem; }
-            .btn-primary { font-size: 0.9rem; padding: 12px 15px; }
-            .stat-item { padding: 8px 12px; font-size: 0.8rem; }
+            .btn-primary { font-size: 0.85rem; padding: 10px 14px; }
+            .nav-tabs .tab-btn { font-size: 0.6rem; padding: 4px 6px; }
+            .nav-tabs .tab-btn i { font-size: 0.8rem; }
         }
     </style>
 </head>
 <body>
 
     <!-- ============================================================
-    نافذة التأكيد (تسليم الواجب)
+    الرأس
     ============================================================ -->
-    <div class="modal-overlay" id="successModal">
-        <div class="modal-box">
-            <div class="icon-success"><i class="fas fa-check-circle"></i></div>
-            <h2>✅ تم تسليم الواجب بنجاح!</h2>
-            <p>شكراً لك، تم استلام واجبك وسيتم مراجعته من قبل المقيّم.</p>
-            <div class="details" id="submissionDetails"></div>
-            <button class="btn-close-modal" onclick="closeModal()"><i class="fas fa-check"></i> حسناً</button>
-        </div>
-    </div>
-
-    <!-- ============================================================
-    نافذة نتائج البحث
-    ============================================================ -->
-    <div class="modal-overlay" id="searchResultModal">
-        <div class="modal-box">
-            <div class="icon-success" id="searchResultIcon" style="color:#2e86c1;">
-                <i class="fas fa-search"></i>
+    <header>
+        <div class="container">
+            <div class="header-right">
+                <div class="logo-container">
+                    <div class="logo-img">
+                        <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                            <circle cx="50" cy="50" r="45" fill="#0d3b66" stroke="#f1c40f" stroke-width="3"/>
+                            <circle cx="50" cy="50" r="35" fill="#1a5276" stroke="#f1c40f" stroke-width="2"/>
+                            <path d="M25 35 L50 28 L75 35 L75 65 L50 72 L25 65 Z" fill="#f1c40f" opacity="0.9"/>
+                            <path d="M50 28 L50 72" stroke="#0d3b66" stroke-width="2"/>
+                            <polygon points="35,30 50,18 65,30 50,42" fill="#f1c40f" stroke="white" stroke-width="1"/>
+                            <rect x="47" y="40" width="6" height="5" fill="#f1c40f" rx="1"/>
+                            <circle cx="50" cy="43" r="2" fill="#0d3b66"/>
+                            <circle cx="30" cy="55" r="2" fill="white" opacity="0.6"/>
+                            <circle cx="70" cy="55" r="2" fill="white" opacity="0.6"/>
+                        </svg>
+                    </div>
+                    <div class="logo-text">
+                        <h1>مدرسة الطرة الثانوية للبنين</h1>
+                        <span class="school-sub"><i class="fas fa-university"></i> مديرية التربية والتعليم لواء الرمثا</span>
+                    </div>
+                </div>
             </div>
-            <h2 id="searchResultTitle">📋 نتائج البحث</h2>
-            <div class="details" id="searchResultDetails"></div>
-            <button class="btn-close-modal" onclick="closeSearchModal()"><i class="fas fa-check"></i> حسناً</button>
+            <div class="header-left">
+                <span class="subtitle"><i class="fas fa-cloud-upload-alt"></i> نظام إدارة الواجبات</span>
+            </div>
         </div>
-    </div>
-
-    <!-- ============================================================
-    رسالة Toast
-    ============================================================ -->
-    <div class="success-toast" id="successToast">
-        <i class="fas fa-check-circle"></i>
-        <span id="toastMessage">تم تسليم الواجب بنجاح!</span>
-    </div>
+    </header>
 
     <!-- ============================================================
     المحتوى الرئيسي
     ============================================================ -->
     <main class="container">
-        
-        <!-- الإحصائيات -->
-        <section class="stats" id="statsSection">
-            <div class="stat-item total"><i class="fas fa-users"></i> إجمالي المسلّمين: <span id="totalCount">0</span></div>
-            <div class="stat-item approved"><i class="fas fa-check-circle"></i> تم التأكيد: <span id="approvedCount">0</span></div>
-            <div class="stat-item pending"><i class="fas fa-clock"></i> قيد المراجعة: <span id="pendingCount">0</span></div>
-        </section>
 
-        <!-- قسم بحث الطالب -->
-        <section class="student-search">
-            <div class="search-title"><i class="fas fa-search"></i> بحث عن واجبي</div>
-            <div class="search-inputs">
-                <input type="text" id="studentSearchInput" placeholder="🔍 أدخل رقم الطالب أو اسمه..." onkeypress="if(event.key==='Enter') searchStudent()">
-                <button class="btn-secondary" onclick="searchStudent()"><i class="fas fa-search"></i> بحث</button>
-                <div class="search-result waiting" id="searchResult">
-                    <span class="status-icon"><i class="fas fa-info-circle"></i></span>
-                    أدخل رقمك أو اسمك للبحث
-                </div>
-            </div>
-        </section>
-
-        <!-- تسجيل الدخول -->
-        <div class="evaluator-login">
-            <div class="login-title"><i class="fas fa-user-shield"></i> منطقة المقيّمين</div>
+        <!-- ============================================================
+        تسجيل الدخول
+        ============================================================ -->
+        <div class="login-section">
+            <div class="login-title"><i class="fas fa-user-shield"></i> تسجيل الدخول</div>
             <div class="login-inputs">
-                <input type="password" id="evaluatorPassword" placeholder="أدخل كلمة سر المقيّم" onkeypress="if(event.key==='Enter') loginEvaluator()">
-                <button class="btn-gold" onclick="loginEvaluator()"><i class="fas fa-sign-in-alt"></i> دخول</button>
-                <button class="btn-secondary" onclick="logoutEvaluator()" id="logoutBtn" style="display:none;"><i class="fas fa-sign-out-alt"></i> خروج</button>
+                <select id="roleSelect">
+                    <option value="student">👨‍🎓 طالب</option>
+                    <option value="evaluator">👨‍🏫 مقيّم</option>
+                    <option value="admin">👑 مدير</option>
+                </select>
+                <input type="password" id="loginPassword" placeholder="كلمة السر" onkeypress="if(event.key==='Enter') loginUser()">
+                <button class="btn-gold" onclick="loginUser()"><i class="fas fa-sign-in-alt"></i> دخول</button>
+                <button class="btn-secondary" onclick="logoutUser()" id="logoutBtn" style="display:none;"><i class="fas fa-sign-out-alt"></i> خروج</button>
                 <span class="login-status logged-out" id="loginStatus"><i class="fas fa-lock"></i> غير متصل</span>
             </div>
         </div>
 
-        <!-- نموذج الطالب -->
-        <section class="selection-section card">
-            <h2><i class="fas fa-user-graduate"></i> بيانات الطالب والواجب</h2>
-            <div class="selection-grid">
-                <div class="form-group">
-                    <label for="studentId"><i class="fas fa-id-card"></i> رقم الطالب <span class="required">*</span></label>
-                    <input type="text" id="studentId" placeholder="مثال: 20241001" maxlength="20">
-                    <span class="hint">رقم فريد لكل طالب</span>
-                </div>
-                <div class="form-group">
-                    <label for="studentName"><i class="fas fa-user"></i> اسم الطالب <span class="required">*</span></label>
-                    <input type="text" id="studentName" placeholder="أدخل اسمك الثلاثي">
-                </div>
-                <div class="form-group">
-                    <label for="specialization"><i class="fas fa-code"></i> التخصص <span class="required">*</span></label>
-                    <select id="specialization">
-                        <option value="">-- اختر التخصص --</option>
-                        <option value="تكنولوجيا المعلومات">💻 تكنولوجيا المعلومات</option>
-                        <option value="إدارة الأعمال">📊 إدارة الأعمال</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="grade"><i class="fas fa-graduation-cap"></i> الصف <span class="required">*</span></label>
-                    <select id="grade">
-                        <option value="">-- اختر الصف --</option>
-                        <option value="العاشر">العاشر</option>
-                        <option value="الحادي عشر">الحادي عشر</option>
-                        <option value="الثاني عشر">الثاني عشر</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="evaluatorName"><i class="fas fa-user-tie"></i> اسم المقيّم <span class="required">*</span></label>
-                    <select id="evaluatorName">
-                        <option value="">-- اختر التخصص أولاً --</option>
-                    </select>
-                    <span class="hint" id="evaluatorHint">⚠️ يرجى اختيار التخصص أولاً</span>
-                </div>
-                <div class="form-group">
-                    <label for="unitInfo"><i class="fas fa-book"></i> اسم الوحدة ورقمها <span class="required">*</span></label>
-                    <input type="text" id="unitInfo" placeholder="مثال: الوحدة الثالثة - البرمجة">
-                    <span class="hint">أدخل اسم الوحدة ورقمها</span>
-                </div>
-            </div>
-        </section>
+        <!-- ============================================================
+        شريط التنقل (حسب الصلاحية)
+        ============================================================ -->
+        <nav class="nav-tabs" id="navTabs">
+            <!-- الطالب -->
+            <button class="tab-btn active" data-tab="student-dashboard"><i class="fas fa-user-graduate"></i> <span>لوحة الطالب</span></button>
+            <button class="tab-btn" data-tab="submit"><i class="fas fa-cloud-upload-alt"></i> <span>رفع واجب</span></button>
+            <button class="tab-btn" data-tab="student-search"><i class="fas fa-search"></i> <span>بحث</span></button>
+            
+            <!-- المقيّم -->
+            <button class="tab-btn hidden" data-tab="evaluator-dashboard"><i class="fas fa-chart-bar"></i> <span>لوحة المقيّم</span></button>
+            <button class="tab-btn hidden" data-tab="submissions"><i class="fas fa-list"></i> <span>الواجبات</span> <span class="badge" id="submissionsBadge">0</span></button>
+            <button class="tab-btn hidden" data-tab="add-assignment"><i class="fas fa-plus-circle"></i> <span>إضافة واجب</span></button>
+            
+            <!-- المدير -->
+            <button class="tab-btn hidden" data-tab="admin-dashboard"><i class="fas fa-cogs"></i> <span>الإدارة</span></button>
+        </nav>
 
-        <!-- رفع الملف -->
-        <section class="upload-section card">
-            <h2><i class="fas fa-cloud-upload-alt"></i> رفع الواجب</h2>
-            <div class="upload-area" id="uploadArea">
-                <i class="fas fa-file-pdf fa-3x"></i>
-                <p>اسحب ملف الواجب هنا أو اضغط للاختيار</p>
-                <p style="font-size:0.8rem;color:#a0aec0;">الملفات المدعومة: PDF, DOC, DOCX, JPG, PNG</p>
-                <input type="file" id="fileInput" accept=".pdf,.doc,.docx,.jpg,.png">
-                <span class="file-name" id="fileName">لم يتم اختيار ملف</span>
+        <!-- ============================================================
+        التبويب 1: لوحة الطالب
+        ============================================================ -->
+        <div class="tab-content active" id="tab-student-dashboard">
+            <div class="card gold-border">
+                <h2><i class="fas fa-user-graduate"></i> لوحة تحكم الطالب</h2>
+                <div class="form-grid" style="margin-bottom:15px;">
+                    <div class="form-group">
+                        <label><i class="fas fa-id-card"></i> رقم الطالب</label>
+                        <input type="text" id="studentId" placeholder="مثال: 20241001" oninput="updateStudentDashboard()">
+                    </div>
+                </div>
+                <div class="form-grid" id="studentStats">
+                    <div class="stat-card" style="background:#f7fafc;padding:12px;border-radius:10px;border:2px solid #2e86c1;text-align:center;">
+                        <div style="font-size:1.8rem;font-weight:700;color:#0d3b66;" id="sTotal">0</div>
+                        <div style="font-size:0.8rem;color:#a0aec0;">إجمالي الواجبات</div>
+                    </div>
+                    <div class="stat-card" style="background:#f7fafc;padding:12px;border-radius:10px;border:2px solid #27ae60;text-align:center;">
+                        <div style="font-size:1.8rem;font-weight:700;color:#0d3b66;" id="sApproved">0</div>
+                        <div style="font-size:0.8rem;color:#a0aec0;">تم التأكيد</div>
+                    </div>
+                    <div class="stat-card" style="background:#f7fafc;padding:12px;border-radius:10px;border:2px solid #f39c12;text-align:center;">
+                        <div style="font-size:1.8rem;font-weight:700;color:#0d3b66;" id="sPending">0</div>
+                        <div style="font-size:0.8rem;color:#a0aec0;">قيد المراجعة</div>
+                    </div>
+                    <div class="stat-card" style="background:#f7fafc;padding:12px;border-radius:10px;border:2px solid #e74c3c;text-align:center;">
+                        <div style="font-size:1.8rem;font-weight:700;color:#0d3b66;" id="sOverdue">0</div>
+                        <div style="font-size:0.8rem;color:#a0aec0;">متأخرة</div>
+                    </div>
+                </div>
+                <div style="background:#f7fafc;padding:12px;border-radius:10px;border:2px solid #e2e8f0;">
+                    <h4 style="color:#0d3b66;margin-bottom:8px;"><i class="fas fa-bell"></i> آخر النشاطات</h4>
+                    <div id="studentActivities"><p style="color:#a0aec0;">لا توجد نشاطات</p></div>
+                </div>
             </div>
-            <button id="submitBtn" class="btn-primary"><i class="fas fa-paper-plane"></i> تسليم الواجب للمقيّم</button>
-            <div id="uploadMessage" class="message"></div>
-        </section>
+        </div>
 
-        <!-- قائمة الواجبات -->
-        <section class="submissions-section card protected-section" id="submissionsSection">
-            <h2><i class="fas fa-list"></i> قائمة الطلاب الذين سلموا الواجب</h2>
-            <div class="filter-bar">
-                <select id="filterSpecialization">
-                    <option value="all">📚 كل التخصصات</option>
-                    <option value="تكنولوجيا المعلومات">💻 تكنولوجيا المعلومات</option>
-                    <option value="إدارة الأعمال">📊 إدارة الأعمال</option>
-                </select>
-                <select id="filterGrade">
-                    <option value="all">📖 كل الصفوف</option>
-                    <option value="العاشر">العاشر</option>
-                    <option value="الحادي عشر">الحادي عشر</option>
-                    <option value="الثاني عشر">الثاني عشر</option>
-                </select>
-                <select id="filterEvaluator">
-                    <option value="all">👨‍🏫 كل المقيّمين</option>
-                </select>
-                <button id="refreshBtn" class="btn-secondary"><i class="fas fa-sync"></i> تحديث</button>
-            </div>
-            <div class="table-responsive">
-                <table id="submissionsTable">
-                    <thead>
-                        <tr>
-                            <th>#</th>
-                            <th>رقم الطالب</th>
-                            <th>اسم الطالب</th>
-                            <th>المقيّم</th>
-                            <th>التخصص</th>
-                            <th>الصف</th>
-                            <th>الوحدة</th>
-                            <th>اسم الملف</th>
-                            <th>تاريخ التسليم</th>
-                            <th>الحالة</th>
-                            <th>العلامة</th>
-                            <th>إجراءات</th>
-                        </tr>
-                    </thead>
-                    <tbody id="submissionsBody"></tbody>
-                </table>
-            </div>
-            <p id="emptyMessage" class="empty-message">📭 لا يوجد طلاب سلموا واجبات حتى الآن</p>
-        </section>
+        <!-- ============================================================
+        التبويب 2: رفع واجب (للطالب فقط - يختار الواجب من قائمة)
+        ============================================================ -->
+        <div class="tab-content" id="tab-submit">
+            <div class="card">
+                <h2><i class="fas fa-cloud-upload-alt"></i> رفع واجب</h2>
+                <p style="color:#a0aec0;margin-bottom:12px;font-size:0.9rem;">
+                    <i class="fas fa-info-circle"></i> اختر الواجب المطلوب من القائمة ثم ارفع ملفك
+                </p>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label><i class="fas fa-id-card"></i> رقم الطالب <span class="required">*</span></label>
+                        <input type="text" id="submitStudentId" placeholder="مثال: 20241001">
+                    </div>
+                    <div class="form-group">
+                        <label><i class="fas fa-user"></i> اسم الطالب <span class="required">*</span></label>
+                        <input type="text" id="submitStudentName" placeholder="أدخل اسمك الثلاثي">
+                    </div>
+                    <div class="form-group">
+                        <label><i class="fas fa-tasks"></i> اسم الواجب <span class="required">*</span></label>
+                        <select id="submitAssignment">
+                            <option value="">-- اختر الواجب --</option>
+                        </select>
+                        <span class="hint" id="assignmentHint">📅 اختر الواجب لترى تاريخ التسليم</span>
+                    </div>
+                    <div class="form-group">
+                        <label><i class="fas fa-calendar-alt"></i> تاريخ التسليم</label>
+                        <input type="text" id="submitDueDateDisplay" readonly style="background:#edf2f7;color:#2e86c1;font-weight:600;">
+                        <span class="hint">📌 يحدده المقيّم (للقراءة فقط)</span>
+                    </div>
+                    <div class="form-group" style="grid-column: span 2;">
+                        <label><i class="fas fa-tag"></i> التخصص والصف</label>
+                        <input type="text" id="submitInfoDisplay" readonly style="background:#edf2f7;color:#4a5568;">
+                    </div>
+                </div>
 
-        <!-- إدارة -->
-        <section class="admin-section card protected-section" id="adminSection">
-            <h2><i class="fas fa-chalkboard-teacher"></i> لوحة تحكم المعلم</h2>
-            <p class="admin-hint">
-                <i class="fas fa-info-circle"></i> 
-                <i class="fas fa-check-circle" style="color:#27ae60;"></i> تأكيد الاستلام |
-                <i class="fas fa-star" style="color:#f39c12;"></i> إضافة علامة (D, M, P, U) |
-                <i class="fas fa-download" style="color:#2e86c1;"></i> تحميل الملف |
-                <i class="fas fa-trash" style="color:#e74c3c;"></i> حذف التسليم
-            </p>
-            <div class="admin-actions">
-                <button id="resetDemoBtn" class="btn-danger"><i class="fas fa-trash-alt"></i> إعادة تعيين البيانات</button>
-                <button id="exportBtn" class="btn-secondary"><i class="fas fa-file-export"></i> تصدير التقرير (JSON)</button>
-            </div>
-        </section>
+                <div class="upload-area" id="uploadArea">
+                    <i class="fas fa-file-pdf fa-3x"></i>
+                    <p>اسحب ملف الواجب هنا أو اضغط للاختيار</p>
+                    <p style="font-size:0.75rem;color:#a0aec0;">PDF, DOC, DOCX, JPG, PNG</p>
+                    <input type="file" id="fileInput" accept=".pdf,.doc,.docx,.jpg,.png" multiple>
+                    <div class="file-list" id="fileList"></div>
+                    <span class="file-name" id="fileName">لم يتم اختيار ملفات</span>
+                </div>
 
-        <!-- QR Code -->
-        <section class="qr-section" id="qrSection">
+                <button id="submitBtn" class="btn-primary"><i class="fas fa-paper-plane"></i> تسليم الواجب</button>
+                <div id="submitMessage" class="message" style="display:none;"></div>
+            </div>
+        </div>
+
+        <!-- ============================================================
+        التبويب 3: بحث الطالب
+        ============================================================ -->
+        <div class="tab-content" id="tab-student-search">
+            <div class="card gold-border">
+                <h2><i class="fas fa-search"></i> بحث عن واجبي</h2>
+                <div class="student-search" style="border:none;background:transparent;padding:0;">
+                    <div class="search-inputs" style="width:100%;">
+                        <input type="text" id="searchInput" placeholder="🔍 أدخل رقم الطالب أو اسمه..." onkeypress="if(event.key==='Enter') searchStudent()" style="flex:1;">
+                        <button class="btn-secondary" onclick="searchStudent()"><i class="fas fa-search"></i> بحث</button>
+                    </div>
+                    <div class="search-result waiting" id="searchResult">
+                        <span><i class="fas fa-info-circle"></i> أدخل رقمك أو اسمك للبحث</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ============================================================
+        التبويب 4: لوحة المقيّم
+        ============================================================ -->
+        <div class="tab-content" id="tab-evaluator-dashboard">
+            <div class="card gold-border">
+                <h2><i class="fas fa-chart-bar"></i> لوحة تحكم المقيّم</h2>
+                <div class="form-grid" id="evaluatorStats">
+                    <div class="stat-card" style="background:#f7fafc;padding:12px;border-radius:10px;border:2px solid #2e86c1;text-align:center;">
+                        <div style="font-size:1.8rem;font-weight:700;color:#0d3b66;" id="eTotal">0</div>
+                        <div style="font-size:0.8rem;color:#a0aec0;">إجمالي الواجبات</div>
+                    </div>
+                    <div class="stat-card" style="background:#f7fafc;padding:12px;border-radius:10px;border:2px solid #27ae60;text-align:center;">
+                        <div style="font-size:1.8rem;font-weight:700;color:#0d3b66;" id="eApproved">0</div>
+                        <div style="font-size:0.8rem;color:#a0aec0;">تم التأكيد</div>
+                    </div>
+                    <div class="stat-card" style="background:#f7fafc;padding:12px;border-radius:10px;border:2px solid #f39c12;text-align:center;">
+                        <div style="font-size:1.8rem;font-weight:700;color:#0d3b66;" id="ePending">0</div>
+                        <div style="font-size:0.8rem;color:#a0aec0;">قيد المراجعة</div>
+                    </div>
+                    <div class="stat-card" style="background:#f7fafc;padding:12px;border-radius:10px;border:2px solid #e74c3c;text-align:center;">
+                        <div style="font-size:1.8rem;font-weight:700;color:#0d3b66;" id="eOverdue">0</div>
+                        <div style="font-size:0.8rem;color:#a0aec0;">متأخرة</div>
+                    </div>
+                </div>
+                <div style="background:#f7fafc;padding:12px;border-radius:10px;border:2px solid #e2e8f0;">
+                    <h4 style="color:#0d3b66;margin-bottom:8px;"><i class="fas fa-clock"></i> آخر النشاطات</h4>
+                    <div id="evaluatorActivities"><p style="color:#a0aec0;">لا توجد نشاطات</p></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ============================================================
+        التبويب 5: قائمة الواجبات (للمقيّم والمدير)
+        ============================================================ -->
+        <div class="tab-content" id="tab-submissions">
+            <div class="card">
+                <h2><i class="fas fa-list"></i> قائمة الواجبات</h2>
+                <div class="form-grid" style="grid-template-columns:repeat(auto-fit,minmax(150px,1fr));margin-bottom:12px;">
+                    <select id="filterSpecialization"><option value="all">📚 كل التخصصات</option><option value="تكنولوجيا المعلومات">💻 تكنولوجيا المعلومات</option><option value="إدارة الأعمال">📊 إدارة الأعمال</option></select>
+                    <select id="filterGrade"><option value="all">📖 كل الصفوف</option><option value="العاشر">العاشر</option><option value="الحادي عشر">الحادي عشر</option><option value="الثاني عشر">الثاني عشر</option></select>
+                    <select id="filterEvaluator"><option value="all">👨‍🏫 كل المقيّمين</option></select>
+                    <button id="refreshBtn" class="btn-secondary"><i class="fas fa-sync"></i> تحديث</button>
+                </div>
+                <div class="table-responsive">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>رقم الطالب</th>
+                                <th>اسم الطالب</th>
+                                <th>المقيّم</th>
+                                <th>الواجب</th>
+                                <th>التخصص</th>
+                                <th>الصف</th>
+                                <th>الملف</th>
+                                <th>تاريخ التسليم</th>
+                                <th>تاريخ الاستحقاق</th>
+                                <th>الحالة</th>
+                                <th>العلامة</th>
+                                <th>إجراءات</th>
+                            </tr>
+                        </thead>
+                        <tbody id="submissionsBody"></tbody>
+                    </table>
+                </div>
+                <div id="submissionsEmpty" class="empty-message">📭 لا يوجد واجبات</div>
+            </div>
+        </div>
+
+        <!-- ============================================================
+        التبويب 6: إضافة واجب (للمقيّم فقط)
+        ============================================================ -->
+        <div class="tab-content" id="tab-add-assignment">
+            <div class="card green-border">
+                <h2><i class="fas fa-plus-circle"></i> إضافة واجب جديد</h2>
+                <p style="color:#a0aec0;margin-bottom:12px;font-size:0.9rem;">
+                    <i class="fas fa-info-circle"></i> قم بإضافة الواجب وتحديد تاريخ التسليم للطلاب
+                </p>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label><i class="fas fa-tasks"></i> اسم الواجب <span class="required">*</span></label>
+                        <input type="text" id="newAssignmentName" placeholder="مثال: الوحدة الثالثة - البرمجة">
+                    </div>
+                    <div class="form-group">
+                        <label><i class="fas fa-code"></i> التخصص <span class="required">*</span></label>
+                        <select id="newAssignmentSpecialization">
+                            <option value="">-- اختر --</option>
+                            <option value="تكنولوجيا المعلومات">💻 تكنولوجيا المعلومات</option>
+                            <option value="إدارة الأعمال">📊 إدارة الأعمال</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label><i class="fas fa-graduation-cap"></i> الصف <span class="required">*</span></label>
+                        <select id="newAssignmentGrade">
+                            <option value="">-- اختر --</option>
+                            <option value="العاشر">العاشر</option>
+                            <option value="الحادي عشر">الحادي عشر</option>
+                            <option value="الثاني عشر">الثاني عشر</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label><i class="fas fa-calendar-alt"></i> تاريخ التسليم <span class="required">*</span></label>
+                        <input type="date" id="newAssignmentDueDate">
+                        <span class="hint">اختر تاريخ استحقاق الواجب</span>
+                    </div>
+                    <div class="form-group" style="grid-column: span 2;">
+                        <label><i class="fas fa-align-left"></i> وصف الواجب</label>
+                        <textarea id="newAssignmentDescription" placeholder="أدخل وصفاً للواجب (اختياري)" rows="2"></textarea>
+                    </div>
+                </div>
+                <button id="addAssignmentBtn" class="btn-success" style="width:100%;"><i class="fas fa-save"></i> إضافة الواجب</button>
+                <div id="addAssignmentMessage" style="margin-top:12px;display:none;"></div>
+            </div>
+        </div>
+
+        <!-- ============================================================
+        التبويب 7: إدارة النظام (للمدير)
+        ============================================================ -->
+        <div class="tab-content" id="tab-admin-dashboard">
+            <div class="card red-border">
+                <h2><i class="fas fa-cogs"></i> إدارة النظام</h2>
+                <div class="form-grid" style="margin-bottom:12px;">
+                    <div class="stat-card" style="background:#f7fafc;padding:12px;border-radius:10px;border:2px solid #2e86c1;text-align:center;">
+                        <div style="font-size:1.5rem;font-weight:700;color:#0d3b66;" id="admTotalSub">0</div>
+                        <div style="font-size:0.8rem;color:#a0aec0;">إجمالي الواجبات</div>
+                    </div>
+                    <div class="stat-card" style="background:#f7fafc;padding:12px;border-radius:10px;border:2px solid #9b59b6;text-align:center;">
+                        <div style="font-size:1.5rem;font-weight:700;color:#0d3b66;" id="admStudents">0</div>
+                        <div style="font-size:0.8rem;color:#a0aec0;">عدد الطلاب</div>
+                    </div>
+                    <div class="stat-card" style="background:#f7fafc;padding:12px;border-radius:10px;border:2px solid #f1c40f;text-align:center;">
+                        <div style="font-size:1.5rem;font-weight:700;color:#0d3b66;" id="admEvaluators">0</div>
+                        <div style="font-size:0.8rem;color:#a0aec0;">عدد المقيّمين</div>
+                    </div>
+                </div>
+                <div style="display:flex;gap:10px;flex-wrap:wrap;">
+                    <button id="resetDataBtn" class="btn-danger"><i class="fas fa-trash-alt"></i> إعادة تعيين البيانات</button>
+                    <button id="exportDataBtn" class="btn-success"><i class="fas fa-file-export"></i> تصدير التقرير</button>
+                    <button id="addDemoBtn" class="btn-gold"><i class="fas fa-plus"></i> إضافة بيانات تجريبية</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ============================================================
+        نافذة منبثقة للتأكيد
+        ============================================================ -->
+        <div class="modal-overlay" id="resultModal">
+            <div class="modal-box">
+                <div class="icon" id="modalIcon" style="color:#27ae60;"><i class="fas fa-check-circle"></i></div>
+                <h2 id="modalTitle">✅ تمت العملية بنجاح</h2>
+                <div class="details" id="modalDetails"></div>
+                <button class="btn-close" onclick="closeModal()"><i class="fas fa-check"></i> حسناً</button>
+            </div>
+        </div>
+
+        <!-- ============================================================
+        Toast
+        ============================================================ -->
+        <div class="toast" id="toast"><i class="fas fa-check-circle"></i> <span id="toastMessage">تم بنجاح</span></div>
+
+        <!-- ============================================================
+        QR Code
+        ============================================================ -->
+        <section class="qr-section">
             <div class="qr-info">
-                <h3><i class="fas fa-qrcode"></i> رابط الموقع - QR Code</h3>
-                <p><i class="fas fa-mobile-alt" style="color:#2e86c1;"></i> استخدم كود QR لزيارة الموقع بسرعة</p>
-                <div class="url-display" id="siteUrl">جاري تحميل الرابط...</div>
+                <h3><i class="fas fa-qrcode"></i> رابط الموقع</h3>
+                <p style="font-size:0.8rem;color:#4a5568;">استخدم كود QR لزيارة الموقع بسرعة</p>
+                <div class="url-display" id="siteUrl">جاري التحميل...</div>
                 <div class="qr-actions">
-                    <button class="btn-qr-download" onclick="downloadQR()"><i class="fas fa-download"></i> تحميل QR Code</button>
+                    <button class="btn-qr" onclick="downloadQR()"><i class="fas fa-download"></i> تحميل</button>
                     <button class="btn-qr-copy" onclick="copyUrl()"><i class="fas fa-copy"></i> نسخ الرابط</button>
                 </div>
             </div>
@@ -477,6 +640,7 @@
                 <div id="qrcode"></div>
             </div>
         </section>
+
     </main>
 
     <!-- ============================================================
@@ -485,28 +649,15 @@
     <footer>
         <div class="container">
             <div class="footer-content">
-                <div class="footer-left">
-                    <div class="designer"><i class="fas fa-pen-fancy"></i> إعداد وتصميم: <span> منذر عبدالوهاب الزعبي</span></div>
-                </div>
-                <div class="footer-center">
-                    <i class="fas fa-school"></i>
-                    <p>BTEC - نظام إدارة الواجبات الإلكتروني</p>
-                    <p style="font-size:0.75rem;opacity:0.6;">© 2026- جميع الحقوق محفوظة</p>
-                    
-                    <br>
-                    <div><span class="position"><i class="fas fa-clipboard-check"></i> مقيمي تكنولوجيا المعلومات: </span> <span class="name">منذر الزعبي، فادي الحناوي، سالم السميرات، ثائر أبو زريق</span></div>
-                    <div><span class="position"><i class="fas fa-clipboard-check"></i> مقيمي إدارة الاعمال: </span> <span class="name">معاوية الجهماني، محمد طويط، غيث عليان، محمد غرايب</span></div>
-
-
-                </div>
-                <div class="footer-right">
-                    <div class="official">
-                        <div><span class="position"><i class="fas fa-user-tie"></i> مدير المدرسة:</span> <span class="name">د. طارق جيت</span></div>
-                        <div><span class="position"><i class="fas fa-clipboard-check"></i> ضابط الجودة:</span> <span class="name">أ. يزن الخطيب</span></div>
-                    </div>
+                <div class="designer"><i class="fas fa-pen-fancy"></i> إعداد: <span> منذر عبدالوهاب الزعبي</span></div>
+                <div class="center"><i class="fas fa-school"></i> نظام إدارة الواجبات الإلكتروني</div>
+                <div class="official">
+                    <div><span class="pos">مدير المدرسة:</span> د. طارق جيت</div>
+                    <div><span class="pos">ضابط الجودة:</span> أ. يزن الخطيب</div>
                 </div>
             </div>
-            <div class="footer-bottom"><i class="fas fa-code"></i> تم التطوير بواسطة المقيّم: منذر الزعبي - مدرسة الطرة الثانوية للبنين</div>
+            
+            <div class="footer-bottom"><i class="fas fa-code"></i> تم التطوير بواسطة أ.منذر الزعبي - مدرسة الطرة الثانوية للبنين</div>
         </div>
     </footer>
 
@@ -515,42 +666,298 @@
     ============================================================ -->
     <script>
         // ============================================================
-        // نظام إدارة الواجبات - مع علامات D, M, P, U
+        // النظام المتكامل - الطالب / المقيّم / المدير
         // ============================================================
 
-        const EVALUATOR_PASSWORD = 'teacher123';
+        // -------- كلمات السر --------
+        const PASSWORDS = {
+            student: '123',
+            evaluator: 'teacher123',
+            admin: 'admin123'
+        };
 
+        // -------- قوائم المقيّمين --------
         const EVALUATORS = {
             'تكنولوجيا المعلومات': ['منذر الزعبي', 'فادي الحناوي', 'سالم السميرات', 'ثائر أبو زريق'],
             'إدارة الأعمال': ['معاوية الجهماني', 'محمد طويط', 'غيث عليان', 'محمد غرايبة']
         };
 
-        const STORAGE_KEY = 'altorra_submissions';
+        // -------- البيانات --------
+        const STORAGE_KEY = 'altorra_system_data';
 
-        const defaultSubmissions = [
-            { id: 1, studentId: '20241001', studentName: 'أحمد محمد علي', evaluatorName: 'منذر الزعبي', specialization: 'تكنولوجيا المعلومات', grade: 'العاشر', unitInfo: 'الوحدة الأولى - أساسيات البرمجة', fileName: 'واجب_البرمجة_1.pdf', fileSize: '2.4 MB', uploadDate: '2026-09-02 10:30', status: 'approved', gradeValue: 'D' },
-            { id: 2, studentId: '20241002', studentName: 'خالد يوسف حسن', evaluatorName: 'معاوية الجهماني', specialization: 'إدارة الأعمال', grade: 'الحادي عشر', unitInfo: 'الوحدة الثالثة - التسويق', fileName: 'تقرير_التسويق.docx', fileSize: '1.8 MB', uploadDate: '2026-09-02 11:15', status: 'pending', gradeValue: '' },
-            { id: 3, studentId: '20241003', studentName: 'سعيد عبدالله عمر', evaluatorName: 'فادي الحناوي', specialization: 'تكنولوجيا المعلومات', grade: 'الثاني عشر', unitInfo: 'الوحدة الخامسة - قواعد البيانات', fileName: 'مشروع_قواعد_بيانات.sql', fileSize: '3.1 MB', uploadDate: '2026-09-01 14:45', status: 'pending', gradeValue: '' },
-            { id: 4, studentId: '20241004', studentName: 'منصور إبراهيم خالد', evaluatorName: 'محمد طويط', specialization: 'إدارة الأعمال', grade: 'العاشر', unitInfo: 'الوحدة الثانية - مبادئ الإدارة', fileName: 'بحث_مبادئ_الإدارة.pdf', fileSize: '1.2 MB', uploadDate: '2026-09-03 09:20', status: 'pending', gradeValue: '' }
-        ];
+        function getDefaultData() {
+            return {
+                // قائمة الواجبات التي يضيفها المقيّم
+                assignments: [
+                    { id: 1, name: 'الوحدة الأولى - أساسيات البرمجة', specialization: 'تكنولوجيا المعلومات', grade: 'العاشر', dueDate: '2026-09-10', description: 'حل جميع تمارين الوحدة الأولى' },
+                    { id: 2, name: 'الوحدة الثالثة - التسويق', specialization: 'إدارة الأعمال', grade: 'الحادي عشر', dueDate: '2026-09-12', description: 'تقديم بحث عن استراتيجيات التسويق' },
+                    { id: 3, name: 'الوحدة الخامسة - قواعد البيانات', specialization: 'تكنولوجيا المعلومات', grade: 'الثاني عشر', dueDate: '2026-09-08', description: 'تصميم قاعدة بيانات لمدرسة' },
+                    { id: 4, name: 'الوحدة الثانية - مبادئ الإدارة', specialization: 'إدارة الأعمال', grade: 'العاشر', dueDate: '2026-09-15', description: 'كتابة تقرير عن مبادئ الإدارة' }
+                ],
+                // تسليمات الطلاب
+                submissions: [
+                    { id: 1, studentId: '20241001', studentName: 'أحمد محمد علي', evaluatorName: 'منذر الزعبي', assignmentId: 1, fileName: 'واجب_البرمجة_1.pdf', fileSize: '2.4 MB', uploadDate: '2026-09-02 10:30', status: 'approved', gradeValue: 'D' },
+                    { id: 2, studentId: '20241002', studentName: 'خالد يوسف حسن', evaluatorName: 'معاوية الجهماني', assignmentId: 2, fileName: 'تقرير_التسويق.docx', fileSize: '1.8 MB', uploadDate: '2026-09-02 11:15', status: 'pending', gradeValue: '' },
+                    { id: 3, studentId: '20241003', studentName: 'سعيد عبدالله عمر', evaluatorName: 'فادي الحناوي', assignmentId: 3, fileName: 'مشروع_قواعد_بيانات.sql', fileSize: '3.1 MB', uploadDate: '2026-09-01 14:45', status: 'pending', gradeValue: '' },
+                    { id: 4, studentId: '20241004', studentName: 'منصور إبراهيم خالد', evaluatorName: 'محمد طويط', assignmentId: 4, fileName: 'بحث_مبادئ_الإدارة.pdf', fileSize: '1.2 MB', uploadDate: '2026-09-03 09:20', status: 'pending', gradeValue: '' }
+                ],
+                activities: []
+            };
+        }
 
-        function initData() {
+        function getData() {
             let data = localStorage.getItem(STORAGE_KEY);
             if (!data) {
-                localStorage.setItem(STORAGE_KEY, JSON.stringify(defaultSubmissions));
+                const defaultData = getDefaultData();
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(defaultData));
+                return defaultData;
             }
+            return JSON.parse(data);
+        }
+
+        function saveData(data) {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+        }
+
+        function getAssignments() {
+            return getData().assignments || [];
+        }
+
+        function saveAssignments(assignments) {
+            const data = getData();
+            data.assignments = assignments;
+            saveData(data);
         }
 
         function getSubmissions() {
-            return JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+            return getData().submissions || [];
         }
 
         function saveSubmissions(submissions) {
-            localStorage.setItem(STORAGE_KEY, JSON.stringify(submissions));
+            const data = getData();
+            data.submissions = submissions;
+            saveData(data);
+        }
+
+        // -------- المتغيرات --------
+        let selectedFiles = [];
+        let currentRole = 'student';
+        let isLoggedIn = false;
+        let qrCodeInstance = null;
+
+        // -------- عناصر DOM --------
+        const roleSelect = document.getElementById('roleSelect');
+        const loginPassword = document.getElementById('loginPassword');
+        const loginStatus = document.getElementById('loginStatus');
+        const logoutBtn = document.getElementById('logoutBtn');
+
+        // ============================================================
+        // نظام الصلاحيات
+        // ============================================================
+        function loginUser() {
+            const role = roleSelect.value;
+            const password = loginPassword.value.trim();
+
+            if (password === PASSWORDS[role]) {
+                isLoggedIn = true;
+                currentRole = role;
+
+                const roleNames = { student: 'طالب', evaluator: 'مقيّم', admin: 'مدير' };
+                loginStatus.className = 'login-status logged-in';
+                loginStatus.innerHTML = `<i class="fas fa-unlock"></i> متصل كـ <strong>${roleNames[role]}</strong>`;
+                loginPassword.value = '';
+                loginPassword.style.display = 'none';
+                logoutBtn.style.display = 'inline-block';
+                document.querySelector('.login-section .btn-gold').style.display = 'none';
+
+                showToast(`✅ مرحباً بك كـ ${roleNames[role]}`, 'success');
+                updateRoleVisibility();
+                updateAll();
+                updateAssignmentSelect();
+            } else {
+                showToast('❌ كلمة السر غير صحيحة!', 'error');
+                loginPassword.value = '';
+                loginPassword.focus();
+            }
+        }
+
+        function logoutUser() {
+            isLoggedIn = false;
+            currentRole = 'student';
+            loginStatus.className = 'login-status logged-out';
+            loginStatus.innerHTML = '<i class="fas fa-lock"></i> غير متصل';
+            loginPassword.style.display = 'block';
+            logoutBtn.style.display = 'none';
+            document.querySelector('.login-section .btn-gold').style.display = 'inline-block';
+            showToast('🔒 تم تسجيل الخروج', 'warning');
+            updateRoleVisibility();
+            updateAll();
+        }
+
+        function updateRoleVisibility() {
+            const isStudent = isLoggedIn && currentRole === 'student';
+            const isEvaluator = isLoggedIn && (currentRole === 'evaluator' || currentRole === 'admin');
+            const isAdmin = isLoggedIn && currentRole === 'admin';
+
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                const tab = btn.dataset.tab;
+                let show = false;
+
+                if (tab === 'student-dashboard' || tab === 'submit' || tab === 'student-search') {
+                    show = isLoggedIn;
+                } else if (tab === 'evaluator-dashboard' || tab === 'submissions' || tab === 'add-assignment') {
+                    show = isEvaluator;
+                } else if (tab === 'admin-dashboard') {
+                    show = isAdmin;
+                }
+
+                btn.classList.toggle('hidden', !show);
+            });
+
+            const firstVisible = document.querySelector('.tab-btn:not(.hidden)');
+            if (firstVisible) {
+                document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+                firstVisible.classList.add('active');
+                document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+                document.getElementById('tab-' + firstVisible.dataset.tab).classList.add('active');
+            }
         }
 
         // ============================================================
-        // تخزين الملفات
+        // نظام التبويبات
+        // ============================================================
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+                document.getElementById('tab-' + this.dataset.tab).classList.add('active');
+            });
+        });
+
+        // ============================================================
+        // تحديث قائمة الواجبات للطالب
+        // ============================================================
+        function updateAssignmentSelect() {
+            const assignments = getAssignments();
+            const select = document.getElementById('submitAssignment');
+            const currentValue = select.value;
+            
+            select.innerHTML = '<option value="">-- اختر الواجب --</option>';
+            
+            assignments.forEach(a => {
+                const opt = document.createElement('option');
+                opt.value = a.id;
+                opt.textContent = `${a.name} (${a.specialization} - ${a.grade})`;
+                opt.dataset.dueDate = a.dueDate;
+                opt.dataset.specialization = a.specialization;
+                opt.dataset.grade = a.grade;
+                opt.dataset.description = a.description || '';
+                select.appendChild(opt);
+            });
+
+            if (currentValue && [...select.options].some(o => o.value === currentValue)) {
+                select.value = currentValue;
+            }
+        }
+
+        // عند اختيار الواجب، عرض تاريخ التسليم
+        document.getElementById('submitAssignment').addEventListener('change', function() {
+            const selected = this.options[this.selectedIndex];
+            const dueDateDisplay = document.getElementById('submitDueDateDisplay');
+            const infoDisplay = document.getElementById('submitInfoDisplay');
+            
+            if (this.value && selected) {
+                const dueDate = selected.dataset.dueDate || 'غير محدد';
+                const spec = selected.dataset.specialization || '';
+                const grade = selected.dataset.grade || '';
+                const desc = selected.dataset.description || '';
+                
+                dueDateDisplay.value = `📅 ${dueDate}`;
+                infoDisplay.value = `📚 ${spec} | 🎓 ${grade}${desc ? ' | 📝 ' + desc : ''}`;
+                dueDateDisplay.style.color = '#2e86c1';
+                infoDisplay.style.color = '#4a5568';
+                document.getElementById('assignmentHint').textContent = `✅ تم اختيار الواجب - تاريخ التسليم: ${dueDate}`;
+                document.getElementById('assignmentHint').className = 'hint success';
+            } else {
+                dueDateDisplay.value = '';
+                infoDisplay.value = '';
+                document.getElementById('assignmentHint').textContent = '📅 اختر الواجب لترى تاريخ التسليم';
+                document.getElementById('assignmentHint').className = 'hint';
+            }
+        });
+
+        // ============================================================
+        // تحديث قائمة المقيّمين
+        // ============================================================
+        // لا نحتاجها هنا لأن المقيّم يختار من قائمة الواجبات
+
+        // ============================================================
+        // رفع الملفات
+        // ============================================================
+        const uploadArea = document.getElementById('uploadArea');
+        const fileInput = document.getElementById('fileInput');
+        const fileNameDisplay = document.getElementById('fileName');
+        const fileList = document.getElementById('fileList');
+
+        uploadArea.addEventListener('click', () => fileInput.click());
+        uploadArea.addEventListener('dragover', e => { e.preventDefault();
+            uploadArea.classList.add('dragover'); });
+        uploadArea.addEventListener('dragleave', () => uploadArea.classList.remove('dragover'));
+        uploadArea.addEventListener('drop', e => {
+            e.preventDefault();
+            uploadArea.classList.remove('dragover');
+            if (e.dataTransfer.files.length > 0) {
+                fileInput.files = e.dataTransfer.files;
+                handleFilesSelect(e.dataTransfer.files);
+            }
+        });
+
+        fileInput.addEventListener('change', function() {
+            if (this.files.length > 0) handleFilesSelect(this.files);
+        });
+
+        function handleFilesSelect(files) {
+            selectedFiles = [];
+            let validFiles = [];
+            for (let file of files) {
+                if (file.size > 10 * 1024 * 1024) {
+                    showToast(`⚠️ "${file.name}" كبير جداً (حد 10 ميجابايت)`, 'error');
+                    continue;
+                }
+                validFiles.push(file);
+            }
+            selectedFiles = validFiles;
+            updateFileList();
+        }
+
+        function updateFileList() {
+            fileList.innerHTML = '';
+            selectedFiles.forEach((file, index) => {
+                const div = document.createElement('div');
+                div.className = 'file-item';
+                div.innerHTML = `<i class="fas fa-file"></i> ${file.name} <span class="remove" onclick="removeFile(${index})">✕</span>`;
+                fileList.appendChild(div);
+            });
+            if (selectedFiles.length > 0) {
+                const totalSize = selectedFiles.reduce((sum, f) => sum + f.size, 0);
+                fileNameDisplay.textContent = `📎 ${selectedFiles.length} ملف (${(totalSize / 1024 / 1024).toFixed(2)} MB)`;
+                fileNameDisplay.style.color = '#2e86c1';
+                fileNameDisplay.style.background = '#dbeafe';
+            } else {
+                fileNameDisplay.textContent = 'لم يتم اختيار ملفات';
+                fileNameDisplay.style.color = '#2d3748';
+                fileNameDisplay.style.background = '#edf2f7';
+            }
+        }
+
+        function removeFile(index) {
+            selectedFiles.splice(index, 1);
+            updateFileList();
+        }
+
+        // ============================================================
+        // حفظ الملفات محلياً
         // ============================================================
         function saveFileLocally(file, callback) {
             const reader = new FileReader();
@@ -587,684 +994,593 @@
             };
         }
 
-        function getFileFromIndexedDB(fileName, callback) {
-            const request = indexedDB.open('FileDB', 1);
-            request.onsuccess = function(e) {
-                const db = e.target.result;
-                const transaction = db.transaction(['files'], 'readonly');
-                const store = transaction.objectStore('files');
-                const getRequest = store.get(fileName);
-                getRequest.onsuccess = function() {
-                    if (getRequest.result) {
-                        callback(getRequest.result.data);
-                    } else {
-                        callback(null);
-                    }
-                };
-            };
-        }
-
-        function getFileFromLocalStorage(fileName, callback) {
+        function getFileFromStorage(fileName, callback) {
             const data = localStorage.getItem('file_' + fileName);
             if (data) {
                 callback(data);
             } else {
-                getFileFromIndexedDB(fileName, callback);
+                const request = indexedDB.open('FileDB', 1);
+                request.onsuccess = function(e) {
+                    const db = e.target.result;
+                    const transaction = db.transaction(['files'], 'readonly');
+                    const store = transaction.objectStore('files');
+                    const getRequest = store.get(fileName);
+                    getRequest.onsuccess = function() {
+                        callback(getRequest.result ? getRequest.result.data : null);
+                    };
+                };
             }
         }
 
-        function downloadActualFile(fileName) {
-            getFileFromLocalStorage(fileName, function(fileData) {
-                if (fileData) {
+        function downloadFile(fileName) {
+            if (!fileName) return;
+            const firstFile = fileName.split(',')[0].trim();
+            getFileFromStorage(firstFile, function(data) {
+                if (data) {
                     const link = document.createElement('a');
-                    link.href = fileData;
-                    link.download = fileName;
+                    link.href = data;
+                    link.download = firstFile;
                     document.body.appendChild(link);
                     link.click();
                     document.body.removeChild(link);
-                    showToast('📥 جاري تحميل الملف: ' + fileName);
+                    showToast(`📥 تحميل: ${firstFile}`, 'success');
                 } else {
-                    alert('⚠️ الملف غير موجود في التخزين المحلي.');
+                    showToast(`⚠️ الملف غير موجود`, 'error');
                 }
             });
         }
 
         // ============================================================
-        // المتغيرات والعناصر
+        // تسليم الواجب (الطالب يختار الواجب ويرفع الملف)
         // ============================================================
-        let currentFile = null;
-        let currentFileName = '';
-        let isEvaluatorLoggedIn = false;
-        let qrCodeInstance = null;
+        document.getElementById('submitBtn').addEventListener('click', function() {
+            if (!isLoggedIn) {
+                showToast('⚠️ يجب تسجيل الدخول أولاً', 'error');
+                return;
+            }
 
-        const studentIdInput = document.getElementById('studentId');
-        const studentNameInput = document.getElementById('studentName');
-        const specializationSelect = document.getElementById('specialization');
-        const gradeSelect = document.getElementById('grade');
-        const evaluatorNameSelect = document.getElementById('evaluatorName');
-        const unitInfoInput = document.getElementById('unitInfo');
-        const fileInput = document.getElementById('fileInput');
-        const uploadArea = document.getElementById('uploadArea');
-        const fileNameDisplay = document.getElementById('fileName');
-        const submitBtn = document.getElementById('submitBtn');
-        const uploadMessage = document.getElementById('uploadMessage');
-        const submissionsBody = document.getElementById('submissionsBody');
-        const emptyMessage = document.getElementById('emptyMessage');
-        const filterSpecialization = document.getElementById('filterSpecialization');
-        const filterGrade = document.getElementById('filterGrade');
-        const filterEvaluator = document.getElementById('filterEvaluator');
-        const refreshBtn = document.getElementById('refreshBtn');
-        const resetDemoBtn = document.getElementById('resetDemoBtn');
-        const exportBtn = document.getElementById('exportBtn');
-        const totalCount = document.getElementById('totalCount');
-        const approvedCount = document.getElementById('approvedCount');
-        const pendingCount = document.getElementById('pendingCount');
-        const successModal = document.getElementById('successModal');
-        const submissionDetails = document.getElementById('submissionDetails');
-        const successToast = document.getElementById('successToast');
-        const toastMessage = document.getElementById('toastMessage');
-        const evaluatorPassword = document.getElementById('evaluatorPassword');
-        const loginStatus = document.getElementById('loginStatus');
-        const logoutBtn = document.getElementById('logoutBtn');
-        const studentSearchInput = document.getElementById('studentSearchInput');
-        const searchResult = document.getElementById('searchResult');
+            const studentId = document.getElementById('submitStudentId').value.trim();
+            const studentName = document.getElementById('submitStudentName').value.trim();
+            const assignmentSelect = document.getElementById('submitAssignment');
+            const assignmentId = parseInt(assignmentSelect.value);
 
-        // ============================================================
-        // وظيفة بحث الطالب
-        // ============================================================
-        function searchStudent() {
-            const query = studentSearchInput.value.trim();
-            
-            if (!query) {
-                showToast('📝 الرجاء إدخال رقم الطالب أو اسمه');
+            if (!studentId || !studentName || !assignmentId || selectedFiles.length === 0) {
+                showToast('⚠️ الرجاء تعبئة جميع الحقول واختيار ملفات', 'error');
+                return;
+            }
+
+            const assignments = getAssignments();
+            const assignment = assignments.find(a => a.id === assignmentId);
+            if (!assignment) {
+                showToast('⚠️ الواجب غير موجود', 'error');
                 return;
             }
 
             const submissions = getSubmissions();
-            
-            let found = submissions.filter(s => 
-                s.studentId === query || 
-                s.studentName.toLowerCase().includes(query.toLowerCase())
-            );
-
-            if (found.length === 0) {
-                document.getElementById('searchResultIcon').innerHTML = '<i class="fas fa-times-circle" style="color:#e74c3c;"></i>';
-                document.getElementById('searchResultIcon').style.color = '#e74c3c';
-                document.getElementById('searchResultTitle').textContent = '❌ لا توجد نتائج';
-                document.getElementById('searchResultDetails').innerHTML = `
-                    <div style="text-align:center;padding:20px;">
-                        <p style="font-size:1.1rem;color:#4a5568;">
-                            <i class="fas fa-user-slash" style="font-size:2rem;color:#e74c3c;display:block;margin-bottom:10px;"></i>
-                            لم يتم العثور على واجب مسجل بهذا الاسم أو الرقم
-                        </p>
-                        <p style="font-size:0.9rem;color:#a0aec0;margin-top:10px;">
-                            تأكد من صحة البيانات وحاول مرة أخرى
-                        </p>
-                    </div>
-                `;
-                document.getElementById('searchResultModal').classList.add('active');
-                
-                searchResult.className = 'search-result not-found';
-                searchResult.innerHTML = `
-                    <span class="status-icon"><i class="fas fa-times-circle"></i></span>
-                    ❌ لا توجد نتائج مطابقة
-                `;
+            if (submissions.some(s => s.studentId === studentId && s.assignmentId === assignmentId)) {
+                showToast(`⚠️ هذا الواجب مسجل بالفعل للطالب ${studentId}`, 'error');
                 return;
             }
 
-            let detailsHTML = '';
-            found.forEach((s, index) => {
-                const isApproved = s.status === 'approved';
-                const statusIcon = isApproved ? '✅' : '⏳';
-                const statusText = isApproved ? 'تم تأكيد الواجب' : 'لم يتم تأكيد الواجب بعد';
-                const statusColor = isApproved ? '#27ae60' : '#f39c12';
-                
-                // عرض العلامة مع الترجمة
-                let gradeDisplay = '📝 <span style="color:#a0aec0;">لم يتم إضافة علامة بعد</span>';
-                if (s.gradeValue) {
-                    const gradeLabels = {
-                        'D': 'ممتاز 🏆',
-                        'M': 'جيد جداً 👍',
-                        'P': 'مقبول ✅',
-                        'U': 'غير مقبول ❌'
-                    };
-                    const label = gradeLabels[s.gradeValue] || s.gradeValue;
-                    gradeDisplay = `⭐ <span style="font-weight:700;color:#f39c12;">${s.gradeValue} - ${label}</span>`;
-                }
-                
-                detailsHTML += `
-                    <div style="border-bottom:1px solid #edf2f7;padding:10px 0;${index === found.length - 1 ? 'border-bottom:none;' : ''}">
-                        <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:5px;">
-                            <span style="font-weight:700;color:#1a5276;">📌 الواجب رقم ${index + 1}</span>
-                            <span style="font-size:0.8rem;color:#a0aec0;">${s.uploadDate}</span>
-                        </div>
-                        <div class="row">
-                            <span class="label"><i class="fas fa-user"></i> اسم الطالب:</span>
-                            <span class="value" style="font-weight:700;">${s.studentName}</span>
-                        </div>
-                        <div class="row">
-                            <span class="label"><i class="fas fa-id-card"></i> رقم الطالب:</span>
-                            <span class="value">${s.studentId}</span>
-                        </div>
-                        <div class="row">
-                            <span class="label"><i class="fas fa-book"></i> الواجب:</span>
-                            <span class="value">${s.unitInfo}</span>
-                        </div>
-                        <div class="row">
-                            <span class="label"><i class="fas fa-user-tie"></i> المقيّم:</span>
-                            <span class="value">${s.evaluatorName}</span>
-                        </div>
-                        <div class="row">
-                            <span class="label"><i class="fas fa-file"></i> الملف:</span>
-                            <span class="value" style="font-size:0.85rem;">${s.fileName}</span>
-                        </div>
-                        <div class="row" style="border-bottom:none;padding-bottom:0;">
-                            <span class="label"><i class="fas fa-check-circle"></i> الحالة:</span>
-                            <span class="value" style="color:${statusColor};font-weight:700;">${statusIcon} ${statusText}</span>
-                        </div>
-                        <div class="row" style="border-bottom:none;padding-top:5px;">
-                            <span class="label"><i class="fas fa-star"></i> العلامة:</span>
-                            <span class="value" style="font-size:1rem;">${gradeDisplay}</span>
-                        </div>
-                    </div>
-                `;
-            });
+            // اختيار مقيّم عشوائي من القائمة حسب التخصص
+            const evaluators = EVALUATORS[assignment.specialization] || ['غير محدد'];
+            const randomEvaluator = evaluators[Math.floor(Math.random() * evaluators.length)];
 
-            const allApproved = found.every(s => s.status === 'approved');
-            document.getElementById('searchResultIcon').innerHTML = `<i class="fas fa-${allApproved ? 'check-circle' : 'search'}" style="color:${allApproved ? '#27ae60' : '#2e86c1'};"></i>`;
-            document.getElementById('searchResultIcon').style.color = allApproved ? '#27ae60' : '#2e86c1';
-            document.getElementById('searchResultTitle').textContent = allApproved ? '✅ جميع واجباتك مؤكدة! 🎉' : `📋 تم العثور على ${found.length} واجب${found.length > 1 ? 'ات' : ''}`;
-            document.getElementById('searchResultDetails').innerHTML = detailsHTML;
-            document.getElementById('searchResultModal').classList.add('active');
-            
-            searchResult.className = 'search-result found';
-            searchResult.innerHTML = `
-                <div style="text-align:right;width:100%;">
-                    <div style="font-weight:700;margin-bottom:5px;color:#1a5276;">
-                        ${allApproved ? '✅ جميع واجباتك مؤكدة! 🎉' : '📋 تم العثور على ' + found.length + ' واجب' + (found.length > 1 ? 'ات' : '')}
-                    </div>
-                    ${found.map(s => `
-                        <div style="border-bottom:1px solid #e2e8f0;padding:6px 0;text-align:right;font-size:0.9rem;">
-                            <strong>${s.studentName}</strong> (${s.studentId}) - ${s.unitInfo}
-                            <br>
-                            <span style="color:${s.status === 'approved' ? '#27ae60' : '#f39c12'};">
-                                ${s.status === 'approved' ? '✅ مؤكد' : '⏳ قيد المراجعة'}
-                            </span>
-                            ${s.gradeValue ? ' | ⭐ ' + s.gradeValue : ''}
-                        </div>
-                    `).join('')}
-                </div>
-            `;
-        }
+            const fileNames = [];
+            let filesProcessed = 0;
 
-        function closeSearchModal() {
-            document.getElementById('searchResultModal').classList.remove('active');
-        }
-
-        // ============================================================
-        // الوظائف الأساسية
-        // ============================================================
-
-        function updateEvaluators() {
-            const specialization = specializationSelect.value;
-            evaluatorNameSelect.innerHTML = '';
-            if (specialization && EVALUATORS[specialization]) {
-                const empty = document.createElement('option');
-                empty.value = '';
-                empty.textContent = '-- اختر المقيّم --';
-                evaluatorNameSelect.appendChild(empty);
-                EVALUATORS[specialization].forEach(name => {
-                    const opt = document.createElement('option');
-                    opt.value = name;
-                    opt.textContent = name;
-                    evaluatorNameSelect.appendChild(opt);
-                });
-                evaluatorNameSelect.disabled = false;
-                document.getElementById('evaluatorHint').textContent = `✅ ${EVALUATORS[specialization].length} مقيّم متاح`;
-                document.getElementById('evaluatorHint').className = 'hint success';
-            } else {
-                const empty = document.createElement('option');
-                empty.value = '';
-                empty.textContent = '-- اختر التخصص أولاً --';
-                evaluatorNameSelect.appendChild(empty);
-                evaluatorNameSelect.disabled = true;
-                document.getElementById('evaluatorHint').textContent = '⚠️ يرجى اختيار التخصص أولاً';
-                document.getElementById('evaluatorHint').className = 'hint error';
-            }
-        }
-
-        specializationSelect.addEventListener('change', updateEvaluators);
-
-        function updateStats() {
-            const submissions = getSubmissions();
-            totalCount.textContent = submissions.length;
-            approvedCount.textContent = submissions.filter(s => s.status === 'approved').length;
-            pendingCount.textContent = submissions.filter(s => s.status === 'pending').length;
-        }
-
-        function updateEvaluatorFilter() {
-            const submissions = getSubmissions();
-            const evaluators = [...new Set(submissions.map(s => s.evaluatorName).filter(Boolean))];
-            const currentValue = filterEvaluator.value;
-            filterEvaluator.innerHTML = '<option value="all">👨‍🏫 كل المقيّمين</option>';
-            evaluators.forEach(e => {
-                const option = document.createElement('option');
-                option.value = e;
-                option.textContent = e;
-                filterEvaluator.appendChild(option);
-            });
-            if ([...filterEvaluator.options].some(opt => opt.value === currentValue)) {
-                filterEvaluator.value = currentValue;
-            }
-        }
-
-        function renderTable() {
-            if (!isEvaluatorLoggedIn) {
-                document.querySelectorAll('.protected-section').forEach(el => el.classList.remove('visible'));
-                return;
-            }
-            document.querySelectorAll('.protected-section').forEach(el => el.classList.add('visible'));
-
-            const allSubmissions = getSubmissions();
-            const specFilter = filterSpecialization.value;
-            const gradeFilter = filterGrade.value;
-            const evaluatorFilter = filterEvaluator.value;
-
-            let filtered = allSubmissions;
-            if (specFilter !== 'all') filtered = filtered.filter(s => s.specialization === specFilter);
-            if (gradeFilter !== 'all') filtered = filtered.filter(s => s.grade === gradeFilter);
-            if (evaluatorFilter !== 'all') filtered = filtered.filter(s => s.evaluatorName === evaluatorFilter);
-
-            filtered.sort((a, b) => new Date(b.uploadDate) - new Date(a.uploadDate));
-
-            if (filtered.length === 0) {
-                submissionsBody.innerHTML = '';
-                emptyMessage.style.display = 'block';
-                updateStats();
-                updateEvaluatorFilter();
-                return;
-            }
-            emptyMessage.style.display = 'none';
-
-            let html = '';
-            filtered.forEach((sub, index) => {
-                const statusClass = sub.status === 'approved' ? 'status-approved' : 'status-pending';
-                const statusText = sub.status === 'approved' ? '✓ تم الاستلام' : '⏳ قيد المراجعة';
-
-                let fileIcon = 'fa-file';
-                if (sub.fileName) {
-                    const ext = sub.fileName.split('.').pop().toLowerCase();
-                    if (['pdf'].includes(ext)) fileIcon = 'fa-file-pdf';
-                    else if (['doc', 'docx'].includes(ext)) fileIcon = 'fa-file-word';
-                    else if (['jpg', 'jpeg', 'png', 'gif'].includes(ext)) fileIcon = 'fa-file-image';
-                    else if (['sql', 'txt'].includes(ext)) fileIcon = 'fa-file-code';
-                }
-
-                // عرض العلامة مع لون مناسب
-                let gradeDisplay = '<span class="grade-badge" style="background:#e2e8f0;color:#a0aec0;">—</span>';
-                if (sub.gradeValue) {
-                    const gradeClass = 'grade-' + sub.gradeValue;
-                    const gradeLabels = {
-                        'D': 'ممتاز 🏆',
-                        'M': 'جيد جداً 👍',
-                        'P': 'مقبول ✅',
-                        'U': 'غير مقبول ❌'
-                    };
-                    const label = gradeLabels[sub.gradeValue] || sub.gradeValue;
-                    gradeDisplay = `<span class="grade-badge ${gradeClass}">⭐ ${sub.gradeValue} - ${label}</span>`;
-                }
-
-                html += `
-                    <tr>
-                        <td>${index + 1}</td>
-                        <td><strong>${sub.studentId || 'غير محدد'}</strong></td>
-                        <td><strong>${sub.studentName}</strong></td>
-                        <td><span style="color:#2e86c1;font-weight:600;">${sub.evaluatorName || 'غير محدد'}</span></td>
-                        <td>${sub.specialization}</td>
-                        <td>${sub.grade}</td>
-                        <td style="font-size:0.85rem;">${sub.unitInfo || 'غير محدد'}</td>
-                        <td>
-                            <i class="fas ${fileIcon}" style="color:#e74c3c;"></i>
-                            ${sub.fileName}
-                            <span style="font-size:0.65rem;color:#a0aec0;display:block;">(${sub.fileSize || 'غير معروف'})</span>
-                        </td>
-                        <td style="font-size:0.8rem;">${sub.uploadDate}</td>
-                        <td><span class="status-badge ${statusClass}">${statusText}</span></td>
-                        <td>${gradeDisplay}</td>
-                        <td>
-                            <button class="action-btn approve" data-id="${sub.id}" title="تأكيد الاستلام">
-                                <i class="fas fa-check-circle" style="color:${sub.status === 'approved' ? '#27ae60' : '#bdc3c7'};"></i>
-                            </button>
-                            <button class="action-btn grade" data-id="${sub.id}" title="إضافة علامة (D, M, P, U)">
-                                <i class="fas fa-star" style="color:#f39c12;"></i>
-                            </button>
-                            <button class="action-btn download" data-file="${sub.fileName}" title="تحميل الملف" onclick="downloadActualFile('${sub.fileName}')">
-                                <i class="fas fa-download" style="color:#2e86c1;"></i>
-                            </button>
-                            <button class="action-btn delete" data-id="${sub.id}" title="حذف التسليم">
-                                <i class="fas fa-trash" style="color:#e74c3c;"></i>
-                            </button>
-                        </td>
-                    </tr>
-                `;
-            });
-
-            submissionsBody.innerHTML = html;
-
-            document.querySelectorAll('.action-btn.approve').forEach(btn => {
-                btn.addEventListener('click', function() {
-                    const id = parseInt(this.dataset.id);
-                    toggleApproval(id);
-                });
-            });
-
-            document.querySelectorAll('.action-btn.grade').forEach(btn => {
-                btn.addEventListener('click', function() {
-                    const id = parseInt(this.dataset.id);
-                    addGrade(id);
-                });
-            });
-
-            document.querySelectorAll('.action-btn.delete').forEach(btn => {
-                btn.addEventListener('click', function() {
-                    const id = parseInt(this.dataset.id);
-                    if (confirm('⚠️ هل أنت متأكد من حذف هذا التسليم؟')) {
-                        deleteSubmission(id);
+            selectedFiles.forEach((file, index) => {
+                saveFileLocally(file, function(data) {
+                    fileNames.push(file.name);
+                    filesProcessed++;
+                    if (filesProcessed === selectedFiles.length) {
+                        const now = new Date();
+                        const newSubmission = {
+                            id: Date.now(),
+                            studentId,
+                            studentName,
+                            evaluatorName: randomEvaluator,
+                            assignmentId: assignmentId,
+                            fileName: fileNames.join(', '),
+                            fileSize: (selectedFiles.reduce((sum, f) => sum + f.size, 0) / 1024 / 1024).toFixed(2) + ' MB',
+                            uploadDate: now.toLocaleString('ar-EG'),
+                            status: 'pending',
+                            gradeValue: ''
+                        };
+                        submissions.push(newSubmission);
+                        saveSubmissions(submissions);
+                        showModal('✅ تم التسليم', `تم تسليم واجب "${assignment.name}" بنجاح!`, newSubmission, assignment);
+                        showToast(`✅ تم تسليم واجب "${studentName}"`, 'success');
+                        selectedFiles = [];
+                        fileInput.value = '';
+                        fileList.innerHTML = '';
+                        fileNameDisplay.textContent = 'لم يتم اختيار ملفات';
+                        document.getElementById('submitStudentId').value = '';
+                        document.getElementById('submitStudentName').value = '';
+                        document.getElementById('submitAssignment').value = '';
+                        document.getElementById('submitDueDateDisplay').value = '';
+                        document.getElementById('submitInfoDisplay').value = '';
+                        updateAll();
                     }
                 });
             });
-
-            updateStats();
-            updateEvaluatorFilter();
-        }
+        });
 
         // ============================================================
-        // إضافة علامة للواجب (مع قائمة منسدلة D, M, P, U)
+        // إضافة واجب جديد (للمقيّم)
         // ============================================================
-        function addGrade(id) {
-            if (!isEvaluatorLoggedIn) {
-                showMessage('⚠️ يجب تسجيل الدخول كمدقق أولاً', 'error');
+        document.getElementById('addAssignmentBtn').addEventListener('click', function() {
+            if (!isLoggedIn || !['evaluator', 'admin'].includes(currentRole)) {
+                showToast('⚠️ هذه الخاصية للمقيّم فقط', 'error');
                 return;
             }
-            let submissions = getSubmissions();
-            const sub = submissions.find(s => s.id === id);
-            if (sub) {
-                const currentGrade = sub.gradeValue || 'لا توجد علامة';
-                
-                // عرض القائمة في نافذة منبثقة
-                let message = '⭐ اختر علامة الطالب:\n\n';
-                message += ' ────────────────────────────\n';
-                message += ' │ 1. D  │ ممتاز 🏆           │\n';
-                message += ' ├───────┼────────────────────┤\n';
-                message += ' │ 2. M  │ جيد جداً 👍         │\n';
-                message += ' ├───────┼────────────────────┤\n';
-                message += ' │ 3. P  │ مقبول ✅            │\n';
-                message += ' ├───────┼────────────────────┤\n';
-                message += ' │ 4. U  │ غير مقبول ❌        │\n';
-                message += ' └───────┴────────────────────┘\n\n';
-                message += ' ────────────────────────────\n';
-                message += ` العلامة الحالية: ${currentGrade}\n`;
-                message += ' ────────────────────────────\n\n';
-                message += ' أدخل الرقم (1-4) أو الحرف (D, M, P, U):';
-                
-                const choice = prompt(message, '');
-                
-                if (choice === null) {
-                    return; // إلغاء
-                }
-                
-                let gradeValue = '';
-                let gradeLabel = '';
-                const upperChoice = choice.trim().toUpperCase();
-                
-                // التحقق من الإدخال
-                if (upperChoice === '1' || upperChoice === 'D') {
-                    gradeValue = 'D';
-                    gradeLabel = 'ممتاز 🏆';
-                } else if (upperChoice === '2' || upperChoice === 'M') {
-                    gradeValue = 'M';
-                    gradeLabel = 'جيد جداً 👍';
-                } else if (upperChoice === '3' || upperChoice === 'P') {
-                    gradeValue = 'P';
-                    gradeLabel = 'مقبول ✅';
-                } else if (upperChoice === '4' || upperChoice === 'U') {
-                    gradeValue = 'U';
-                    gradeLabel = 'غير مقبول ❌';
-                } else if (upperChoice === '' || upperChoice === 'إلغاء') {
-                    return;
-                } else {
-                    showMessage('❌ اختيار غير صحيح! استخدم الأرقام (1-4) أو الحروف (D, M, P, U)', 'error');
-                    return;
-                }
-                
-                if (gradeValue) {
-                    sub.gradeValue = gradeValue;
-                    saveSubmissions(submissions);
-                    renderTable();
-                    showMessage(`✅ تم إضافة العلامة "${gradeValue} (${gradeLabel})" للطالب "${sub.studentName}"`, 'success');
-                    showToast(`🏷️ تمت إضافة العلامة ${gradeValue} لـ ${sub.studentName}`);
-                }
-            }
-        }
 
+            const name = document.getElementById('newAssignmentName').value.trim();
+            const specialization = document.getElementById('newAssignmentSpecialization').value;
+            const grade = document.getElementById('newAssignmentGrade').value;
+            const dueDate = document.getElementById('newAssignmentDueDate').value;
+            const description = document.getElementById('newAssignmentDescription').value.trim();
+
+            if (!name || !specialization || !grade || !dueDate) {
+                showToast('⚠️ الرجاء تعبئة جميع الحقول المطلوبة', 'error');
+                return;
+            }
+
+            const assignments = getAssignments();
+            const newAssignment = {
+                id: Date.now(),
+                name,
+                specialization,
+                grade,
+                dueDate,
+                description
+            };
+
+            assignments.push(newAssignment);
+            saveAssignments(assignments);
+            updateAssignmentSelect();
+
+            showToast(`✅ تم إضافة الواجب "${name}" بنجاح`, 'success');
+            
+            document.getElementById('newAssignmentName').value = '';
+            document.getElementById('newAssignmentSpecialization').value = '';
+            document.getElementById('newAssignmentGrade').value = '';
+            document.getElementById('newAssignmentDueDate').value = '';
+            document.getElementById('newAssignmentDescription').value = '';
+            
+            updateAll();
+        });
+
+        // ============================================================
+        // وظائف المقيّم
+        // ============================================================
         function toggleApproval(id) {
-            if (!isEvaluatorLoggedIn) {
-                showMessage('⚠️ يجب تسجيل الدخول كمدقق أولاً', 'error');
+            if (!isLoggedIn || !['evaluator', 'admin'].includes(currentRole)) {
+                showToast('⚠️ صلاحية محدودة', 'error');
                 return;
             }
-            let submissions = getSubmissions();
+            const submissions = getSubmissions();
             const sub = submissions.find(s => s.id === id);
             if (sub) {
                 sub.status = sub.status === 'approved' ? 'pending' : 'approved';
                 saveSubmissions(submissions);
-                renderTable();
-                const statusText = sub.status === 'approved' ? 'تم تأكيد واجبك ✅' : 'تم إعادة واجبك للمراجعة ⏳';
-                showToast(`📢 ${sub.studentName}: ${statusText}`);
-                showMessage(`✅ تم تحديث حالة الطالب "${sub.studentName}"`, 'success');
+                showToast(`✅ تم تحديث حالة ${sub.studentName}`, 'success');
+                updateAll();
+            }
+        }
+
+        function addGrade(id) {
+            if (!isLoggedIn || !['evaluator', 'admin'].includes(currentRole)) {
+                showToast('⚠️ صلاحية محدودة', 'error');
+                return;
+            }
+            const submissions = getSubmissions();
+            const sub = submissions.find(s => s.id === id);
+            if (sub) {
+                const message = '⭐ اختر العلامة:\n\n1. D - ممتاز 🏆\n2. M - جيد جداً 👍\n3. P - مقبول ✅\n4. U - غير مقبول ❌\n\nالعلامة الحالية: ' + (sub.gradeValue || 'لا توجد');
+                const choice = prompt(message, '');
+                if (choice === null) return;
+                const map = { '1': 'D', '2': 'M', '3': 'P', '4': 'U', 'd': 'D', 'm': 'M', 'p': 'P', 'u': 'U' };
+                const grade = map[choice.trim().toLowerCase()];
+                if (grade) {
+                    sub.gradeValue = grade;
+                    saveSubmissions(submissions);
+                    showToast(`⭐ تم إضافة العلامة ${grade} لـ ${sub.studentName}`, 'success');
+                    updateAll();
+                } else {
+                    showToast('❌ اختيار غير صحيح', 'error');
+                }
             }
         }
 
         function deleteSubmission(id) {
-            if (!isEvaluatorLoggedIn) {
-                showMessage('⚠️ يجب تسجيل الدخول كمدقق أولاً', 'error');
+            if (!isLoggedIn || !['evaluator', 'admin'].includes(currentRole)) {
+                showToast('⚠️ صلاحية محدودة', 'error');
                 return;
             }
-            let submissions = getSubmissions();
+            if (confirm('⚠️ هل أنت متأكد من حذف هذا التسليم؟')) {
+                let submissions = getSubmissions();
+                const sub = submissions.find(s => s.id === id);
+                submissions = submissions.filter(s => s.id !== id);
+                saveSubmissions(submissions);
+                showToast(`🗑️ تم حذف تسليم ${sub?.studentName}`, 'success');
+                updateAll();
+            }
+        }
+
+        function editDueDate(id) {
+            if (!isLoggedIn || !['evaluator', 'admin'].includes(currentRole)) {
+                showToast('⚠️ صلاحية محدودة', 'error');
+                return;
+            }
+            const submissions = getSubmissions();
             const sub = submissions.find(s => s.id === id);
-            submissions = submissions.filter(s => s.id !== id);
-            saveSubmissions(submissions);
-            renderTable();
             if (sub) {
-                showMessage(`🗑️ تم حذف تسليم الطالب "${sub.studentName}"`, 'success');
+                const assignments = getAssignments();
+                const assignment = assignments.find(a => a.id === sub.assignmentId);
+                if (assignment) {
+                    const newDate = prompt('📅 أدخل تاريخ الاستحقاق الجديد (YYYY-MM-DD):', assignment.dueDate || '');
+                    if (newDate && newDate.match(/^\d{4}-\d{2}-\d{2}$/)) {
+                        assignment.dueDate = newDate;
+                        saveAssignments(assignments);
+                        // تحديث عرض التاريخ في قائمة الواجبات
+                        updateAssignmentSelect();
+                        showToast(`✅ تم تحديث تاريخ الاستحقاق لـ ${sub.studentName}`, 'success');
+                        updateAll();
+                    } else if (newDate !== null) {
+                        showToast('❌ تاريخ غير صحيح', 'error');
+                    }
+                }
             }
         }
 
-        function showMessage(text, type = 'success') {
-            uploadMessage.textContent = text;
-            uploadMessage.className = 'message ' + type;
-            uploadMessage.style.display = 'block';
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-            setTimeout(() => {
-                uploadMessage.style.display = 'none';
-            }, 4000);
-        }
-
-        function showToast(message) {
-            toastMessage.textContent = message;
-            successToast.classList.add('show');
-            setTimeout(() => {
-                successToast.classList.remove('show');
-            }, 5000);
-        }
-
-        function showSuccessModal(data) {
-            submissionDetails.innerHTML = `
-                <div class="row"><span class="label"><i class="fas fa-id-card"></i> رقم الطالب:</span><span class="value">${data.studentId}</span></div>
-                <div class="row"><span class="label"><i class="fas fa-user"></i> اسم الطالب:</span><span class="value">${data.studentName}</span></div>
-                <div class="row"><span class="label"><i class="fas fa-user-tie"></i> المقيّم:</span><span class="value">${data.evaluatorName}</span></div>
-                <div class="row"><span class="label"><i class="fas fa-code"></i> التخصص:</span><span class="value">${data.specialization}</span></div>
-                <div class="row"><span class="label"><i class="fas fa-graduation-cap"></i> الصف:</span><span class="value">${data.grade}</span></div>
-                <div class="row"><span class="label"><i class="fas fa-book"></i> الوحدة:</span><span class="value">${data.unitInfo}</span></div>
-                <div class="row"><span class="label"><i class="fas fa-file"></i> الملف:</span><span class="value">${data.fileName}</span></div>
-                <div class="row"><span class="label"><i class="fas fa-clock"></i> تاريخ التسليم:</span><span class="value">${data.uploadDate}</span></div>
-            `;
-            successModal.classList.add('active');
-        }
-
-        function closeModal() {
-            successModal.classList.remove('active');
-        }
-
-        successModal.addEventListener('click', function(e) {
-            if (e.target === this) closeModal();
-        });
-
         // ============================================================
-        // معالجة الملفات
+        // بحث الطالب
         // ============================================================
-        uploadArea.addEventListener('click', function(e) {
-            if (e.target.tagName !== 'INPUT') fileInput.click();
-        });
+        function searchStudent() {
+            const query = document.getElementById('searchInput').value.trim();
+            const resultDiv = document.getElementById('searchResult');
 
-        uploadArea.addEventListener('dragover', function(e) {
-            e.preventDefault();
-            this.classList.add('dragover');
-        });
-
-        uploadArea.addEventListener('dragleave', function(e) {
-            e.preventDefault();
-            this.classList.remove('dragover');
-        });
-
-        uploadArea.addEventListener('drop', function(e) {
-            e.preventDefault();
-            this.classList.remove('dragover');
-            if (e.dataTransfer.files.length > 0) {
-                fileInput.files = e.dataTransfer.files;
-                handleFileSelect(e.dataTransfer.files[0]);
-            }
-        });
-
-        fileInput.addEventListener('change', function() {
-            if (this.files.length > 0) handleFileSelect(this.files[0]);
-        });
-
-        function handleFileSelect(file) {
-            if (file.size > 10 * 1024 * 1024) {
-                showMessage('⚠️ حجم الملف كبير جداً (الحد الأقصى 10 ميجابايت)', 'error');
-                fileInput.value = '';
-                return;
-            }
-            currentFile = file;
-            currentFileName = file.name;
-            fileNameDisplay.textContent = `📎 ${file.name} (${(file.size / 1024 / 1024).toFixed(2)} MB)`;
-            fileNameDisplay.style.color = '#2e86c1';
-            fileNameDisplay.style.background = '#dbeafe';
-        }
-
-        // ============================================================
-        // تسجيل الدخول
-        // ============================================================
-        function loginEvaluator() {
-            const password = evaluatorPassword.value.trim();
-            if (password === EVALUATOR_PASSWORD) {
-                isEvaluatorLoggedIn = true;
-                loginStatus.className = 'login-status logged-in';
-                loginStatus.innerHTML = '<i class="fas fa-unlock"></i> متصل';
-                evaluatorPassword.value = '';
-                evaluatorPassword.style.display = 'none';
-                logoutBtn.style.display = 'inline-block';
-                document.querySelector('.evaluator-login .btn-gold').style.display = 'none';
-                showMessage('🔓 تم تسجيل الدخول بنجاح!', 'success');
-                renderTable();
-            } else {
-                showMessage('❌ كلمة سر غير صحيحة!', 'error');
-                evaluatorPassword.value = '';
-                evaluatorPassword.focus();
-            }
-        }
-
-        function logoutEvaluator() {
-            isEvaluatorLoggedIn = false;
-            loginStatus.className = 'login-status logged-out';
-            loginStatus.innerHTML = '<i class="fas fa-lock"></i> غير متصل';
-            evaluatorPassword.style.display = 'block';
-            logoutBtn.style.display = 'none';
-            document.querySelector('.evaluator-login .btn-gold').style.display = 'inline-block';
-            document.querySelectorAll('.protected-section').forEach(el => el.classList.remove('visible'));
-            showMessage('🔒 تم تسجيل الخروج', 'info');
-        }
-
-        // ============================================================
-        // تسليم الواجب
-        // ============================================================
-        submitBtn.addEventListener('click', function() {
-            const studentId = studentIdInput.value.trim();
-            const studentName = studentNameInput.value.trim();
-            const specialization = specializationSelect.value;
-            const grade = gradeSelect.value;
-            const evaluatorName = evaluatorNameSelect.value;
-            const unitInfo = unitInfoInput.value.trim();
-
-            if (!studentId || !studentName || !specialization || !grade || !evaluatorName || !unitInfo || !currentFile) {
-                showMessage('⚠️ الرجاء تعبئة جميع الحقول واختيار ملف', 'error');
+            if (!query) {
+                resultDiv.className = 'search-result waiting';
+                resultDiv.innerHTML = '<span><i class="fas fa-info-circle"></i> أدخل رقمك أو اسمك للبحث</span>';
                 return;
             }
 
             const submissions = getSubmissions();
-            const duplicate = submissions.some(s => s.studentId === studentId);
+            const assignments = getAssignments();
+            const found = submissions.filter(s =>
+                s.studentId === query ||
+                s.studentName.toLowerCase().includes(query.toLowerCase())
+            );
 
-            if (duplicate) {
-                showMessage(`⚠️ رقم الطالب "${studentId}" مسجل بالفعل`, 'error');
-                studentIdInput.focus();
-                studentIdInput.select();
+            if (found.length === 0) {
+                resultDiv.className = 'search-result not-found';
+                resultDiv.innerHTML = '❌ لا توجد نتائج مطابقة';
                 return;
             }
 
-            saveFileLocally(currentFile, function(fileData) {
-                const now = new Date();
-                const newSubmission = {
-                    id: Date.now(),
-                    studentId: studentId,
-                    studentName: studentName,
-                    evaluatorName: evaluatorName,
-                    specialization: specialization,
-                    grade: grade,
-                    unitInfo: unitInfo,
-                    fileName: currentFile.name,
-                    fileSize: (currentFile.size / 1024 / 1024).toFixed(2) + ' MB',
-                    uploadDate: now.toLocaleString('ar-EG', {
-                        hour12: false,
-                        year: 'numeric',
-                        month: '2-digit',
-                        day: '2-digit',
-                        hour: '2-digit',
-                        minute: '2-digit'
-                    }),
-                    status: 'pending',
-                    gradeValue: ''
-                };
-
-                submissions.push(newSubmission);
-                saveSubmissions(submissions);
-
-                showSuccessModal(newSubmission);
-                showToast(`✅ تم تسليم واجب "${studentName}" بنجاح!`);
-
-                currentFile = null;
-                currentFileName = '';
-                fileInput.value = '';
-                fileNameDisplay.textContent = 'لم يتم اختيار ملف';
-                fileNameDisplay.style.color = '#2d3748';
-                fileNameDisplay.style.background = '#edf2f7';
-                studentIdInput.value = '';
-                studentNameInput.value = '';
-                unitInfoInput.value = '';
-
-                if (isEvaluatorLoggedIn) {
-                    renderTable();
-                }
+            let html = '';
+            found.forEach((s, index) => {
+                const assignment = assignments.find(a => a.id === s.assignmentId);
+                const isApproved = s.status === 'approved';
+                const statusText = isApproved ? '✅ تم التأكيد' : '⏳ قيد المراجعة';
+                const gradeText = s.gradeValue ? `⭐ ${s.gradeValue}` : '📝 لا توجد علامة';
+                const dueDate = assignment ? assignment.dueDate : 'غير محدد';
+                
+                html += `
+                    <div style="border-bottom:1px solid #e2e8f0;padding:6px 0;text-align:right;font-size:0.85rem;">
+                        <strong>${s.studentName}</strong> (${s.studentId})
+                        <br>
+                        📚 ${assignment ? assignment.name : 'واجب غير معروف'}
+                        <br>
+                        <span style="color:${isApproved ? '#27ae60' : '#f39c12'};">${statusText}</span>
+                        ${s.gradeValue ? ` | ⭐ ${s.gradeValue}` : ''}
+                        ${dueDate ? ` | 📅 ${dueDate}` : ''}
+                    </div>
+                `;
             });
+
+            resultDiv.className = 'search-result found';
+            resultDiv.innerHTML = `
+                <div style="text-align:right;width:100%;">
+                    <div style="font-weight:700;margin-bottom:4px;color:#0d3b66;">
+                        📋 تم العثور على ${found.length} واجب
+                    </div>
+                    ${html}
+                </div>
+            `;
+        }
+
+        // ============================================================
+        // نافذة منبثقة
+        // ============================================================
+        function showModal(title, message, data, assignment) {
+            document.getElementById('modalTitle').textContent = title;
+            document.getElementById('modalIcon').innerHTML = '<i class="fas fa-check-circle"></i>';
+            document.getElementById('modalIcon').style.color = '#27ae60';
+
+            let details = '';
+            if (data) {
+                const labels = {
+                    studentId: 'رقم الطالب',
+                    studentName: 'اسم الطالب',
+                    evaluatorName: 'المقيّم',
+                    uploadDate: 'تاريخ التسليم'
+                };
+                for (let key in data) {
+                    if (labels[key] && data[key]) {
+                        details += `<div class="row"><span class="label">${labels[key]}:</span><span class="value">${data[key]}</span></div>`;
+                    }
+                }
+                if (assignment) {
+                    details += `<div class="row"><span class="label">الواجب:</span><span class="value">${assignment.name}</span></div>`;
+                    details += `<div class="row"><span class="label">تاريخ الاستحقاق:</span><span class="value">${assignment.dueDate}</span></div>`;
+                }
+            } else {
+                details = `<p style="color:#4a5568;font-size:0.95rem;">${message}</p>`;
+            }
+            document.getElementById('modalDetails').innerHTML = details;
+            document.getElementById('resultModal').classList.add('active');
+        }
+
+        function closeModal() {
+            document.getElementById('resultModal').classList.remove('active');
+        }
+
+        document.getElementById('resultModal').addEventListener('click', function(e) {
+            if (e.target === this) closeModal();
+        });
+
+        // ============================================================
+        // Toast
+        // ============================================================
+        function showToast(message, type = 'success') {
+            const toast = document.getElementById('toast');
+            const toastMessage = document.getElementById('toastMessage');
+            toast.className = 'toast';
+            if (type === 'error') toast.classList.add('error');
+            if (type === 'warning') toast.classList.add('warning');
+            toastMessage.textContent = message;
+            toast.classList.add('show');
+            clearTimeout(toast._timeout);
+            toast._timeout = setTimeout(() => toast.classList.remove('show'), 3500);
+        }
+
+        // ============================================================
+        // تحديث جميع الأقسام
+        // ============================================================
+        function updateAll() {
+            updateStudentDashboard();
+            updateEvaluatorDashboard();
+            updateSubmissionsTable();
+            updateAdminDashboard();
+            updateEvaluatorFilter();
+        }
+
+        // ============================================================
+        // لوحة الطالب
+        // ============================================================
+        function updateStudentDashboard() {
+            const studentId = document.getElementById('studentId').value.trim() || '20241001';
+            const submissions = getSubmissions();
+            const studentSubs = submissions.filter(s => s.studentId === studentId);
+
+            document.getElementById('sTotal').textContent = studentSubs.length;
+            document.getElementById('sApproved').textContent = studentSubs.filter(s => s.status === 'approved').length;
+            document.getElementById('sPending').textContent = studentSubs.filter(s => s.status === 'pending').length;
+            document.getElementById('sOverdue').textContent = studentSubs.filter(s => {
+                const assignments = getAssignments();
+                const assignment = assignments.find(a => a.id === s.assignmentId);
+                return assignment && new Date(assignment.dueDate) < new Date() && s.status !== 'approved';
+            }).length;
+
+            const activities = document.getElementById('studentActivities');
+            if (studentSubs.length === 0) {
+                activities.innerHTML = '<p style="color:#a0aec0;">لا توجد نشاطات</p>';
+            } else {
+                let html = '';
+                const assignments = getAssignments();
+                studentSubs.slice(-5).reverse().forEach(s => {
+                    const assignment = assignments.find(a => a.id === s.assignmentId);
+                    const icon = s.status === 'approved' ? '✅' : '⏳';
+                    html += `<div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid #e2e8f0;font-size:0.85rem;">
+                        <span>${icon} ${assignment ? assignment.name : 'واجب'}</span>
+                        <span style="color:#a0aec0;font-size:0.75rem;">${s.uploadDate}</span>
+                    </div>`;
+                });
+                activities.innerHTML = html;
+            }
+        }
+
+        document.getElementById('studentId').addEventListener('input', updateStudentDashboard);
+
+        // ============================================================
+        // لوحة المقيّم
+        // ============================================================
+        function updateEvaluatorDashboard() {
+            const submissions = getSubmissions();
+            document.getElementById('eTotal').textContent = submissions.length;
+            document.getElementById('eApproved').textContent = submissions.filter(s => s.status === 'approved').length;
+            document.getElementById('ePending').textContent = submissions.filter(s => s.status === 'pending').length;
+            
+            const assignments = getAssignments();
+            const overdue = submissions.filter(s => {
+                const assignment = assignments.find(a => a.id === s.assignmentId);
+                return assignment && new Date(assignment.dueDate) < new Date() && s.status !== 'approved';
+            });
+            document.getElementById('eOverdue').textContent = overdue.length;
+        }
+
+        // ============================================================
+        // قائمة الواجبات
+        // ============================================================
+        function updateSubmissionsTable() {
+            const submissions = getSubmissions();
+            const assignments = getAssignments();
+            const tbody = document.getElementById('submissionsBody');
+            const emptyMsg = document.getElementById('submissionsEmpty');
+
+            const specFilter = document.getElementById('filterSpecialization').value;
+            const gradeFilter = document.getElementById('filterGrade').value;
+            const evalFilter = document.getElementById('filterEvaluator').value;
+
+            let filtered = submissions;
+            if (specFilter !== 'all') {
+                filtered = filtered.filter(s => {
+                    const a = assignments.find(ass => ass.id === s.assignmentId);
+                    return a && a.specialization === specFilter;
+                });
+            }
+            if (gradeFilter !== 'all') {
+                filtered = filtered.filter(s => {
+                    const a = assignments.find(ass => ass.id === s.assignmentId);
+                    return a && a.grade === gradeFilter;
+                });
+            }
+            if (evalFilter !== 'all') {
+                filtered = filtered.filter(s => s.evaluatorName === evalFilter);
+            }
+
+            document.getElementById('submissionsBadge').textContent = filtered.length;
+
+            if (filtered.length === 0) {
+                tbody.innerHTML = '';
+                emptyMsg.style.display = 'block';
+                return;
+            }
+            emptyMsg.style.display = 'none';
+
+            let html = '';
+            filtered.forEach((s, index) => {
+                const assignment = assignments.find(a => a.id === s.assignmentId);
+                const statusClass = s.status === 'approved' ? 'status-approved' :
+                    (assignment && new Date(assignment.dueDate) < new Date() ? 'status-overdue' : 'status-pending');
+                const statusText = s.status === 'approved' ? '✅ تم' :
+                    (assignment && new Date(assignment.dueDate) < new Date() ? '⏰ متأخر' : '⏳ قيد');
+
+                let gradeDisplay = '<span class="grade-badge" style="background:#e2e8f0;color:#a0aec0;">—</span>';
+                if (s.gradeValue) {
+                    const labels = { 'D': 'ممتاز 🏆', 'M': 'جيد جداً 👍', 'P': 'مقبول ✅', 'U': 'غير مقبول ❌' };
+                    gradeDisplay = `<span class="grade-badge grade-${s.gradeValue}">${s.gradeValue} ${labels[s.gradeValue] || ''}</span>`;
+                }
+
+                const canEdit = isLoggedIn && ['evaluator', 'admin'].includes(currentRole);
+
+                html += `
+                    <tr>
+                        <td>${index + 1}</td>
+                        <td>${s.studentId}</td>
+                        <td><strong>${s.studentName}</strong></td>
+                        <td>${s.evaluatorName}</td>
+                        <td style="font-size:0.85rem;">${assignment ? assignment.name : 'غير معروف'}</td>
+                        <td>${assignment ? assignment.specialization : '-'}</td>
+                        <td>${assignment ? assignment.grade : '-'}</td>
+                        <td style="font-size:0.7rem;">${s.fileName}</td>
+                        <td style="font-size:0.75rem;">${s.uploadDate}</td>
+                        <td style="font-size:0.8rem;color:${assignment && new Date(assignment.dueDate) < new Date() ? '#e74c3c' : '#2e86c1'};">${assignment ? assignment.dueDate : 'غير محدد'}</td>
+                        <td><span class="status-badge ${statusClass}">${statusText}</span></td>
+                        <td>${gradeDisplay}</td>
+                        <td>
+                            ${canEdit ? `
+                                <button class="action-btn approve" onclick="toggleApproval(${s.id})" title="تأكيد"><i class="fas fa-check-circle"></i></button>
+                                <button class="action-btn grade" onclick="addGrade(${s.id})" title="علامة"><i class="fas fa-star"></i></button>
+                                <button class="action-btn edit" onclick="editDueDate(${s.id})" title="تعديل الموعد"><i class="fas fa-calendar-alt"></i></button>
+                                <button class="action-btn delete" onclick="deleteSubmission(${s.id})" title="حذف"><i class="fas fa-trash"></i></button>
+                            ` : `
+                                <span style="color:#a0aec0;">🔒</span>
+                            `}
+                            <button class="action-btn download" onclick="downloadFile('${s.fileName}')" title="تحميل"><i class="fas fa-download"></i></button>
+                        </td>
+                    </tr>
+                `;
+            });
+            tbody.innerHTML = html;
+        }
+
+        // ============================================================
+        // فلتر المقيّمين
+        // ============================================================
+        function updateEvaluatorFilter() {
+            const submissions = getSubmissions();
+            const evaluators = [...new Set(submissions.map(s => s.evaluatorName).filter(Boolean))];
+            const filter = document.getElementById('filterEvaluator');
+            const current = filter.value;
+            filter.innerHTML = '<option value="all">👨‍🏫 كل المقيّمين</option>';
+            evaluators.forEach(e => {
+                const opt = document.createElement('option');
+                opt.value = e;
+                opt.textContent = e;
+                filter.appendChild(opt);
+            });
+            if ([...filter.options].some(o => o.value === current)) filter.value = current;
+        }
+
+        document.getElementById('filterSpecialization').addEventListener('change', updateSubmissionsTable);
+        document.getElementById('filterGrade').addEventListener('change', updateSubmissionsTable);
+        document.getElementById('filterEvaluator').addEventListener('change', updateSubmissionsTable);
+        document.getElementById('refreshBtn').addEventListener('click', updateSubmissionsTable);
+
+        // ============================================================
+        // لوحة المدير
+        // ============================================================
+        function updateAdminDashboard() {
+            const submissions = getSubmissions();
+            const students = [...new Set(submissions.map(s => s.studentId))].length;
+            const evaluators = [...new Set(submissions.map(s => s.evaluatorName).filter(Boolean))].length;
+
+            document.getElementById('admTotalSub').textContent = submissions.length;
+            document.getElementById('admStudents').textContent = students;
+            document.getElementById('admEvaluators').textContent = evaluators;
+        }
+
+        // ============================================================
+        // أزرار الإدارة
+        // ============================================================
+        document.getElementById('resetDataBtn').addEventListener('click', function() {
+            if (!isLoggedIn || currentRole !== 'admin') {
+                showToast('⚠️ صلاحية محدودة', 'error');
+                return;
+            }
+            if (confirm('⚠️ هل أنت متأكد؟ سيتم حذف جميع البيانات!')) {
+                localStorage.removeItem(STORAGE_KEY);
+                showToast('🔄 تم إعادة تعيين البيانات', 'success');
+                location.reload();
+            }
+        });
+
+        document.getElementById('exportDataBtn').addEventListener('click', function() {
+            if (!isLoggedIn || currentRole !== 'admin') {
+                showToast('⚠️ صلاحية محدودة', 'error');
+                return;
+            }
+            const data = getData();
+            const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `تقرير_الواجبات_${new Date().toLocaleDateString('ar-EG')}.json`;
+            a.click();
+            URL.revokeObjectURL(url);
+            showToast('📊 تم تصدير التقرير', 'success');
+        });
+
+        document.getElementById('addDemoBtn').addEventListener('click', function() {
+            if (!isLoggedIn || currentRole !== 'admin') {
+                showToast('⚠️ صلاحية محدودة', 'error');
+                return;
+            }
+            const data = getData();
+            const assignments = data.assignments || [];
+            const newAssignments = [
+                { id: Date.now() + 1, name: 'الوحدة السادسة - الذكاء الاصطناعي', specialization: 'تكنولوجيا المعلومات', grade: 'الثاني عشر', dueDate: '2026-09-25', description: 'بحث عن تطبيقات الذكاء الاصطناعي' },
+                { id: Date.now() + 2, name: 'الوحدة الخامسة - إدارة المشاريع', specialization: 'إدارة الأعمال', grade: 'الحادي عشر', dueDate: '2026-09-28', description: 'إعداد خطة مشروع صغير' }
+            ];
+            data.assignments = [...assignments, ...newAssignments];
+            saveData(data);
+            updateAssignmentSelect();
+            showToast('✅ تم إضافة واجبات تجريبية', 'success');
+            updateAll();
         });
 
         // ============================================================
@@ -1273,12 +1589,12 @@
         function generateQR() {
             const url = window.location.href;
             document.getElementById('siteUrl').textContent = url;
-            const qrContainer = document.getElementById('qrcode');
-            qrContainer.innerHTML = '';
-            qrCodeInstance = new QRCode(qrContainer, {
+            const container = document.getElementById('qrcode');
+            container.innerHTML = '';
+            qrCodeInstance = new QRCode(container, {
                 text: url,
-                width: 150,
-                height: 150,
+                width: 140,
+                height: 140,
                 colorDark: '#0d3b66',
                 colorLight: '#ffffff',
                 correctLevel: QRCode.CorrectLevel.H
@@ -1292,15 +1608,13 @@
                 link.download = 'QR_Code_مدرسة_الطرة.png';
                 link.href = canvas.toDataURL('image/png');
                 link.click();
-            } else {
-                alert('⚠️ يرجى الانتظار حتى يتم تحميل QR Code');
             }
         }
 
         function copyUrl() {
             const url = window.location.href;
             navigator.clipboard.writeText(url).then(() => {
-                showToast('📋 تم نسخ الرابط بنجاح!');
+                showToast('📋 تم نسخ الرابط', 'success');
             }).catch(() => {
                 const input = document.createElement('input');
                 input.value = url;
@@ -1308,108 +1622,59 @@
                 input.select();
                 document.execCommand('copy');
                 document.body.removeChild(input);
-                showToast('📋 تم نسخ الرابط بنجاح!');
+                showToast('📋 تم نسخ الرابط', 'success');
             });
         }
 
         // ============================================================
-        // الأزرار الإضافية
-        // ============================================================
-        resetDemoBtn.addEventListener('click', function() {
-            if (!isEvaluatorLoggedIn) {
-                showMessage('⚠️ يجب تسجيل الدخول كمدقق أولاً', 'error');
-                return;
-            }
-            if (confirm('⚠️ هل أنت متأكد؟ سيتم حذف جميع البيانات وإعادة البيانات الافتراضية.')) {
-                localStorage.setItem(STORAGE_KEY, JSON.stringify(defaultSubmissions));
-                renderTable();
-                showMessage('🔄 تم إعادة تعيين البيانات إلى الوضع الافتراضي', 'success');
-            }
-        });
-
-        exportBtn.addEventListener('click', function() {
-            if (!isEvaluatorLoggedIn) {
-                showMessage('⚠️ يجب تسجيل الدخول كمدقق أولاً', 'error');
-                return;
-            }
-            const submissions = getSubmissions();
-            const dataStr = JSON.stringify(submissions, null, 2);
-            const blob = new Blob([dataStr], { type: 'application/json' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = `تقرير_الواجبات_${new Date().toLocaleDateString('ar-EG')}.json`;
-            a.click();
-            URL.revokeObjectURL(url);
-            showMessage('📊 تم تصدير التقرير بنجاح!', 'success');
-        });
-
-        refreshBtn.addEventListener('click', function() {
-            if (!isEvaluatorLoggedIn) {
-                showMessage('⚠️ يجب تسجيل الدخول كمدقق أولاً', 'error');
-                return;
-            }
-            renderTable();
-            showMessage('🔄 تم تحديث القائمة', 'success');
-        });
-
-        filterSpecialization.addEventListener('change', renderTable);
-        filterGrade.addEventListener('change', renderTable);
-        filterEvaluator.addEventListener('change', renderTable);
-
-        // ============================================================
         // التنقل بين الحقول
         // ============================================================
-        studentIdInput.addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') studentNameInput.focus();
+        document.getElementById('submitStudentId').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') document.getElementById('submitStudentName').focus();
         });
-        studentNameInput.addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') specializationSelect.focus();
+        document.getElementById('submitStudentName').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') document.getElementById('submitAssignment').focus();
         });
-        specializationSelect.addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') gradeSelect.focus();
-        });
-        gradeSelect.addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') evaluatorNameSelect.focus();
-        });
-        evaluatorNameSelect.addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') unitInfoInput.focus();
-        });
-        unitInfoInput.addEventListener('keypress', function(e) {
+        document.getElementById('submitAssignment').addEventListener('keypress', function(e) {
             if (e.key === 'Enter') fileInput.click();
         });
 
         // ============================================================
         // التهيئة
         // ============================================================
-        initData();
-        updateEvaluators();
-        renderTable();
+        function init() {
+            // تعيين تاريخ افتراضي
+            const today = new Date();
+            const defaultDue = new Date(today);
+            defaultDue.setDate(today.getDate() + 7);
+            document.getElementById('newAssignmentDueDate').value = defaultDue.toISOString().split('T')[0];
 
-        setTimeout(generateQR, 500);
+            // تهيئة البيانات
+            if (!localStorage.getItem(STORAGE_KEY)) {
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(getDefaultData()));
+            }
 
-        setTimeout(() => {
-            const count = getSubmissions().length;
-            showMessage(`👋 مرحباً! عدد الطلاب المسجلين: ${count} طالب`, 'success');
-        }, 800);
+            // تحديث قائمة الواجبات
+            updateAssignmentSelect();
 
-        console.log('✅ نظام مدرسة الطرة الثانوية للبنين جاهز!');
-        console.log('📌 عدد الطلاب المسجلين:', getSubmissions().length);
-        console.log('🔑 كلمة سر المقيّم:', EVALUATOR_PASSWORD);
-        console.log('⭐ نظام العلامات: D (ممتاز), M (جيد جداً), P (مقبول), U (غير مقبول)');
+            // تحديث كل الأقسام
+            updateAll();
 
+            // إنشاء QR Code
+            setTimeout(generateQR, 500);
 
-        // منع القائمة عند الضغط بالزر الأيمن
-document.addEventListener('contextmenu', event => event.preventDefault());
+            // رسالة ترحيب
+            setTimeout(() => {
+                showToast('👋 مرحباً بك في نظام إدارة الواجبات', 'success');
+            }, 800);
 
-// منع اختصارات لوحة المفاتيح
-document.onkeydown = function(e) {
-  // F12
-  if (e.keyCode == 123) return false;
-  // Ctrl+Shift+I / Ctrl+Shift+J / Ctrl+U
-  if (e.ctrlKey && e.shiftKey && (e.keyCode == 73 || e.keyCode == 74)) return false;
-  if (e.ctrlKey && e.keyCode == 85) return false;
-};
+            console.log('✅ نظام مدرسة الطرة الثانوية للبنين جاهز!');
+            console.log('🔑 كلمات السر: طالب=123, مقيّم=teacher123, مدير=admin123');
+            console.log('📝 المقيّم يضيف الواجبات وتاريخ التسليم');
+            console.log('👨‍🎓 الطالب يختار الواجب ويرفع الملف فقط');
+        }
+
+        init();
     </script>
 
 </body>
