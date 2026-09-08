@@ -11,14 +11,11 @@
     <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
     
     <style>
-        /* ============================================================
-           جميع التنسيقات
-           ============================================================ */
+        /* ====== جميع التنسيقات (كما هي) ====== */
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f0f4f8; color: #2d3748; line-height: 1.6; }
         .container { max-width: 1300px; margin: 0 auto; padding: 0 20px; }
         
-        /* ----- الرأس ----- */
         header {
             background: linear-gradient(135deg, #0d3b66, #1a5276, #2e86c1);
             color: white; padding: 12px 0; box-shadow: 0 4px 20px rgba(0,0,0,0.3);
@@ -38,12 +35,7 @@
         .logo-text .school-sub { font-size: 0.7rem; opacity: 0.9; display: block; background: rgba(255,255,255,0.15); padding: 2px 14px; border-radius: 20px; display: inline-block; }
         .header-left .subtitle { font-size: 0.8rem; opacity: 0.95; background: rgba(255,255,255,0.12); padding: 5px 16px; border-radius: 30px; }
         
-        /* ----- البطاقات ----- */
-        .card {
-            background: white; border-radius: 14px; padding: 25px; margin-bottom: 25px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.06); transition: transform 0.2s, box-shadow 0.2s;
-            border-top: 4px solid #2e86c1;
-        }
+        .card { background: white; border-radius: 14px; padding: 25px; margin-bottom: 25px; box-shadow: 0 4px 20px rgba(0,0,0,0.06); transition: transform 0.2s; border-top: 4px solid #2e86c1; }
         .card:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(0,0,0,0.1); }
         .card.gold-border { border-top-color: #f1c40f; }
         .card.green-border { border-top-color: #27ae60; }
@@ -51,7 +43,6 @@
         .card h2 { color: #0d3b66; margin-bottom: 18px; font-size: 1.3rem; border-right: 4px solid #2e86c1; padding-right: 14px; }
         .card h2 i { margin-left: 8px; color: #2e86c1; }
         
-        /* ----- شريط التنقل ----- */
         .nav-tabs {
             display: flex; gap: 4px; flex-wrap: wrap; background: white; padding: 8px 14px;
             border-radius: 14px; margin-bottom: 20px; box-shadow: 0 4px 20px rgba(0,0,0,0.06);
@@ -64,16 +55,12 @@
         }
         .nav-tabs .tab-btn:hover { background: #f0f4f8; }
         .nav-tabs .tab-btn.active { background: #0d3b66; color: white; }
-        .nav-tabs .tab-btn .badge {
-            background: #e74c3c; color: white; border-radius: 50%; padding: 0 7px;
-            font-size: 0.6rem; font-weight: 700;
-        }
+        .nav-tabs .tab-btn .badge { background: #e74c3c; color: white; border-radius: 50%; padding: 0 7px; font-size: 0.6rem; font-weight: 700; }
         .nav-tabs .tab-btn.hidden { display: none; }
         
         .tab-content { display: none; }
         .tab-content.active { display: block; }
         
-        /* ----- تسجيل الدخول ----- */
         .login-section {
             background: linear-gradient(135deg, #f8f9fa, #e9ecef);
             border: 2px solid #f1c40f; border-radius: 14px; padding: 18px 22px;
@@ -89,7 +76,6 @@
         .login-status.logged-in { background: #d4edda; color: #155724; }
         .login-status.logged-out { background: #f8d7da; color: #721c24; }
         
-        /* ----- نماذج ----- */
         .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; }
         .form-group { display: flex; flex-direction: column; }
         .form-group label { font-weight: 600; margin-bottom: 4px; font-size: 0.85rem; color: #2d3748; }
@@ -106,7 +92,6 @@
         .form-group textarea { min-height: 50px; resize: vertical; }
         .form-group .hint { font-size: 0.75rem; color: #a0aec0; margin-top: 3px; }
         
-        /* ----- رفع الملف ----- */
         .upload-area {
             border: 3px dashed #cbd5e1; border-radius: 14px; padding: 30px 20px;
             text-align: center; cursor: pointer; transition: all 0.3s;
@@ -120,7 +105,6 @@
         .file-item .remove { cursor: pointer; color: #e74c3c; font-weight: 700; }
         .file-name { display: block; margin-top: 8px; font-weight: 600; background: #edf2f7; padding: 5px 12px; border-radius: 8px; font-size: 0.85rem; }
         
-        /* ----- أزرار ----- */
         .btn-primary {
             background: linear-gradient(135deg, #2e86c1, #0d3b66); color: white;
             border: none; padding: 12px 28px; border-radius: 50px;
@@ -128,7 +112,6 @@
             margin-top: 12px; width: 100%; display: flex; align-items: center; justify-content: center; gap: 8px;
         }
         .btn-primary:hover { transform: scale(1.02); box-shadow: 0 6px 20px rgba(46, 134, 193, 0.4); }
-        .btn-primary:disabled { opacity: 0.6; cursor: not-allowed; }
         .btn-secondary { background: #edf2f7; color: #2d3748; border: 2px solid #e2e8f0; padding: 8px 18px; border-radius: 8px; font-weight: 600; cursor: pointer; transition: all 0.3s; }
         .btn-secondary:hover { background: #e2e8f0; }
         .btn-danger { background: #e74c3c; color: white; border: none; padding: 8px 18px; border-radius: 8px; font-weight: 600; cursor: pointer; transition: all 0.3s; }
@@ -139,7 +122,6 @@
         .btn-gold:hover { transform: scale(1.05); box-shadow: 0 4px 15px rgba(241, 196, 15, 0.4); }
         .btn-sm { padding: 4px 12px; font-size: 0.8rem; width: auto; display: inline-flex; }
         
-        /* ----- الجدول ----- */
         .table-responsive { overflow-x: auto; }
         table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
         table th { background: #0d3b66; color: white; padding: 10px 8px; text-align: center; white-space: nowrap; }
@@ -161,7 +143,6 @@
         
         .empty-message { text-align: center; padding: 25px; color: #a0aec0; font-size: 1rem; }
         
-        /* ----- بحث الطالب ----- */
         .student-search {
             background: linear-gradient(135deg, #e8f4fd, #dbeafe);
             border: 2px solid #2e86c1; border-radius: 14px; padding: 18px 22px;
@@ -176,7 +157,6 @@
         .student-search .search-result.not-found { background: #f8d7da; color: #721c24; border: 2px solid #f5c6cb; }
         .student-search .search-result.waiting { background: #fefcbf; color: #975a16; border: 2px solid #fce8b2; }
         
-        /* ----- نافذة منبثقة ----- */
         .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 9999; align-items: center; justify-content: center; backdrop-filter: blur(4px); }
         .modal-overlay.active { display: flex; }
         .modal-box { background: white; border-radius: 18px; padding: 30px; max-width: 520px; width: 92%; text-align: center; box-shadow: 0 20px 60px rgba(0,0,0,0.3); animation: modalIn 0.4s ease; max-height: 90vh; overflow-y: auto; }
@@ -191,14 +171,12 @@
         .modal-box .btn-close { background: linear-gradient(135deg, #2e86c1, #0d3b66); color: white; border: none; padding: 10px 35px; border-radius: 50px; font-size: 0.95rem; font-weight: 700; cursor: pointer; transition: all 0.3s; margin-top: 8px; }
         .modal-box .btn-close:hover { transform: scale(1.05); box-shadow: 0 4px 15px rgba(46, 134, 193, 0.4); }
         
-        /* ----- العلامات ----- */
         .grade-badge { display: inline-block; padding: 3px 12px; border-radius: 20px; font-size: 0.8rem; font-weight: 700; }
         .grade-D { background: #d4edda; color: #155724; border: 2px solid #27ae60; }
         .grade-M { background: #cce5ff; color: #004085; border: 2px solid #3498db; }
         .grade-P { background: #fff3cd; color: #856404; border: 2px solid #f39c12; }
         .grade-U { background: #f8d7da; color: #721c24; border: 2px solid #e74c3c; }
         
-        /* ----- Toast ----- */
         .toast {
             position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
             background: #27ae60; color: white; padding: 12px 28px; border-radius: 50px;
@@ -211,7 +189,6 @@
         .toast.error { background: #e74c3c; box-shadow: 0 10px 40px rgba(231, 76, 60, 0.4); }
         .toast.warning { background: #f39c12; box-shadow: 0 10px 40px rgba(243, 156, 18, 0.4); }
         
-        /* ----- QR Code ----- */
         .qr-section {
             background: linear-gradient(135deg, #f8f9fa, #e9ecef);
             border: 2px solid #2e86c1; border-radius: 14px; padding: 18px 22px;
@@ -229,7 +206,6 @@
         .btn-qr-copy { background: #edf2f7; color: #2d3748; border: 2px solid #e2e8f0; padding: 5px 16px; border-radius: 6px; font-weight: 600; cursor: pointer; transition: all 0.3s; font-size: 0.8rem; }
         .btn-qr-copy:hover { background: #e2e8f0; }
         
-        /* ----- التذييل ----- */
         footer {
             background: linear-gradient(135deg, #0d3b66, #1a202c);
             color: #e2e8f0; padding: 20px 0 12px; border-top: 4px solid #f1c40f;
@@ -243,7 +219,6 @@
         .footer-content .official .pos { font-weight: 600; color: #f1c40f; }
         .footer-bottom { text-align: center; margin-top: 10px; padding-top: 10px; border-top: 1px solid rgba(255,255,255,0.1); font-size: 0.75rem; opacity: 0.6; }
         
-        /* ----- استجابة ----- */
         @media (max-width: 768px) {
             .logo-img { width: 45px; height: 45px; }
             .logo-img svg { width: 30px; height: 30px; }
@@ -341,20 +316,15 @@
         </div>
 
         <!-- ============================================================
-        شريط التنقل (حسب الصلاحية)
+        شريط التنقل
         ============================================================ -->
         <nav class="nav-tabs" id="navTabs">
-            <!-- الطالب -->
             <button class="tab-btn active" data-tab="student-dashboard"><i class="fas fa-user-graduate"></i> <span>لوحة الطالب</span></button>
             <button class="tab-btn" data-tab="submit"><i class="fas fa-cloud-upload-alt"></i> <span>رفع واجب</span></button>
             <button class="tab-btn" data-tab="student-search"><i class="fas fa-search"></i> <span>بحث</span></button>
-            
-            <!-- المقيّم -->
             <button class="tab-btn hidden" data-tab="evaluator-dashboard"><i class="fas fa-chart-bar"></i> <span>لوحة المقيّم</span></button>
             <button class="tab-btn hidden" data-tab="submissions"><i class="fas fa-list"></i> <span>الواجبات</span> <span class="badge" id="submissionsBadge">0</span></button>
             <button class="tab-btn hidden" data-tab="add-assignment"><i class="fas fa-plus-circle"></i> <span>إضافة واجب</span></button>
-            
-            <!-- المدير -->
             <button class="tab-btn hidden" data-tab="admin-dashboard"><i class="fas fa-cogs"></i> <span>الإدارة</span></button>
         </nav>
 
@@ -396,13 +366,13 @@
         </div>
 
         <!-- ============================================================
-        التبويب 2: رفع واجب (للطالب فقط - يختار الواجب من قائمة)
+        التبويب 2: رفع واجب (مع اختيار المقيّم)
         ============================================================ -->
         <div class="tab-content" id="tab-submit">
             <div class="card">
                 <h2><i class="fas fa-cloud-upload-alt"></i> رفع واجب</h2>
                 <p style="color:#a0aec0;margin-bottom:12px;font-size:0.9rem;">
-                    <i class="fas fa-info-circle"></i> اختر الواجب المطلوب من القائمة ثم ارفع ملفك
+                    <i class="fas fa-info-circle"></i> اختر الواجب والمقيّم ثم ارفع ملفك
                 </p>
                 <div class="form-grid">
                     <div class="form-group">
@@ -425,9 +395,24 @@
                         <input type="text" id="submitDueDateDisplay" readonly style="background:#edf2f7;color:#2e86c1;font-weight:600;">
                         <span class="hint">📌 يحدده المقيّم (للقراءة فقط)</span>
                     </div>
-                    <div class="form-group" style="grid-column: span 2;">
+                    <div class="form-group">
                         <label><i class="fas fa-tag"></i> التخصص والصف</label>
                         <input type="text" id="submitInfoDisplay" readonly style="background:#edf2f7;color:#4a5568;">
+                    </div>
+                    <div class="form-group">
+                        <label><i class="fas fa-user-tie"></i> اسم المقيّم <span class="required">*</span></label>
+                        <select id="submitEvaluatorSelect">
+                            <option value="">-- اختر المقيّم --</option>
+                            <option value="منذر الزعبي">منذر الزعبي</option>
+                            <option value="فادي الحناوي">فادي الحناوي</option>
+                            <option value="سالم السميرات">سالم السميرات</option>
+                            <option value="ثائر أبو زريق">ثائر أبو زريق</option>
+                            <option value="معاوية الجهماني">معاوية الجهماني</option>
+                            <option value="محمد طويط">محمد طويط</option>
+                            <option value="غيث عليان">غيث عليان</option>
+                            <option value="محمد غرايبة">محمد غرايبة</option>
+                        </select>
+                        <span class="hint">اختر المقيّم المسؤول عن هذا الواجب</span>
                     </div>
                 </div>
 
@@ -441,7 +426,7 @@
                 </div>
 
                 <button id="submitBtn" class="btn-primary"><i class="fas fa-paper-plane"></i> تسليم الواجب</button>
-                <div id="submitMessage" class="message" style="display:none;"></div>
+                <div id="submitMessage" style="display:none;"></div>
             </div>
         </div>
 
@@ -495,7 +480,7 @@
         </div>
 
         <!-- ============================================================
-        التبويب 5: قائمة الواجبات (للمقيّم والمدير)
+        التبويب 5: قائمة الواجبات
         ============================================================ -->
         <div class="tab-content" id="tab-submissions">
             <div class="card">
@@ -533,7 +518,7 @@
         </div>
 
         <!-- ============================================================
-        التبويب 6: إضافة واجب (للمقيّم فقط)
+        التبويب 6: إضافة واجب (للمقيّم)
         ============================================================ -->
         <div class="tab-content" id="tab-add-assignment">
             <div class="card green-border">
@@ -656,8 +641,7 @@
                     <div><span class="pos">ضابط الجودة:</span> أ. يزن الخطيب</div>
                 </div>
             </div>
-            
-            <div class="footer-bottom"><i class="fas fa-code"></i> تم التطوير بواسطة أ.منذر الزعبي - مدرسة الطرة الثانوية للبنين</div>
+            <div class="footer-bottom"><i class="fas fa-code"></i> تم التطوير بواسطة أ. منذر الزعبي - مدرسة الطرة الثانوية للبنين</div>
         </div>
     </footer>
 
@@ -666,7 +650,7 @@
     ============================================================ -->
     <script>
         // ============================================================
-        // النظام المتكامل - الطالب / المقيّم / المدير
+        // النظام المتكامل - مع اختيار المقيّم
         // ============================================================
 
         // -------- كلمات السر --------
@@ -682,26 +666,29 @@
             'إدارة الأعمال': ['معاوية الجهماني', 'محمد طويط', 'غيث عليان', 'محمد غرايبة']
         };
 
+        // قائمة جميع المقيّمين (للقائمة المنسدلة)
+        const ALL_EVALUATORS = [
+            'منذر الزعبي', 'فادي الحناوي', 'سالم السميرات', 'ثائر أبو زريق',
+            'معاوية الجهماني', 'محمد طويط', 'غيث عليان', 'محمد غرايبة'
+        ];
+
         // -------- البيانات --------
         const STORAGE_KEY = 'altorra_system_data';
 
         function getDefaultData() {
             return {
-                // قائمة الواجبات التي يضيفها المقيّم
                 assignments: [
                     { id: 1, name: 'الوحدة الأولى - أساسيات البرمجة', specialization: 'تكنولوجيا المعلومات', grade: 'العاشر', dueDate: '2026-09-10', description: 'حل جميع تمارين الوحدة الأولى' },
                     { id: 2, name: 'الوحدة الثالثة - التسويق', specialization: 'إدارة الأعمال', grade: 'الحادي عشر', dueDate: '2026-09-12', description: 'تقديم بحث عن استراتيجيات التسويق' },
                     { id: 3, name: 'الوحدة الخامسة - قواعد البيانات', specialization: 'تكنولوجيا المعلومات', grade: 'الثاني عشر', dueDate: '2026-09-08', description: 'تصميم قاعدة بيانات لمدرسة' },
                     { id: 4, name: 'الوحدة الثانية - مبادئ الإدارة', specialization: 'إدارة الأعمال', grade: 'العاشر', dueDate: '2026-09-15', description: 'كتابة تقرير عن مبادئ الإدارة' }
                 ],
-                // تسليمات الطلاب
                 submissions: [
                     { id: 1, studentId: '20241001', studentName: 'أحمد محمد علي', evaluatorName: 'منذر الزعبي', assignmentId: 1, fileName: 'واجب_البرمجة_1.pdf', fileSize: '2.4 MB', uploadDate: '2026-09-02 10:30', status: 'approved', gradeValue: 'D' },
                     { id: 2, studentId: '20241002', studentName: 'خالد يوسف حسن', evaluatorName: 'معاوية الجهماني', assignmentId: 2, fileName: 'تقرير_التسويق.docx', fileSize: '1.8 MB', uploadDate: '2026-09-02 11:15', status: 'pending', gradeValue: '' },
                     { id: 3, studentId: '20241003', studentName: 'سعيد عبدالله عمر', evaluatorName: 'فادي الحناوي', assignmentId: 3, fileName: 'مشروع_قواعد_بيانات.sql', fileSize: '3.1 MB', uploadDate: '2026-09-01 14:45', status: 'pending', gradeValue: '' },
                     { id: 4, studentId: '20241004', studentName: 'منصور إبراهيم خالد', evaluatorName: 'محمد طويط', assignmentId: 4, fileName: 'بحث_مبادئ_الإدارة.pdf', fileSize: '1.2 MB', uploadDate: '2026-09-03 09:20', status: 'pending', gradeValue: '' }
-                ],
-                activities: []
+                ]
             };
         }
 
@@ -861,7 +848,7 @@
             }
         }
 
-        // عند اختيار الواجب، عرض تاريخ التسليم
+        // عند اختيار الواجب، عرض تاريخ التسليم والمعلومات
         document.getElementById('submitAssignment').addEventListener('change', function() {
             const selected = this.options[this.selectedIndex];
             const dueDateDisplay = document.getElementById('submitDueDateDisplay');
@@ -886,11 +873,6 @@
                 document.getElementById('assignmentHint').className = 'hint';
             }
         });
-
-        // ============================================================
-        // تحديث قائمة المقيّمين
-        // ============================================================
-        // لا نحتاجها هنا لأن المقيّم يختار من قائمة الواجبات
 
         // ============================================================
         // رفع الملفات
@@ -1031,7 +1013,7 @@
         }
 
         // ============================================================
-        // تسليم الواجب (الطالب يختار الواجب ويرفع الملف)
+        // تسليم الواجب (مع اختيار المقيّم)
         // ============================================================
         document.getElementById('submitBtn').addEventListener('click', function() {
             if (!isLoggedIn) {
@@ -1043,8 +1025,9 @@
             const studentName = document.getElementById('submitStudentName').value.trim();
             const assignmentSelect = document.getElementById('submitAssignment');
             const assignmentId = parseInt(assignmentSelect.value);
+            const evaluatorName = document.getElementById('submitEvaluatorSelect').value;
 
-            if (!studentId || !studentName || !assignmentId || selectedFiles.length === 0) {
+            if (!studentId || !studentName || !assignmentId || !evaluatorName || selectedFiles.length === 0) {
                 showToast('⚠️ الرجاء تعبئة جميع الحقول واختيار ملفات', 'error');
                 return;
             }
@@ -1062,10 +1045,6 @@
                 return;
             }
 
-            // اختيار مقيّم عشوائي من القائمة حسب التخصص
-            const evaluators = EVALUATORS[assignment.specialization] || ['غير محدد'];
-            const randomEvaluator = evaluators[Math.floor(Math.random() * evaluators.length)];
-
             const fileNames = [];
             let filesProcessed = 0;
 
@@ -1079,7 +1058,7 @@
                             id: Date.now(),
                             studentId,
                             studentName,
-                            evaluatorName: randomEvaluator,
+                            evaluatorName: evaluatorName,
                             assignmentId: assignmentId,
                             fileName: fileNames.join(', '),
                             fileSize: (selectedFiles.reduce((sum, f) => sum + f.size, 0) / 1024 / 1024).toFixed(2) + ' MB',
@@ -1100,6 +1079,7 @@
                         document.getElementById('submitAssignment').value = '';
                         document.getElementById('submitDueDateDisplay').value = '';
                         document.getElementById('submitInfoDisplay').value = '';
+                        document.getElementById('submitEvaluatorSelect').value = '';
                         updateAll();
                     }
                 });
@@ -1223,7 +1203,6 @@
                     if (newDate && newDate.match(/^\d{4}-\d{2}-\d{2}$/)) {
                         assignment.dueDate = newDate;
                         saveAssignments(assignments);
-                        // تحديث عرض التاريخ في قائمة الواجبات
                         updateAssignmentSelect();
                         showToast(`✅ تم تحديث تاريخ الاستحقاق لـ ${sub.studentName}`, 'success');
                         updateAll();
@@ -1273,6 +1252,8 @@
                         <strong>${s.studentName}</strong> (${s.studentId})
                         <br>
                         📚 ${assignment ? assignment.name : 'واجب غير معروف'}
+                        <br>
+                        👨‍🏫 المقيّم: ${s.evaluatorName}
                         <br>
                         <span style="color:${isApproved ? '#27ae60' : '#f39c12'};">${statusText}</span>
                         ${s.gradeValue ? ` | ⭐ ${s.gradeValue}` : ''}
@@ -1636,6 +1617,9 @@
             if (e.key === 'Enter') document.getElementById('submitAssignment').focus();
         });
         document.getElementById('submitAssignment').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') document.getElementById('submitEvaluatorSelect').focus();
+        });
+        document.getElementById('submitEvaluatorSelect').addEventListener('keypress', function(e) {
             if (e.key === 'Enter') fileInput.click();
         });
 
@@ -1670,8 +1654,7 @@
 
             console.log('✅ نظام مدرسة الطرة الثانوية للبنين جاهز!');
             console.log('🔑 كلمات السر: طالب=123, مقيّم=teacher123, مدير=admin123');
-            console.log('📝 المقيّم يضيف الواجبات وتاريخ التسليم');
-            console.log('👨‍🎓 الطالب يختار الواجب ويرفع الملف فقط');
+            console.log('📝 الطالب يختار الواجب والمقيّم ثم يرفع الملف');
         }
 
         init();
