@@ -1,0 +1,760 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مدرسة الطرة الثانوية للبنين - النظام الإلكتروني الموحد</title>
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%230f2b4a'/><circle cx='50' cy='40' r='20' fill='%23f1c40f'/></svg>">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<!-- ===== الرأس ===== -->
+<header class="main-header">
+    <div class="container">
+        <div class="logo-container">
+            <div class="logo-img">
+                <svg viewBox="0 0 100 100">
+                    <circle cx="50" cy="50" r="45" fill="#0f2b4a" stroke="#f1c40f" stroke-width="3"/>
+                    <circle cx="50" cy="50" r="35" fill="#1a4b6d" stroke="#f1c40f" stroke-width="2"/>
+                    <path d="M25 35 L50 28 L75 35 L75 65 L50 72 L25 65 Z" fill="#f1c40f" opacity="0.9"/>
+                    <path d="M50 28 L50 72" stroke="#0f2b4a" stroke-width="2"/>
+                    <polygon points="35,30 50,18 65,30 50,42" fill="#f1c40f" stroke="white" stroke-width="1"/>
+                    <circle cx="50" cy="43" r="2" fill="#0f2b4a"/>
+                </svg>
+            </div>
+            <div class="logo-text">
+                <h1>مدرسة الطرة الثانوية للبنين</h1>
+                <span class="school-sub"><i class="fas fa-university"></i> مديرية التربية والتعليم - لواء الرمثا</span>
+            </div>
+        </div>
+        <div class="header-stats">
+            <div class="stat-item"><i class="fas fa-file-alt"></i> <span id="headerTotal">0</span> واجب</div>
+            <div class="stat-item"><i class="fas fa-clock"></i> <span id="headerUpcoming">0</span> قريب</div>
+            <div class="stat-item"><i class="fas fa-circle-check"></i> <span id="headerEvaluated">0</span> مُقيَّم</div>
+        </div>
+    </div>
+</header>
+
+<main class="container">
+
+    <!-- ===== تسجيل الدخول ===== -->
+    <section class="login-section">
+        <div class="login-title">
+            <i class="fas fa-user-shield"></i>
+            <span>بوابة الدخول الموحدة</span>
+        </div>
+        <div class="login-inputs">
+            <select id="roleSelect">
+                <option value="student">👨‍🎓 طالب</option>
+                <option value="evaluator">👨‍🏫 مقيّم</option>
+                <option value="admin">👨‍🏫 ضابط الجودة </option>
+            </select>
+            <input type="password" id="loginPassword" placeholder="كلمة المرور" onkeypress="if(event.key==='Enter') loginUser()">
+            <button class="btn-gold" onclick="loginUser()"><i class="fas fa-right-to-bracket"></i> دخول</button>
+            <button class="btn-secondary" onclick="logoutUser()" id="logoutBtn" style="display:none;"><i class="fas fa-right-from-bracket"></i> خروج</button>
+            <span class="login-status logged-out" id="loginStatus"><i class="fas fa-lock"></i> غير متصل</span>
+        </div>
+    </section>
+
+    <!-- ===== شريط التنقل ===== -->
+    <nav class="nav-tabs" id="navTabs">
+        <button class="tab-btn active" data-tab="student-dashboard"><i class="fas fa-graduation-cap"></i> <span>لوحة الطالب</span></button>
+        <button class="tab-btn" data-tab="submit"><i class="fas fa-cloud-arrow-up"></i> <span>رفع واجب</span></button>
+        <button class="tab-btn" data-tab="student-search"><i class="fas fa-magnifying-glass"></i> <span>بحث</span></button>
+        <button class="tab-btn hidden" data-tab="evaluator-dashboard"><i class="fas fa-chart-simple"></i> <span>لوحة المقيّم</span></button>
+        <button class="tab-btn hidden" data-tab="submissions"><i class="fas fa-list-check"></i> <span>الواجبات</span> <span class="badge" id="submissionsBadge">0</span></button>
+        <button class="tab-btn hidden" data-tab="add-assignment"><i class="fas fa-square-plus"></i> <span>إضافة واجب</span></button>
+        <button class="tab-btn hidden" data-tab="btec-plan"><i class="fas fa-award"></i> <span>خطة BTEC</span></button>
+        <button class="tab-btn hidden" data-tab="admin-dashboard"><i class="fas fa-sliders"></i> <span>الإدارة</span></button>
+    </nav>
+
+    <!-- ===== تبويب 1: لوحة الطالب ===== -->
+    <div class="tab-content active" id="tab-student-dashboard">
+        <div class="card gold-border">
+            <h2><i class="fas fa-graduation-cap"></i> لوحة تحكم الطالب</h2>
+            <div class="form-grid" style="margin-bottom:20px;">
+                <div class="form-group">
+                    <label><i class="fas fa-id-card"></i> رقم الطالب</label>
+                    <input type="text" id="studentId" placeholder="مثال: 20241001" oninput="updateStudentDashboard()">
+                </div>
+            </div>
+            <div class="stats-grid">
+                <div class="stat-card blue">
+                    <div class="icon-wrap"><i class="fas fa-folder-open"></i></div>
+                    <div class="number" id="sTotal">0</div>
+                    <div class="label">إجمالي الواجبات</div>
+                </div>
+                <div class="stat-card green">
+                    <div class="icon-wrap"><i class="fas fa-circle-check"></i></div>
+                    <div class="number" id="sApproved">0</div>
+                    <div class="label">تم التأكيد</div>
+                </div>
+                <div class="stat-card orange">
+                    <div class="icon-wrap"><i class="fas fa-hourglass-half"></i></div>
+                    <div class="number" id="sPending">0</div>
+                    <div class="label">قيد المراجعة</div>
+                </div>
+                <div class="stat-card red">
+                    <div class="icon-wrap"><i class="fas fa-triangle-exclamation"></i></div>
+                    <div class="number" id="sOverdue">0</div>
+                    <div class="label">متأخرة</div>
+                </div>
+            </div>
+            <div class="activity-box">
+                <h4><i class="fas fa-bell"></i> آخر النشاطات</h4>
+                <div id="studentActivities"><p class="empty-text">لا توجد نشاطات حتى الآن</p></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== تبويب 2: رفع واجب ===== -->
+    <div class="tab-content" id="tab-submit">
+        <div class="card">
+            <h2><i class="fas fa-cloud-arrow-up"></i> رفع واجب</h2>
+            <p class="info-text"><i class="fas fa-circle-info"></i> اختر الواجب والمقيّم ثم ارفع ملفك</p>
+            <div class="form-grid">
+                <div class="form-group">
+                    <label><i class="fas fa-id-card"></i> رقم الطالب <span class="required">*</span></label>
+                    <input type="text" id="submitStudentId" placeholder="مثال: 20241001">
+                </div>
+                <div class="form-group">
+                    <label><i class="fas fa-user"></i> اسم الطالب <span class="required">*</span></label>
+                    <input type="text" id="submitStudentName" placeholder="أدخل اسمك الثلاثي">
+                </div>
+                <div class="form-group">
+                    <label><i class="fas fa-tasks"></i> الواجب <span class="required">*</span></label>
+                    <select id="submitAssignment"><option value="">-- اختر الواجب --</option></select>
+                    <span class="hint" id="assignmentHint"><i class="fas fa-calendar-days"></i> اختر الواجب لترى تاريخ التسليم</span>
+                </div>
+                <div class="form-group">
+                    <label><i class="fas fa-calendar-check"></i> تاريخ التسليم</label>
+                    <input type="text" id="submitDueDateDisplay" readonly class="readonly-input">
+                </div>
+                <div class="form-group full-width">
+                    <label><i class="fas fa-tag"></i> التفاصيل</label>
+                    <input type="text" id="submitInfoDisplay" readonly class="readonly-input">
+                </div>
+                <div class="form-group">
+                    <label><i class="fas fa-user-tie"></i> المقيّم <span class="required">*</span></label>
+                    <select id="submitEvaluatorSelect">
+                        <option value="">-- اختر المقيّم --</option>
+                        <option value="منذر الزعبي">منذر الزعبي</option>
+                        <option value="فادي الحناوي">فادي الحناوي</option>
+                        <option value="سالم السميرات">سالم السميرات</option>
+                        <option value="ثائر أبو زريق">ثائر أبو زريق</option>
+                        <option value="معاوية الجهماني">معاوية الجهماني</option>
+                        <option value="محمد طويط">محمد طويط</option>
+                        <option value="غيث عليان">غيث عليان</option>
+                        <option value="محمد غرايبة">محمد غرايبة</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="upload-area" id="uploadArea">
+                <i class="fas fa-file-arrow-up"></i>
+                <p class="upload-title">اسحب الملفات هنا أو اضغط للاختيار</p>
+                <p class="upload-sub">PDF, DOC, DOCX, JPG, PNG (حتى 10 MB)</p>
+                <input type="file" id="fileInput" accept=".pdf,.doc,.docx,.jpg,.png" multiple>
+                <div class="file-list" id="fileList"></div>
+                <span class="file-name" id="fileName">لم يتم اختيار ملفات</span>
+            </div>
+
+            <button id="submitBtn" class="btn-primary btn-full"><i class="fas fa-paper-plane"></i> تسليم الواجب</button>
+        </div>
+    </div>
+
+    <!-- ===== تبويب 3: بحث الطالب ===== -->
+    <div class="tab-content" id="tab-student-search">
+        <div class="card gold-border">
+            <h2><i class="fas fa-magnifying-glass"></i> بحث عن واجباتي</h2>
+            <div class="search-bar">
+                <input type="text" id="searchInput" placeholder="🔍 أدخل رقم الطالب أو الاسم..." onkeypress="if(event.key==='Enter') searchStudent()">
+                <button class="btn-primary" onclick="searchStudent()"><i class="fas fa-search"></i> بحث</button>
+            </div>
+            <div class="search-result waiting" id="searchResult">
+                <i class="fas fa-circle-info"></i> أدخل رقمك أو اسمك للبحث
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== تبويب 4: لوحة المقيّم ===== -->
+    <div class="tab-content" id="tab-evaluator-dashboard">
+        <div class="card gold-border">
+            <h2><i class="fas fa-chart-simple"></i> لوحة تحكم المقيّم</h2>
+            <div class="stats-grid">
+                <div class="stat-card blue">
+                    <div class="icon-wrap"><i class="fas fa-folder-open"></i></div>
+                    <div class="number" id="eTotal">0</div>
+                    <div class="label">إجمالي الواجبات</div>
+                </div>
+                <div class="stat-card green">
+                    <div class="icon-wrap"><i class="fas fa-circle-check"></i></div>
+                    <div class="number" id="eApproved">0</div>
+                    <div class="label">تم التأكيد</div>
+                </div>
+                <div class="stat-card orange">
+                    <div class="icon-wrap"><i class="fas fa-hourglass-half"></i></div>
+                    <div class="number" id="ePending">0</div>
+                    <div class="label">قيد المراجعة</div>
+                </div>
+                <div class="stat-card red">
+                    <div class="icon-wrap"><i class="fas fa-triangle-exclamation"></i></div>
+                    <div class="number" id="eOverdue">0</div>
+                    <div class="label">متأخرة</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== تبويب 5: قائمة الواجبات ===== -->
+    <div class="tab-content" id="tab-submissions">
+        <div class="card">
+            <h2><i class="fas fa-list-check"></i> قائمة الواجبات المُسلَّمة</h2>
+            <div class="filter-bar">
+                <select id="filterSpecialization">
+                    <option value="all">📚 كل التخصصات</option>
+                    <option value="تكنولوجيا المعلومات">💻 تكنولوجيا المعلومات</option>
+                    <option value="إدارة الأعمال">📊 إدارة الأعمال</option>
+                </select>
+                <select id="filterGrade">
+                    <option value="all">📖 كل الصفوف</option>
+                    <option value="العاشر">العاشر</option>
+                    <option value="الحادي عشر">الحادي عشر</option>
+                    <option value="الثاني عشر">الثاني عشر</option>
+                </select>
+                <select id="filterEvaluator"><option value="all">👨‍🏫 كل المقيّمين</option></select>
+                <button id="refreshBtn" class="btn-secondary"><i class="fas fa-rotate"></i> تحديث</button>
+            </div>
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>رقم الطالب</th>
+                            <th>اسم الطالب</th>
+                            <th>المقيّم</th>
+                            <th>الواجب</th>
+                            <th>الملف</th>
+                            <th>تاريخ التسليم</th>
+                            <th>الحالة</th>
+                            <th>العلامة</th>
+                            <th>إجراءات</th>
+                        </tr>
+                    </thead>
+                    <tbody id="submissionsBody"></tbody>
+                </table>
+            </div>
+            <div id="submissionsEmpty" class="empty-state">📭 لا توجد واجبات</div>
+        </div>
+    </div>
+
+    <!-- ===== تبويب 6: إضافة واجب ===== -->
+    <div class="tab-content" id="tab-add-assignment">
+        <div class="card green-border">
+            <h2><i class="fas fa-square-plus"></i> إضافة واجب جديد</h2>
+            <p class="info-text"><i class="fas fa-circle-info"></i> قم بإضافة الواجب وتحديد تاريخ التسليم للطلاب</p>
+            <div class="form-grid">
+                <div class="form-group">
+                    <label><i class="fas fa-tasks"></i> اسم الواجب <span class="required">*</span></label>
+                    <input type="text" id="newAssignmentName" placeholder="مثال: الوحدة الثالثة">
+                </div>
+                <div class="form-group">
+                    <label><i class="fas fa-code"></i> التخصص <span class="required">*</span></label>
+                    <select id="newAssignmentSpecialization">
+                        <option value="">-- اختر --</option>
+                        <option value="تكنولوجيا المعلومات">💻 تكنولوجيا المعلومات</option>
+                        <option value="إدارة الأعمال">📊 إدارة الأعمال</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label><i class="fas fa-graduation-cap"></i> الصف <span class="required">*</span></label>
+                    <select id="newAssignmentGrade">
+                        <option value="">-- اختر --</option>
+                        <option value="العاشر">العاشر</option>
+                        <option value="الحادي عشر">الحادي عشر</option>
+                        <option value="الثاني عشر">الثاني عشر</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label><i class="fas fa-calendar-plus"></i> تاريخ التسليم <span class="required">*</span></label>
+                    <input type="date" id="newAssignmentDueDate">
+                </div>
+                <div class="form-group full-width">
+                    <label><i class="fas fa-align-right"></i> الوصف</label>
+                    <textarea id="newAssignmentDescription" placeholder="وصف الواجب (اختياري)" rows="2"></textarea>
+                </div>
+            </div>
+            <button id="addAssignmentBtn" class="btn-success btn-full"><i class="fas fa-floppy-disk"></i> إضافة الواجب</button>
+        </div>
+    </div>
+
+    <!-- ===== تبويب 7: خطة BTEC ===== -->
+    <div class="tab-content" id="tab-btec-plan">
+        <div class="btec-wrapper">
+            <!-- Hero -->
+            <div class="btec-hero">
+                <div class="btec-hero-content">
+                    <div class="btec-hero-title">
+                        <div class="btec-hero-icon"><i class="fas fa-award"></i></div>
+                        <div>
+                            <h2>خطة تقييم BTEC</h2>
+                            <p id="btecSubtitle">الدبلوم الدولي في تكنولوجيا المعلومات - 2026/2027</p>
+                        </div>
+                    </div>
+                    <div class="btec-hero-stats">
+                        <div class="btec-hero-stat"><i class="fas fa-tasks"></i> <strong id="btecTotal">0</strong> إجمالي</div>
+                        <div class="btec-hero-stat"><i class="fas fa-clock"></i> <strong id="btecUpcoming">0</strong> قريب</div>
+                        <div class="btec-hero-stat"><i class="fas fa-circle-check"></i> <strong id="btecEvaluated">0</strong> مُقيَّم</div>
+                        <div class="btec-hero-stat"><i class="fas fa-users"></i> <strong>4</strong> مقيم</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- اختيار التخصص -->
+            <div class="btec-spec-selector">
+                <button class="btec-spec-btn active" data-spec="it" onclick="switchBtecSpecialization('it')">
+                    <i class="fas fa-laptop-code"></i>
+                    <span>تكنولوجيا المعلومات</span>
+                    <span class="spec-badge">متاح</span>
+                </button>
+                <button class="btec-spec-btn" data-spec="business" onclick="switchBtecSpecialization('business')">
+                    <i class="fas fa-briefcase"></i>
+                    <span>إدارة الأعمال</span>
+                    <span class="spec-badge coming">قريباً</span>
+                </button>
+            </div>
+
+            <!-- أزرار الطباعة -->
+            <div class="btec-print-bar">
+                <button class="btec-print-btn" onclick="printCurrentBtecTab()"><i class="fas fa-print"></i> طباعة التبويب</button>
+                <button class="btec-print-btn all" onclick="printAllBtecTabs()"><i class="fas fa-file-pdf"></i> طباعة الكل</button>
+            </div>
+
+            <!-- ====== محتوى تكنولوجيا المعلومات ====== -->
+            <div class="btec-spec-content active" id="btec-spec-it">
+                <div class="btec-tabs">
+                    <button class="btec-tab-btn active" data-btec-tab="level2"><i class="fas fa-layer-group"></i> المستوى الثاني <span class="btec-badge" id="btecBadgeLevel2">0</span></button>
+                    <button class="btec-tab-btn" data-btec-tab="level3-11"><i class="fas fa-layer-group"></i> المستوى الثالث (11) <span class="btec-badge" id="btecBadgeLevel3_11">0</span></button>
+                    <button class="btec-tab-btn" data-btec-tab="level3-12"><i class="fas fa-layer-group"></i> المستوى الثالث (12) <span class="btec-badge" id="btecBadgeLevel3_12">0</span></button>
+                    <button class="btec-tab-btn" data-btec-tab="evaluators"><i class="fas fa-users"></i> المقيّمون <span class="btec-badge" id="btecBadgeEvaluators">0</span></button>
+                    <button class="btec-tab-btn" data-btec-tab="reports"><i class="fas fa-chart-pie"></i> التقارير</button>
+                </div>
+
+                <!-- المستوى الثاني -->
+                <div class="btec-tab-content active" data-btec-content="level2">
+                    <div class="btec-table-wrapper semester-1">
+                        <div class="btec-table-header">
+                            <h3><i class="fas fa-list"></i> المستوى الثاني - الفصل الأول</h3>
+                            <span class="btec-level-badge"><i class="fas fa-tag"></i> Level 2 - Semester 1</span>
+                        </div>
+                        <div class="btec-table-scroll">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>الوحدة / المهمة</th>
+                                        <th>أهداف التعلم</th>
+                                        <th>ساعات</th>
+                                        <th>التوزيع</th>
+                                        <th>الاستلام</th>
+                                        <th>القرار</th>
+                                        <th>المقييم</th>
+                                        <th>المدقق</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="btecL2S1"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="btec-table-wrapper semester-2">
+                        <div class="btec-table-header">
+                            <h3><i class="fas fa-list"></i> المستوى الثاني - الفصل الثاني</h3>
+                            <span class="btec-level-badge"><i class="fas fa-tag"></i> Level 2 - Semester 2</span>
+                        </div>
+                        <div class="btec-table-scroll">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>الوحدة / المهمة</th>
+                                        <th>أهداف التعلم</th>
+                                        <th>ساعات</th>
+                                        <th>التوزيع</th>
+                                        <th>الاستلام</th>
+                                        <th>القرار</th>
+                                        <th>المقييم</th>
+                                        <th>المدقق</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="btecL2S2"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="btec-table-wrapper semester-3">
+                        <div class="btec-table-header">
+                            <h3><i class="fas fa-list"></i> المستوى الثاني - الفصل الثالث</h3>
+                            <span class="btec-level-badge"><i class="fas fa-tag"></i> Level 2 - Semester 3</span>
+                        </div>
+                        <div class="btec-table-scroll">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>الوحدة / المهمة</th>
+                                        <th>أهداف التعلم</th>
+                                        <th>ساعات</th>
+                                        <th>التوزيع</th>
+                                        <th>الاستلام</th>
+                                        <th>القرار</th>
+                                        <th>المقييم</th>
+                                        <th>المدقق</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="btecL2S3"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- المستوى الثالث 11 -->
+                <div class="btec-tab-content" data-btec-content="level3-11">
+                    <div class="btec-table-wrapper semester-1">
+                        <div class="btec-table-header">
+                            <h3><i class="fas fa-list"></i> المستوى الثالث (11) - الفصل الأول</h3>
+                            <span class="btec-level-badge"><i class="fas fa-tag"></i> Level 3 (11) - Semester 1</span>
+                        </div>
+                        <div class="btec-table-scroll">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>الوحدة / المهمة</th>
+                                        <th>أهداف التعلم</th>
+                                        <th>ساعات</th>
+                                        <th>التوزيع</th>
+                                        <th>الاستلام</th>
+                                        <th>القرار</th>
+                                        <th>المقييم</th>
+                                        <th>المدقق</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="btecL311S1"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="btec-table-wrapper semester-2">
+                        <div class="btec-table-header">
+                            <h3><i class="fas fa-list"></i> المستوى الثالث (11) - الفصل الثاني</h3>
+                            <span class="btec-level-badge"><i class="fas fa-tag"></i> Level 3 (11) - Semester 2</span>
+                        </div>
+                        <div class="btec-table-scroll">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>الوحدة / المهمة</th>
+                                        <th>أهداف التعلم</th>
+                                        <th>ساعات</th>
+                                        <th>التوزيع</th>
+                                        <th>الاستلام</th>
+                                        <th>القرار</th>
+                                        <th>المقييم</th>
+                                        <th>المدقق</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="btecL311S2"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="btec-table-wrapper semester-3">
+                        <div class="btec-table-header">
+                            <h3><i class="fas fa-list"></i> المستوى الثالث (11) - الفصل الثالث</h3>
+                            <span class="btec-level-badge"><i class="fas fa-tag"></i> Level 3 (11) - Semester 3</span>
+                        </div>
+                        <div class="btec-table-scroll">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>الوحدة / المهمة</th>
+                                        <th>أهداف التعلم</th>
+                                        <th>ساعات</th>
+                                        <th>التوزيع</th>
+                                        <th>الاستلام</th>
+                                        <th>القرار</th>
+                                        <th>المقييم</th>
+                                        <th>المدقق</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="btecL311S3"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- المستوى الثالث 12 -->
+                <div class="btec-tab-content" data-btec-content="level3-12">
+                    <div class="btec-table-wrapper semester-1">
+                        <div class="btec-table-header">
+                            <h3><i class="fas fa-list"></i> المستوى الثالث (12) - الفصل الأول</h3>
+                            <span class="btec-level-badge"><i class="fas fa-tag"></i> Level 3 (12) - Semester 1</span>
+                        </div>
+                        <div class="btec-table-scroll">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>الوحدة / المهمة</th>
+                                        <th>أهداف التعلم</th>
+                                        <th>ساعات</th>
+                                        <th>التوزيع</th>
+                                        <th>الاستلام</th>
+                                        <th>القرار</th>
+                                        <th>المقييم</th>
+                                        <th>المدقق</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="btecL312S1"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="btec-table-wrapper semester-2">
+                        <div class="btec-table-header">
+                            <h3><i class="fas fa-list"></i> المستوى الثالث (12) - الفصل الثاني</h3>
+                            <span class="btec-level-badge"><i class="fas fa-tag"></i> Level 3 (12) - Semester 2</span>
+                        </div>
+                        <div class="btec-table-scroll">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>الوحدة / المهمة</th>
+                                        <th>أهداف التعلم</th>
+                                        <th>ساعات</th>
+                                        <th>التوزيع</th>
+                                        <th>الاستلام</th>
+                                        <th>القرار</th>
+                                        <th>المقييم</th>
+                                        <th>المدقق</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="btecL312S2"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="btec-table-wrapper semester-3">
+                        <div class="btec-table-header">
+                            <h3><i class="fas fa-list"></i> المستوى الثالث (12) - الفصل الثالث</h3>
+                            <span class="btec-level-badge"><i class="fas fa-tag"></i> Level 3 (12) - Semester 3</span>
+                        </div>
+                        <div class="btec-table-scroll">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>الوحدة / المهمة</th>
+                                        <th>أهداف التعلم</th>
+                                        <th>ساعات</th>
+                                        <th>التوزيع</th>
+                                        <th>الاستلام</th>
+                                        <th>القرار</th>
+                                        <th>المقييم</th>
+                                        <th>المدقق</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="btecL312S3"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- المقيّمون -->
+                <div class="btec-tab-content" data-btec-content="evaluators">
+                    <div style="margin-bottom:20px;">
+                        <h3 style="font-size:24px;font-weight:800;color:#0f2b4a;"><i class="fas fa-users" style="color:#1a4b6d;"></i> المقييمين</h3>
+                        <p style="color:#4a5a72;">عرض تفصيلي للمقييمين وعدد الواجبات وساعات التدريس الموزعة عليهم</p>
+                    </div>
+                    <div class="btec-grid" id="btecEvaluatorGrid"></div>
+                </div>
+
+                <!-- التقارير -->
+                <div class="btec-tab-content" data-btec-content="reports">
+                    <div style="margin-bottom:20px;">
+                        <h3 style="font-size:24px;font-weight:800;color:#0f2b4a;"><i class="fas fa-chart-pie" style="color:#1a4b6d;"></i> التقارير الشاملة</h3>
+                        <p style="color:#4a5a72;">إحصائيات عامة عن كل مستوى وكل مقيم مع ساعات التدريس</p>
+                    </div>
+                    <div class="btec-grid" id="btecReportsGrid"></div>
+                </div>
+            </div>
+
+            <!-- ====== محتوى إدارة الأعمال ====== -->
+            <div class="btec-spec-content" id="btec-spec-business">
+                <div class="btec-coming-soon">
+                    <div class="coming-icon">
+                        <i class="fas fa-hourglass-half"></i>
+                    </div>
+                    <h2>سوف يتم الإضافة لاحقاً</h2>
+                    <p>خطة تقييم BTEC لتخصص إدارة الأعمال قيد الإعداد</p>
+                    <p class="coming-hint">يرجى العودة لاحقاً للاطلاع على الخطة الكاملة</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- نافذة BTEC المنبثقة -->
+        <div class="btec-modal" id="btecUnitModal">
+            <div class="btec-modal-content">
+                <div class="btec-modal-header">
+                    <h2><i class="fas fa-info-circle"></i> <span id="btecModalTitle">وصف الوحدة</span></h2>
+                    <button class="btec-modal-close" onclick="closeBtecModal()"><i class="fas fa-times"></i></button>
+                </div>
+                <div class="btec-modal-body" id="btecModalBody"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== تبويب 8: الإدارة ===== -->
+    <div class="tab-content" id="tab-admin-dashboard">
+        <div class="card red-border">
+            <h2><i class="fas fa-sliders"></i> لوحة تحكم المدير</h2>
+
+            <div class="stats-grid">
+                <div class="stat-card blue">
+                    <div class="icon-wrap"><i class="fas fa-file-alt"></i></div>
+                    <div class="number" id="admTotalSub">0</div>
+                    <div class="label">إجمالي الواجبات</div>
+                </div>
+                <div class="stat-card purple">
+                    <div class="icon-wrap"><i class="fas fa-users"></i></div>
+                    <div class="number" id="admStudents">0</div>
+                    <div class="label">عدد الطلاب</div>
+                </div>
+                <div class="stat-card orange">
+                    <div class="icon-wrap"><i class="fas fa-user-tie"></i></div>
+                    <div class="number" id="admEvaluators">0</div>
+                    <div class="label">عدد المقيّمين</div>
+                </div>
+                <div class="stat-card green">
+                    <div class="icon-wrap"><i class="fas fa-check-double"></i></div>
+                    <div class="number" id="admApproved">0</div>
+                    <div class="label">مؤكدة</div>
+                </div>
+            </div>
+
+            <div class="admin-tools">
+                <h3 class="tools-title"><i class="fas fa-toolbox"></i> أدوات الإدارة</h3>
+                <div class="tools-grid">
+                    <div class="tool-card" onclick="exportData('json')">
+                        <i class="fas fa-file-code"></i>
+                        <h4>تصدير JSON</h4>
+                        <p>تصدير جميع البيانات</p>
+                    </div>
+                    <div class="tool-card" onclick="exportData('csv')">
+                        <i class="fas fa-file-csv"></i>
+                        <h4>تصدير CSV</h4>
+                        <p>كجدول Excel</p>
+                    </div>
+                    <div class="tool-card" onclick="window.print()">
+                        <i class="fas fa-print"></i>
+                        <h4>طباعة</h4>
+                        <p>طباعة الصفحة</p>
+                    </div>
+                    <div class="tool-card" onclick="backupData()">
+                        <i class="fas fa-cloud-arrow-down"></i>
+                        <h4>نسخ احتياطي</h4>
+                        <p>حفظ نسخة كاملة</p>
+                    </div>
+                    <div class="tool-card" onclick="showActivityLog()">
+                        <i class="fas fa-history"></i>
+                        <h4>سجل النشاطات</h4>
+                        <p>عرض كل الأحداث</p>
+                    </div>
+                    <div class="tool-card" onclick="showEvaluatorManager()">
+                        <i class="fas fa-user-gear"></i>
+                        <h4>إدارة المقيّمين</h4>
+                        <p>قائمة المقيّمين</p>
+                    </div>
+                    <div class="tool-card" onclick="addDemoData()">
+                        <i class="fas fa-flask"></i>
+                        <h4>بيانات تجريبية</h4>
+                        <p>للاختبار</p>
+                    </div>
+                    <div class="tool-card danger" onclick="resetAllData()">
+                        <i class="fas fa-trash-can"></i>
+                        <h4>حذف الكل</h4>
+                        <p>إعادة تعيين</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="admin-section">
+                <h3 class="tools-title"><i class="fas fa-list"></i> إدارة الواجبات</h3>
+                <div class="table-responsive">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>اسم الواجب</th>
+                                <th>التخصص</th>
+                                <th>الصف</th>
+                                <th>تاريخ التسليم</th>
+                                <th>إجراءات</th>
+                            </tr>
+                        </thead>
+                        <tbody id="adminAssignmentsBody"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- نافذة منبثقة عامة -->
+    <div class="modal-overlay" id="resultModal">
+        <div class="modal-box">
+            <div class="icon" id="modalIcon"><i class="fas fa-circle-check"></i></div>
+            <h2 id="modalTitle">تمت العملية بنجاح</h2>
+            <div class="details" id="modalDetails"></div>
+            <button class="btn-close-modal" onclick="closeModal()"><i class="fas fa-check"></i> حسناً</button>
+        </div>
+    </div>
+
+    <!-- Toast -->
+    <div class="toast" id="toast"><i class="fas fa-circle-check"></i> <span id="toastMessage">تم بنجاح</span></div>
+
+    <!-- QR Code -->
+    <section class="qr-section">
+        <div class="qr-info">
+            <h3><i class="fas fa-qrcode"></i> رابط الموقع</h3>
+            <p>استخدم QR Code للوصول السريع</p>
+            <div class="url-display" id="siteUrl">جاري التحميل...</div>
+            <div class="qr-actions">
+                <button class="btn-primary btn-sm" onclick="downloadQR()"><i class="fas fa-download"></i> تحميل</button>
+                <button class="btn-secondary btn-sm" onclick="copyUrl()"><i class="fas fa-copy"></i> نسخ</button>
+            </div>
+        </div>
+        <div class="qr-code-container"><div id="qrcode"></div></div>
+    </section>
+</main>
+
+<!-- التذييل -->
+<footer class="main-footer">
+    <div class="container">
+        <div class="footer-content">
+            <div class="designer"><i class="fas fa-pen-fancy"></i> إعداد: <span>منذر عبدالوهاب الزعبي</span></div>
+            <div class="center"><i class="fas fa-school"></i> النظام الإلكتروني BTEC</div>
+            <div class="official">
+                <div><span class="pos">مدير المدرسة:</span> د. طارق جيت</div>
+                <div><span class="pos">ضابط الجودة:</span> أ. يزن الخطيب</div>
+            </div>
+        </div>
+        <div class="footer-bottom"><i class="fas fa-code"></i> منذر الزعبي-  جميع الحقوق محفوظة © 2026</div>
+    </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
+<script src="js/data.js"></script>
+<script src="js/script.js"></script>
+</body>
+</html>
